@@ -18,7 +18,7 @@ function EditProducts() {
   const getAllCatagory = async () => {
     try {
       const res = await axios.get(
-        "http://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+        "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
       );
       if (res.status === 200) {
         console.log("catagory===", res);
@@ -34,7 +34,7 @@ function EditProducts() {
 
   const getAllProduct = async () => {
     let res = await axios.get(
-      "http://api.infinitimart.in/api/product/getproduct"
+      "https://api.infinitimart.in/api/product/getproduct"
     );
     if (res.status === 200) {
       console.log("productList===", res);
@@ -45,7 +45,7 @@ function EditProducts() {
   const getAllSubCatagory = async (categoryId) => {
     try {
       let res = await axios.get(
-        `http://api.infinitimart.in/api/vendor/product/subcatagory/getSubcategoriesByCategory/${categoryId}`
+        `https://api.infinitimart.in/api/vendor/product/subcatagory/getSubcategoriesByCategory/${categoryId}`
       );
       if (res.status === 200) {
         console.log("subcatagory===", res);

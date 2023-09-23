@@ -22,7 +22,7 @@ export function Login() {
     } else {
       try {
         const config = {
-          url: "http://api.infinitimart.in/api/vendor/login",
+          url: "https://api.infinitimart.in/api/vendor/login",
           method: "POST",
           headers: { "content-type": "application/json" },
           data: {

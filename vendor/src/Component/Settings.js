@@ -17,7 +17,7 @@ function Settings() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "http://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -34,7 +34,7 @@ function Settings() {
       const config = {
         url: `/updatevendor `,
         method: "post",
-        baseURL: "http://api.infinitimart.in/api",
+        baseURL: "https://api.infinitimart.in/api",
         headers: { "content-type": "application/json" },
         data: {
           userId: user._id,
@@ -74,7 +74,7 @@ function Settings() {
             <div className="col-md-4">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  // src={`http://api.infinitimart.in/documents/${user?.selfie}`}
+                  // src={`https://api.infinitimart.in/documents/${user?.selfie}`}
                   src="/images/banner.jpg"
                   alt=""
                   style={{

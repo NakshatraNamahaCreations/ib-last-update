@@ -33,7 +33,7 @@ function EditServices(props) {
   const getSubcategoriesByCategory = async () => {
     try {
       let res = await axios.post(
-        `http://api.infinitimart.in/api/vendor/services/subcatagory/postsubcatagoryservices/`,
+        `https://api.infinitimart.in/api/vendor/services/subcatagory/postsubcatagoryservices/`,
         {
           catagoryName: category,
         }
@@ -86,7 +86,7 @@ function EditServices(props) {
       const config = {
         url: `/vendor/services/productlist/updateservice/${serviceId}`,
         method: "post",
-        baseURL: "http://api.infinitimart.in/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -219,7 +219,7 @@ function EditServices(props) {
               )}
               {!selectedImage && (
                 <img
-                  src={`http://api.infinitimart.in/ServiceProductList/${
+                  src={`https://api.infinitimart.in/ServiceProductList/${
                     serviceObj?.serviceProductImage || ""
                   }`}
                   className="edit-product-image"
