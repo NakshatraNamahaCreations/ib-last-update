@@ -136,9 +136,9 @@ export function Login() {
                                 setLoginWithEmail(!loginWithEmail);
                                 setLoginWithMobile(false);
                               }}
-                            />{" "}
+                            />
                             <label> Email</label>
-                          </span>{" "}
+                          </span>
                           <span>
                             {" "}
                             <input

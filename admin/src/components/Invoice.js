@@ -12,33 +12,10 @@ function Invoice() {
   const { invoiceData } = location.state || {};
   console.log("invoiceData", invoiceData);
 
-  // const exportData = async () => {
-  //   const content = document.getElementById("invoiceContent");
-  //   const pdfOptions = {
-  //     margin: 10,
-  //     filename: "Invoice.pdf",
-  //     image: { type: "jpeg", quality: 0.98 },
-  //     html2canvas: { scale: 2 },
-  //     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-  //   };
-
-  //   try {
-  //     const pdf = await html2pdf().from(content).set(pdfOptions).outputPdf();
-  //     const blob = new Blob([pdf], { type: "application/pdf" });
-  //     const url = URL.createObjectURL(blob);
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = pdfOptions.filename;
-  //     link.click();
-  //     URL.revokeObjectURL(url);
-  //   } catch (error) {
-  //     console.error("Error generating PDF:", error);
-  //   }
-  // };
-
   const exportData = () => {
     window.print();
   };
+
   return (
     <div>
       <Header />
@@ -47,7 +24,6 @@ function Invoice() {
         style={{ justifyContent: "space-between" }}
       >
         <div>
-          {" "}
           <h2>Invoice</h2>
         </div>
         <div>
@@ -197,7 +173,7 @@ function Invoice() {
                     ₹
                     {(
                       invoiceData?.PaymentDetails[0]?.data?.amount / 100
-                    ).toFixed(2)}
+                    ).toFixed(2) - 180}
                   </b>{" "}
                 </td>
               </tr>
@@ -212,8 +188,8 @@ function Invoice() {
                   <b>
                     ₹{" "}
                     {(
-                      invoiceData?.PaymentDetails[0]?.data?.amount * 0.18
-                    ).toFixed(2)}{" "}
+                      invoiceData?.PaymentDetails[0]?.data?.amount / 100
+                    ).toFixed(2) - 999}{" "}
                   </b>{" "}
                 </td>
               </tr>
@@ -226,12 +202,13 @@ function Invoice() {
                 </td>
                 <td>
                   <b>
-                    ₹{" "}
-                    {(
-                      invoiceData?.PaymentDetails[0]?.data?.amount * 1.18
-                    ).toFixed(2)}
-                    2
-                  </b>{" "}
+                    ₹
+                    {Math.round(
+                      (
+                        invoiceData?.PaymentDetails[0]?.data?.amount / 100
+                      ).toFixed(2)
+                    )}
+                  </b>
                 </td>
               </tr>
               <tr>
@@ -257,23 +234,3 @@ function Invoice() {
 }
 
 export default Invoice;
-{
-  /* <div className="col-md-2 invoiceBorder  pt-2 ps-1 pb-2 text-center">
-           
-          </div>
-          <div className="col-md-4 invoiceBorder  pt-2 ps-1 pb-2 text-center">
-            <b>Description</b>
-          </div>
-          <div className="col-md-2 invoiceBorder  pt-2 ps-1 pb-2 text-center">
-            {" "}
-            <b>Oty</b>{" "}
-          </div>
-          <div className="col-md-2 invoiceBorder  pt-2 ps-1 pb-2 text-center">
-            {" "}
-            <b>Unit Price</b>
-          </div>
-          <div className="col-md-2 invoiceBorder  pt-2 ps-1 pb-2 text-center">
-            {" "}
-            <b>Total Price</b>
-          </div> */
-}
