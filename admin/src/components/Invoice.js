@@ -24,7 +24,7 @@ function Invoice() {
         style={{ justifyContent: "space-between" }}
       >
         <div>
-          <h2>Invoice</h2>
+          <h2>Tax Invoice</h2>
         </div>
         <div>
           <Button variant="primary" onClick={exportData}>
@@ -34,15 +34,19 @@ function Invoice() {
       </div>
       <div className="ps-5 pe-3" id="invoiceContent">
         <div className="row me-0 invoiceBorder">
-          <div className="col-md-6 invoiceBorder text-center">
-            <img src="./images/newlogo.png" style={{ width: "50%" }} alt="" />
+          <div className="col-md-6 invoiceBorder text-center p-4">
+            <img
+              src="./images/tax.png"
+              style={{ width: "150px", height: "auto" }}
+              alt=""
+            />
           </div>
           <div
             className="col-md-6 invoiceBorder"
             style={{ borderTopRightRadius: "1px solid rgb(173, 173, 173)" }}
           >
             <h3 className="text-center mt-5" style={{ fontSize: "70px" }}>
-              Invoice
+              Tax Invoice
             </h3>
           </div>
           <div className="col-md-6 invoiceBorder pt-2 ps-1 pb-2">
@@ -143,14 +147,14 @@ function Invoice() {
                   ₹
                   {(invoiceData?.PaymentDetails[0]?.data?.amount / 100).toFixed(
                     2
-                  )}
+                  ) - 180}
                 </td>
                 <td>
                   {" "}
                   ₹{" "}
                   {(invoiceData?.PaymentDetails[0]?.data?.amount / 100).toFixed(
                     2
-                  )}{" "}
+                  ) - 180}{" "}
                 </td>
               </tr>
               <tr className="text-center" style={{ height: "36px" }}>
