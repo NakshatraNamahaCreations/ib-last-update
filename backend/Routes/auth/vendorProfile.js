@@ -34,5 +34,6 @@ router.put("/productslimits/:id", vendorProfileController.productsLimites);
 router.post("/approvevendor/:id", vendorProfileController.vendorapprove);
 router.post("/disapprovevendor/:id", vendorProfileController.vendordisapprove);
 router.post("/updateapprove/:id", vendorProfileController.approveupdate);
+router.post("/delete/:id", vendorProfileController.deletevendor);
 
 module.exports = router;

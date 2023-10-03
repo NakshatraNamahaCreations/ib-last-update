@@ -307,7 +307,7 @@ class vendorProfile {
       findVendor.businessName = businessName || findVendor.businessName;
       findVendor.businesstype = businesstype || findVendor.businesstype;
       findVendor.category = category || findVendor.category;
-      
+
       let updateVendor = await VendorModel.findOneAndUpdate(
         { _id: vendorId },
         updateVendor,
@@ -413,6 +413,16 @@ class vendorProfile {
         });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async deletevendor(req, res) {
+    let catagory = req.params.id;
+    const data = await VendorModel.deleteOne({ _id: catagory });
+    if (data) {
+      return res.json({ success: "Deleted Successfully" });
+    } else {
+      return res.json({ error: "not able to complete" });
     }
   }
 }

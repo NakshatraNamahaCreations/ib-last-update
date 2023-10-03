@@ -13,6 +13,30 @@ function Vendorprofile() {
 
   console.log("Vendor Data:", item);
 
+  const deleteUserAccount = async () => {
+    try {
+      const response = await axios.post(
+        `https://api.infinitimart.in/api/vendor/delete/${item._id}`
+      );
+      if (response.status === 200) {
+        console.log("delete successfully");
+        window.location.assign("/vendormanagement");
+      } else {
+        // Handle errors if necessary
+        alert("Error", "Account deletion failed. Please try again later.");
+      }
+    } catch (error) {
+      // Handle network errors or other exceptions
+      console.error("Error:", error);
+      alert(
+        "Error",
+        "An error occurred. Please check your internet connection."
+      );
+    }
+  };
+
+  console.log("yeyeyey", item._id);
+
   const Approve = async (e) => {
     e.preventDefault();
     try {
@@ -409,6 +433,7 @@ function Vendorprofile() {
             </div>
             <div>
               <button
+                onClick={deleteUserAccount}
                 style={{
                   backgroundColor: "#ff4131",
                   border: 0,
