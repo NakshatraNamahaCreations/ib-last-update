@@ -55,7 +55,7 @@ function Services() {
 
   const getServiceProductListByUserId = async () => {
     let res = await axios.post(
-      `http://localhost:8000/api/vendor/services/productlist/serviceproductbyuserid/`,
+      `https://api.infinitimart.in/api/vendor/services/productlist/serviceproductbyuserid/`,
       { userId: user._id }
     );
     if (res.status === 200) {
@@ -71,7 +71,7 @@ function Services() {
   const getSubcategoriesByCategory = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8000/api/vendor/services/subcatagory/postsubcatagoryservices/`,
+        `https://api.infinitimart.in/api/vendor/services/subcatagory/postsubcatagoryservices/`,
         {
           catagoryName: catagory,
         }
@@ -115,7 +115,7 @@ function Services() {
         const config = {
           url: "/vendor/services/productlist/addserviceproducts",
           method: "post",
-          baseURL: "http://localhost:8000/api",
+          baseURL: "https://api.infinitimart.in/api",
           data: formdata,
         };
         await axios(config).then(function (res) {
@@ -200,7 +200,7 @@ function Services() {
       selector: (row) => (
         <>
           <img
-            src={`http://localhost:8000/ServiceProductList/${row.serviceProductImage}`}
+            src={`https://api.infinitimart.in/ServiceProductList/${row.serviceProductImage}`}
             alt=""
             style={{ padding: "7px", width: "100%" }}
           />
@@ -257,7 +257,7 @@ function Services() {
     try {
       axios
         .post(
-          `http://localhost:8000/api/vendor/services/productlist/deleteservice/` +
+          `https://api.infinitimart.in/api/vendor/services/productlist/deleteservice/` +
             data._id
         )
         .then(function (res) {

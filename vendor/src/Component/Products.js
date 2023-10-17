@@ -42,7 +42,7 @@ function Products() {
 
   const getProductsByUserId = async () => {
     let res = await axios.post(
-      `http://localhost:8000/api/product/productsbyuserid/`,
+      `https://api.infinitimart.in/api/product/productsbyuserid/`,
       { userId: user._id }
     );
     if (res.status === 200) {
@@ -61,7 +61,7 @@ function Products() {
   const getSubcategoriesByCategory = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8000/api/vendor/product/subcatagory/postsubcatagory/`,
+        `https://api.infinitimart.in/api/vendor/product/subcatagory/postsubcatagory/`,
         {
           catagoryName: category,
         }
@@ -120,7 +120,7 @@ function Products() {
       const config = {
         url: "/product/addproduct",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -196,7 +196,7 @@ function Products() {
       selector: (row) => (
         <>
           <img
-            src={`http://localhost:8000/productlist/${row.productImage}`}
+            src={`https://api.infinitimart.in/productlist/${row.productImage}`}
             alt=""
             style={{ padding: "7px", width: "100%" }}
           />
@@ -262,7 +262,9 @@ function Products() {
   const deleteProduct = async (data) => {
     try {
       axios
-        .post(`http://localhost:8000/api/product/deleteproduct/` + data._id)
+        .post(
+          `https://api.infinitimart.in/api/product/deleteproduct/` + data._id
+        )
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
