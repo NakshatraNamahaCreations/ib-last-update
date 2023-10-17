@@ -22,6 +22,10 @@ router.post(
 router.get("/getcatagory", catagoryController.getAllcatagory);
 router.post("/deletecatagory/:catagoryid", catagoryController.deleteCatagory);
 router.post("/postprocat", catagoryController.postcategory);
+router.post(
+  "/addcustomersviaexcelesheet",
+  catagoryController.addCategoriesViaExcelSheet
+);
 router.put(
   "/updateproductcategory/:id",
   upload.single("catagoryImage"),

@@ -2,15 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom";
 
 function ServiceApproval() {
   const [serviceData, setserviceData] = useState([]);
   const [filteredService, setFilteredService] = useState();
   const [unifiedSearchTerm, setUnifiedSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const getAllservices = async () => {
     let res = await axios.get(
-      `https://api.infinitimart.in/api/vendor/services/productlist/getserviceswithusersdetails`
+      `http://localhost:8000/api/vendor/services/productlist/getserviceswithusersdetails`
     );
     if (res.status === 200) {
       console.log("getAllServices==", res);
@@ -32,7 +34,7 @@ function ServiceApproval() {
   const handleApprove = async (serviceId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/service/productlist/serviceapprove/${serviceId}`
+        `http://localhost:8000/api/vendor/services/productlist/serviceapprove/${serviceId}`
       );
       // Refresh data after approval
       //   window.location.assign();
@@ -45,7 +47,7 @@ function ServiceApproval() {
   const handleDisapprove = async (serviceId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/service/productlist/servicedisapprove/${serviceId}`
+        `http://localhost:8000/api/vendor/services/productlist/servicedisapprove/${serviceId}`
       );
       // Refresh data after disapproval
       //   window.location.assign();
@@ -108,7 +110,7 @@ function ServiceApproval() {
       selector: (row) => (
         <>
           <img
-            src={`https://api.infinitimart.in/ServiceProductList/${row.serviceProductImage}`}
+            src={`http://localhost:8000/ServiceProductList/${row.serviceProductImage}`}
             alt=""
             style={{ padding: "7px", width: "76%" }}
           />
@@ -158,7 +160,7 @@ function ServiceApproval() {
             </>
           ) : (
             <>
-              {row.serviceStatus === "approved" ? (
+              {row.serviceProductStatus === "approved" ? (
                 <p style={{ color: "green" }}> Approved</p>
               ) : (
                 <p style={{ color: "#c0352f" }}>Dispproved</p>
@@ -203,6 +205,10 @@ function ServiceApproval() {
     setFilteredService(filteredData);
   }, [unifiedSearchTerm, serviceData]);
 
+  const handleRowClick = (row) => {
+    navigate(`/sapprovaldetails/${row.userId._id}`);
+  };
+
   return (
     <div>
       <div>
@@ -226,6 +232,7 @@ function ServiceApproval() {
             selectableRowsHighlight
             subHeaderAlign="left"
             highlightOnHover
+            onRowClicked={handleRowClick}
           />
         </div>
       </div>

@@ -23,7 +23,7 @@ const otp = new Schema(
     expire_at: {
       type: Date,
       default: Date.now,
-      expires: 300,
+      expires: 60,
     },
   },
   { timestamps: true }

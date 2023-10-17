@@ -64,6 +64,22 @@ class Catagory {
     }
   }
 
+  async addSerivceCategoriesViaExcelSheet(req, res) {
+    const categoryname = req.body;
+    try {
+      const categoryList = await ServiceCategoryModel.insertMany(categoryname);
+
+      if (categoryList.length > 0) {
+        return res.json({ success: "Category Added" });
+      } else {
+        return res.status(400).json({ error: "Failed to add" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   async updateCategory(req, res) {
     try {
       const categoryId = req.params.id;

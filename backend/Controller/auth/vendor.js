@@ -76,6 +76,11 @@ class vendorProfile {
         return res.status(400).json({ error: "Mobile number already exists" });
       }
 
+      const existinggst = await VendorModel.findOne({ gst });
+      if (existinggst) {
+        return res.status(400).json({ error: "Gst already exists" });
+      }
+
       const newVendor = new VendorModel({
         firstname,
         lastname,
@@ -186,6 +191,37 @@ class vendorProfile {
         return res.status(401).json({ error: "Invalid password" });
       }
       await VendorModel.findOneAndUpdate({ email }, { status: "Online" });
+      return res.json({ success: "Login successful", user });
+    } catch (error) {
+      console.error("Something went wrong", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
+  async vendorLoginwithvendorcode(req, res) {
+    const { phoneNumber, customNumber } = req.body; // Extract phoneNumber and customNumber
+
+    try {
+      if (!phoneNumber) {
+        return res.status(400).json({ error: "Please enter your phoneNumber" });
+      }
+      if (!customNumber) {
+        return res
+          .status(400)
+          .json({ error: "Please enter your customNumber" });
+      }
+      const user = await VendorModel.findOne({ phoneNumber });
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      // const passwordMatch = customNumber === user.customNumber;
+      // if (!passwordMatch) {
+      //   return res.status(401).json({ error: "Invalid customNumber" });
+      // }
+      if (customNumber !== user.customNumber) {
+        return res.status(401).json({ error: "Invalid customNumber" });
+      }
+      await VendorModel.findOneAndUpdate({ phoneNumber }, { status: "Online" });
       return res.json({ success: "Login successful", user });
     } catch (error) {
       console.error("Something went wrong", error);
@@ -356,6 +392,34 @@ class vendorProfile {
       console.log("Error in getting users with payments");
     }
   }
+
+  // async getUsersWithPaymentsData(req, res) {
+  //   try {
+  //     const { search } = req.query;
+  //     let usersWithPayments = await VendorModel.aggregate([
+  //       {
+  //         $lookup: {
+  //           from: "paymentgetwaymodels",
+  //           localField: "_id",
+  //           foreignField: "userId",
+  //           as: "PaymentDetails",
+  //         },
+  //       },
+  //     ]);
+  //     const searchResults = usersWithPayments.filter((item) =>
+  //       item.firstname.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     if (searchResults.length > 0) {
+  //       return res.json({ results: searchResults });
+  //     } else {
+  //       console.log("No matching users found");
+  //       return res.status(404).json({ error: "No matching users found" });
+  //     }
+  //   } catch (error) {
+  //     console.log("Error in getting users with payments");
+  //     return res.status(500).json({ error: "Internal server error" });
+  //   }
+  // }
 
   async productsLimites(req, res) {
     try {

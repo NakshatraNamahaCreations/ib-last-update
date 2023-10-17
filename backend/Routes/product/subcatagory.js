@@ -29,6 +29,10 @@ router.put(
   upload.single("SubcatagoryImage"),
   SubCatagoryController.updateSubcategory
 );
+router.post(
+  "/addsubcatogoriesviaexcelesheet",
+  SubCatagoryController.addSubCategoriesViaExcelSheet
+);
 router.get("/getallsubcatagory", SubCatagoryController.getAllSubcatagory);
 router.post("/postsubcatagory", SubCatagoryController.postsubcategory);
 router.post(

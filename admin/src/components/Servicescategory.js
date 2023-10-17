@@ -5,10 +5,12 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Sidebar from "./layout/Sidebar";
 import DataTable from "react-data-table-component";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import ServicessubCategory from "./Servicessubcategory";
 import { WbIncandescentTwoTone } from "@mui/icons-material";
 import ServiceApproval from "./ServiceApproval";
+import { CSVLink } from "react-csv";
+import * as XLSX from "xlsx";
 
 function Servicescategory() {
   const [categoryTab, setCategoryTab] = useState(true);
@@ -20,6 +22,8 @@ function Servicescategory() {
   //search
   const [searchServiceCategory, setSearchServiceCategory] = useState("");
   const [filterdata, setfilterdata] = useState([]);
+  const [excel, setExcel] = useState();
+  const [hideUploadButton, setHideUploadButton] = useState(true);
 
   // Edit
   const [editCatagoryName, setEditCatagoryName] = useState("");
@@ -55,7 +59,7 @@ function Servicescategory() {
       const config = {
         url: "/vendor/services/catagory/addservicecatagory",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -73,7 +77,7 @@ function Servicescategory() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
+      "http://localhost:8000/api/vendor/services/catagory/getservicecatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -89,7 +93,7 @@ function Servicescategory() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/services/catagory/deleteservicecatagory/` +
+          `http://localhost:8000/api/vendor/services/catagory/deleteservicecatagory/` +
             data._id
         )
         .then(function (res) {
@@ -117,7 +121,7 @@ function Servicescategory() {
       const config = {
         url: `/vendor/services/catagory/updateservicecategory/${categoryId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -148,7 +152,7 @@ function Servicescategory() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/ServiceCategory/${row?.categoryimage}`}
+            src={`http://localhost:8000/ServiceCategory/${row?.categoryimage}`}
             alt=""
             style={{ padding: "7px", width: "35%" }}
           />
@@ -195,6 +199,43 @@ function Servicescategory() {
     };
     searchResults();
   }, [searchServiceCategory]);
+
+  const handleImport = async () => {
+    if (excel) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        const formData = new FormData();
+
+        for (let i = 0; i < jsonData.length; i++) {
+          const imageFile = jsonData[i].imageFile;
+          const imageName = jsonData[i].imageName;
+
+          formData.append(imageName, imageFile);
+        }
+        try {
+          const response = await axios.post(
+            "http://localhost:8000/api/vendor/services/catagory/addservicecatogoriesviaexcelesheet",
+            jsonData
+          );
+          alert(response.data.success);
+          setHideUploadButton(false);
+          getAllCatagory();
+          // window.location.reload();
+          console.log("Response from backend:", response.data);
+        } catch (error) {
+          console.error("Error sending data to backend:", error);
+        }
+      };
+      reader.readAsArrayBuffer(excel);
+    }
+  };
+
+  const csvData = [["categoryname"]];
 
   return (
     <div className="row me-0">
@@ -275,6 +316,43 @@ function Servicescategory() {
                   placeholder="Search by category"
                   onChange={(e) => setSearchServiceCategory(e.target.value)}
                 />
+                <div className="mt-2">
+                  <CSVLink data={csvData} filename={"Service Category.csv"}>
+                    {" "}
+                    <Button
+                      className="btn btn-danger me-1"
+                      style={{ backgroundColor: "#a9042e", border: 0 }}
+                    >
+                      Download
+                    </Button>
+                  </CSVLink>
+                  <input
+                    accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    style={{ display: "none" }}
+                    id="icon-button-file"
+                    type="file"
+                    onChange={(e) => setExcel(e.target.files[0])}
+                  />{" "}
+                  <label
+                    className="btn btn-outline-danger "
+                    style={{ borderColor: "#a9042e" }}
+                    htmlFor="icon-button-file"
+                  >
+                    {" "}
+                    Upload Category
+                  </label>{" "}
+                  {excel && hideUploadButton ? (
+                    <Button
+                      className="btn btn-danger ms-1"
+                      style={{ backgroundColor: "#a9042e", border: 0 }}
+                      onClick={handleImport}
+                    >
+                      Upload
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
               <div>
                 <button
@@ -393,7 +471,7 @@ function Servicescategory() {
           <h5>Image</h5>
           {!selectedImage && (
             <img
-              src={`https://api.infinitimart.in/ServiceCategory/${editCategory?.categoryimage}`}
+              src={`http://localhost:8000/ServiceCategory/${editCategory?.categoryimage}`}
               alt=""
               width="25%"
             />

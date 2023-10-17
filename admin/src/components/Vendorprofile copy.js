@@ -21,7 +21,7 @@ function Vendorprofile() {
 
   const getvendor = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/getuserswithpaymentsdata"
+      "http://localhost:8000/api/vendor/getuserswithpaymentsdata"
     );
     if (res.status === 200) {
       setdata(res.data.vendorsPayments);
@@ -51,7 +51,7 @@ function Vendorprofile() {
       const config = {
         url: `/approvevendor/${item._id}`,
         method: "post",
-        baseURL: "https://api.infinitimart.in/api/vendor",
+        baseURL: "http://localhost:8000/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           vendorstatus: "approved",
@@ -75,7 +75,7 @@ function Vendorprofile() {
       const config = {
         url: `/disapprovevendor/${item._id}`,
         method: "post",
-        baseURL: "https://api.infinitimart.in/api/vendor",
+        baseURL: "http://localhost:8000/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           vendorstatus: "disapproved", // Change the vendorstatus to "disapproved"
@@ -99,7 +99,7 @@ function Vendorprofile() {
       const config = {
         url: `/productslimits/${item._id}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api/vendor",
+        baseURL: "http://localhost:8000/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           ProductLimits: limitProducts,
@@ -205,7 +205,7 @@ function Vendorprofile() {
           <div className="d-flex">
             {/* <div>
               <img
-                src={`https://api.infinitimart.in/documents/${item?.selfie}`}
+                src={`http://localhost:8000/documents/${item?.selfie}`}
                 className="vendorprofile"
               />
             </div> */}
@@ -251,7 +251,7 @@ function Vendorprofile() {
             <div className="col-md-4">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={`https://api.infinitimart.in/documents/${item?.selfie}`}
+                  src={`http://localhost:8000/documents/${item?.selfie}`}
                   className="vendorprofile"
                   alt=""
                   style={{ width: "25%", borderRadius: "100%" }}

@@ -2,15 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import DataTable from "react-data-table-component";
+import { Link, useNavigate } from "react-router-dom";
 
 function ProductApproval() {
   const [productData, setproductData] = useState([]);
   const [filteredProduct, setFilteredProduct] = useState();
   const [unifiedSearchTerm, setUnifiedSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const getAllProducts = async () => {
     let res = await axios.get(
-      `https://api.infinitimart.in/api/product/getproductswithusersdetails`
+      `http://localhost:8000/api/product/getproductswithusersdetails`
     );
     if (res.status === 200) {
       console.log("getAllProduct===", res);
@@ -32,7 +34,7 @@ function ProductApproval() {
   const handleApprove = async (productId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/product/productapprove/${productId}`
+        `http://localhost:8000/api/product/productapprove/${productId}`
       );
       // Refresh data after approval
       //   window.location.assign();
@@ -45,7 +47,7 @@ function ProductApproval() {
   const handleDisapprove = async (productId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/product/productdisapprove/${productId}`
+        `http://localhost:8000/api/product/productdisapprove/${productId}`
       );
       // Refresh data after disapproval
       //   window.location.assign();
@@ -99,7 +101,7 @@ function ProductApproval() {
       selector: (row) => (
         <>
           <img
-            src={`https://api.infinitimart.in/productlist/${row.productImage}`}
+            src={`http://localhost:8000/productlist/${row.productImage}`}
             alt=""
             style={{ padding: "7px", width: "76%" }}
           />
@@ -182,6 +184,10 @@ function ProductApproval() {
     setFilteredProduct(filteredData);
   }, [unifiedSearchTerm, productData]);
 
+  const handleRowClick = (row) => {
+    navigate(`/papprovaldetails/${row.userId._id}`);
+  };
+
   return (
     <div>
       <div>
@@ -205,6 +211,7 @@ function ProductApproval() {
             selectableRowsHighlight
             subHeaderAlign="left"
             highlightOnHover
+            onRowClicked={handleRowClick}
           />
         </div>
       </div>

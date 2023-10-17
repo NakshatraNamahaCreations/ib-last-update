@@ -64,6 +64,7 @@ const bidroute = require("./Routes/Bid/Bid");
 const bidproductroute = require("./Routes/Bid/Productbid");
 const postroute = require("./Routes/Post/Post");
 const productpostroute = require("./Routes/Productpost/Productpost");
+const adminSequenceVendorCode = require("./Routes/admin/vendorSequence");
 
 //middleware
 app.use(morgan("dev"));
@@ -96,6 +97,7 @@ app.use("/api/postreq", postroute);
 app.use("/api/productpost", productpostroute);
 app.use("/api/buyer/enquiry", enquiryroute);
 app.use("/api/admin", bannerroute);
+app.use("/api/admin", adminSequenceVendorCode);
 
 app.use(bodyParser.json());
 

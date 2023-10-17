@@ -9,7 +9,7 @@ function VendorUpdates() {
   const getvendorWithPayments = async () => {
     try {
       let res = await axios.get(
-        "https://api.infinitimart.in/api/getallupdatedvendor"
+        "http://localhost:8000/api/getallupdatedvendor"
       );
       if (res.status === 200) {
         const vendors = res.data?.vendorprofile;
@@ -30,7 +30,7 @@ function VendorUpdates() {
       const config = {
         url: `/vendor/updateapprove/${row.userId}`,
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: { "content-type": "application/json" },
         data: {
           firstname: row?.firstname,

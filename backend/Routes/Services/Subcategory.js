@@ -27,6 +27,10 @@ router.get(
   "/getSubcategoriesByCategoryservices/:categoryId",
   SubCatagoryserviceController.getSubcategoriesservicesByCategory
 );
+router.post(
+  "/addservicesubcatogoriesviaexcelesheet",
+  SubCatagoryserviceController.addServiceSubCategoriesViaExcelSheet
+);
 router.get(
   "/getallsubcatagoryservices",
   SubCatagoryserviceController.getAllSubcatagoryservice

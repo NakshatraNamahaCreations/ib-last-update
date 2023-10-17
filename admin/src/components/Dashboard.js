@@ -18,6 +18,8 @@ function Dashboard() {
   const [vendor, setVendor] = useState([]);
   const [payment, setPayment] = useState([]);
   const [buyerData, setBuyerData] = useState([]);
+  const [sequenceData, setSequenceData] = useState([]);
+  const [vendorSequence, setVendorSequence] = useState("");
 
   const [lastWeekPercentageOfVendor, setLastWeekPercentageOfVendor] =
     useState(0);
@@ -27,9 +29,7 @@ function Dashboard() {
     useState(0);
 
   const getVendor = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/getalluser"
-    );
+    let res = await axios.get("http://localhost:8000/api/vendor/getalluser");
     if (res.status === 200) {
       setVendor(res.data.vendorprofile);
     } else {
@@ -39,9 +39,7 @@ function Dashboard() {
   // console.log("vendor", vendor);
 
   const getPayment = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/payment/getpayments"
-    );
+    let res = await axios.get("http://localhost:8000/api/payment/getpayments");
     if (res.status === 200) {
       setPayment(res.data.success);
     } else {
@@ -51,9 +49,7 @@ function Dashboard() {
 
   const getAllBuyres = async () => {
     try {
-      let res = await axios.get(
-        "https://api.infinitimart.in/api/buyer/getalluser"
-      );
+      let res = await axios.get("http://localhost:8000/api/buyer/getalluser");
       if (res.status === 200) {
         const buyerDetails = res.data?.buyerProfile;
         setBuyerData(buyerDetails);
@@ -185,6 +181,7 @@ function Dashboard() {
     getVendor();
     getPayment();
     getAllBuyres();
+    getSequenceNumber();
   }, []);
 
   useEffect(() => {
@@ -206,6 +203,44 @@ function Dashboard() {
   const lenht = payment.filter((item) => item.code === "PAYMENT_SUCCESS");
   // console.log("Payment success length", lenht.length);
 
+  const addSequences = async () => {
+    try {
+      const config = {
+        url: "/admin/updatevendorcodesequence",
+        method: "post",
+        baseURL: "http://localhost:8000/api",
+        data: {
+          vendorSequenceNumber: vendorSequence,
+        },
+      };
+      await axios(config).then(function (res) {
+        if (res.status === 200) {
+          console.log("success");
+          alert(res.data.success);
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("not able to complete");
+    }
+  };
+
+  const getSequenceNumber = async () => {
+    try {
+      let res = await axios.get(
+        "http://localhost:8000/api/admin/getsequencecode"
+      );
+      if (res.status === 200) {
+        const theSequence = res.data?.Sequence;
+        setSequenceData(theSequence);
+        console.log("theSequence", theSequence);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       style={{
@@ -213,8 +248,38 @@ function Dashboard() {
         // "#f7f7f7"
       }}
     >
-      <div className="p-5">
+      <div
+        className="d-flex p-5"
+        style={{ display: "flex", justifyContent: "space-between" }}
+      >
         <h2>Analytics Dashboard</h2>
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Vendor Code Sequence"
+            style={{
+              borderRadius: "7px",
+              padding: "5px 7px",
+              boxShadow: "0px 1px 3px 0px gray",
+              border: 0,
+            }}
+            onChange={(e) => setVendorSequence(e.target.value)}
+          />{" "}
+          <button
+            style={{
+              border: 0,
+              borderRadius: "7px",
+              padding: "4px 7px",
+              backgroundColor: "#b8b5e8",
+              boxShadow: "0px 1px 3px 0px gray",
+            }}
+            onClick={addSequences}
+          >
+            Add
+          </button>{" "}
+          <br />
+          {sequenceData[0]?.vendorSequenceNumber}
+        </div>
       </div>
 
       <div className="row me-0">

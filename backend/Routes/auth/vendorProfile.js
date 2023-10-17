@@ -15,6 +15,8 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 router.post("/signup", upload.any(), vendorProfileController.createAccount);
 router.post("/login", vendorProfileController.vendorLogin);
+router.post("/loginvendor", vendorProfileController.vendorLoginwithvendorcode);
+
 router.post("/loginwithmobile", vendorProfileController.vendorLoginWithMobile);
 router.post("/postsubcategory", vendorProfileController.postsubcategory);
 router.post(
@@ -33,7 +35,7 @@ router.post("/useredit/:id", vendorProfileController.userupdate);
 router.put("/productslimits/:id", vendorProfileController.productsLimites);
 router.post("/approvevendor/:id", vendorProfileController.vendorapprove);
 router.post("/disapprovevendor/:id", vendorProfileController.vendordisapprove);
-router.post("/updateapprove/:id", vendorProfileController.approveupdate);
+router.post("/updateuser/:id", vendorProfileController.approveupdate);
 router.post("/delete/:id", vendorProfileController.deletevendor);
 
 module.exports = router;

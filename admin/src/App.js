@@ -27,6 +27,9 @@ import ProductBanner from "./components/ProductBanner";
 import VendorUpdates from "./components/VendorUpdates";
 import SubAdminAccess from "./components/SubAdminAccess";
 
+import Papprovaldetails from "./components/Papprovaldetails";
+import Sapprovaldetail from "./components/Sapprovaldetail";
+
 function App() {
   return (
     <BrowserRouter>
@@ -176,6 +179,26 @@ function App() {
             </>
           }
         />
+
+        <Route
+          path="/papprovaldetails/:id"
+          element={
+            <>
+              <Header />
+              <Papprovaldetails />
+            </>
+          }
+        />
+        <Route
+          path="/sapprovaldetails/:id"
+          element={
+            <>
+              <Header />
+              <Sapprovaldetail />
+            </>
+          }
+        />
+
         <Route path="/" element={<Login />} />
         <Route path="/invoice" element={<Invoice />} />
       </Routes>

@@ -12,6 +12,9 @@ class ServiceProductList {
       serviceProductDescription,
       serviceProductBrand,
       serviceProductSize,
+      serviceProductStatus,
+      serviceProductMaxRange,
+      serviceProductMinRange,
     } = req.body;
     let file = req.file?.filename;
     try {
@@ -26,6 +29,9 @@ class ServiceProductList {
         serviceProductBrand,
         serviceProductSize,
         serviceProductImage: file,
+        serviceProductStatus,
+        serviceProductMaxRange,
+        serviceProductMinRange,
       });
       if (!file) {
         return res.status(500).json({
@@ -167,6 +173,8 @@ class ServiceProductList {
         serviceProductDescription,
         serviceProductBrand,
         serviceProductRange,
+        serviceProductMinRange,
+        serviceProductMaxRange,
       } = req.body;
       const file = req.file?.filename;
       const existingService = await ServiceProductListModal.findById(productId);
@@ -180,6 +188,11 @@ class ServiceProductList {
         existingService.serviceProductName = serviceProductName;
       if (serviceProductPrice)
         existingService.serviceProductPrice = serviceProductPrice;
+
+      if (serviceProductMaxRange)
+        existingService.serviceProductMaxRange = serviceProductMaxRange;
+      if (serviceProductMinRange)
+        existingService.serviceProductMinRange = serviceProductMinRange;
 
       if (serviceProductDescription)
         existingService.serviceProductDescription = serviceProductDescription;

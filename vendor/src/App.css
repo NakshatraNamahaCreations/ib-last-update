@@ -472,3 +472,7 @@ h6 {
   cursor: pointer;
   font-size: 21px;
 }
+.profileImage-hover:hover {
+  opacity: 0.5;
+  /* backgroun */
+}

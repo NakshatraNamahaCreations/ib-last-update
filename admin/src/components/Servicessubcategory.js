@@ -8,7 +8,9 @@ import axios from "axios";
 import Sidebar from "../components/layout/Sidebar";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
+import * as XLSX from "xlsx";
+import { CSVLink } from "react-csv";
 
 function ServicessubCategory() {
   const [catagory, setCatagory] = useState([]);
@@ -19,6 +21,10 @@ function ServicessubCategory() {
   //search
   const [searchServiceSubCategory, setServiceSearchSubCategory] = useState("");
   const [filterdata, setfilterdata] = useState([]);
+  const [excel, setExcel] = useState();
+  const [hideUploadButton, setHideUploadButton] = useState(true);
+  const [jsonData, setJsonData] = useState([]);
+
   // Edit
   const [editCatagoryName, setEditCatagoryName] = useState("");
   const [editSubcategoryName, setEditSubcategoryName] = useState("");
@@ -56,7 +62,7 @@ function ServicessubCategory() {
       const config = {
         url: "/vendor/services/subcatagory/addsubcatagoryservices",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -80,7 +86,7 @@ function ServicessubCategory() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
+      "http://localhost:8000/api/vendor/services/catagory/getservicecatagory"
     );
     if (res.status === 200) {
       console.log("catagory===", res);
@@ -90,7 +96,7 @@ function ServicessubCategory() {
 
   const getAllSubCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/subcatagory/getsubcatagoryservices"
+      "http://localhost:8000/api/vendor/services/subcatagory/getsubcatagoryservices"
     );
     if (res.status === 200) {
       console.log("subcatagory===", res);
@@ -103,7 +109,7 @@ function ServicessubCategory() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/services/subcatagory/deletesubcatagoryservices/` +
+          `http://localhost:8000/api/vendor/services/subcatagory/deletesubcatagoryservices/` +
             data._id
         )
         .then(function (res) {
@@ -132,7 +138,7 @@ function ServicessubCategory() {
       const config = {
         url: `/vendor/services/subcatagory/updateservicesubcategory/${subCategoryId}`,
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -166,7 +172,7 @@ function ServicessubCategory() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/servicesubcatagory/${row.SubcatagoryImage}`}
+            src={`http://localhost:8000/servicesubcatagory/${row.SubcatagoryImage}`}
             alt=""
             width="50%"
           />
@@ -215,6 +221,84 @@ function ServicessubCategory() {
     searchResults();
   }, [searchServiceSubCategory]);
 
+  useEffect(() => {
+    if (excel) {
+      readFile();
+    }
+  }, [excel]);
+
+  function readFile() {
+    var name = excel.name;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      // evt = on_file_select event
+      /* Parse data */
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      /* Get first worksheet */
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      /* Convert array of arrays */
+      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
+      /* Update state */
+      console.log("Data>>>" + data); // shows that excel data is read
+      console.log(convertToJson(data)); // shows data in json format
+      setJsonData(JSON.parse(convertToJson(data)));
+    };
+    reader.readAsBinaryString(excel);
+  }
+
+  function convertToJson(csv) {
+    var lines = csv.split("\n");
+
+    var result = [];
+
+    var headers = lines[0].split(",");
+
+    for (var i = 1; i < lines.length; i++) {
+      var obj = {};
+      var currentline = lines[i].split(",");
+
+      for (var j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
+
+      result.push(obj);
+    }
+    return JSON.stringify(result); //JSON
+  }
+
+  console.log("subcategory excel upload", excel);
+
+  const handleImport = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        url: "/vendor/services/subcatagory/addservicesubcatogoriesviaexcelesheet",
+        method: "post",
+        baseURL: "http://localhost:8000/api",
+        headers: { "content-type": "application/json" },
+        data: {
+          subcategories: jsonData.map((ele) => ({
+            SubcatagoryName: ele.SubcatagoryName,
+            catagoryName: ele.catagoryName,
+          })),
+        },
+      };
+      let res = await axios(config);
+      if (res.status === 200) {
+        console.log(jsonData, "jsonData");
+        alert(res.data.success);
+        setHideUploadButton(false);
+        getAllSubCatagory();
+        return res;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const csvData = [["catagoryName", "SubcatagoryName"]];
+
   return (
     <div>
       <div>
@@ -228,6 +312,43 @@ function ServicessubCategory() {
               placeholder="Search by Subcategory"
               onChange={(e) => setServiceSearchSubCategory(e.target.value)}
             />
+            <div className="mt-2">
+              <CSVLink data={csvData} filename={"Service Subcategory.csv"}>
+                {" "}
+                <Button
+                  className="btn btn-danger me-1"
+                  style={{ backgroundColor: "#a9042e", border: 0 }}
+                >
+                  Download
+                </Button>
+              </CSVLink>
+              <input
+                accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                style={{ display: "none" }}
+                id="icon-button-file"
+                type="file"
+                onChange={(e) => setExcel(e.target.files[0])}
+              />{" "}
+              <label
+                className="btn btn-outline-danger "
+                style={{ borderColor: "#a9042e" }}
+                htmlFor="icon-button-file"
+              >
+                {" "}
+                Upload Subcategory
+              </label>{" "}
+              {excel && hideUploadButton ? (
+                <Button
+                  className="btn btn-danger ms-1"
+                  style={{ backgroundColor: "#a9042e", border: 0 }}
+                  onClick={handleImport}
+                >
+                  Upload
+                </Button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
 
           <div>
@@ -359,7 +480,7 @@ function ServicessubCategory() {
           <h5>Image</h5>
           {!selectedImage && (
             <img
-              src={`https://api.infinitimart.in/servicesubcatagory/${editSubcategory?.SubcatagoryImage}`}
+              src={`http://localhost:8000/servicesubcatagory/${editSubcategory?.SubcatagoryImage}`}
               alt=""
               width="25%"
             />

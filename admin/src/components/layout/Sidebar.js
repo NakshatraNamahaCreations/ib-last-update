@@ -1,15 +1,6 @@
 import React, { useState } from "react";
-import {
-  FaTh,
-  FaBars,
-  FaUserAlt,
-  FaRegChartBar,
-  FaCommentAlt,
-  FaShoppingBag,
-  FaThList,
-} from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import Header from "./Header";
+// import Header from "./Header";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);

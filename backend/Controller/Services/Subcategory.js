@@ -50,6 +50,31 @@ class SubCatagory {
     }
   }
 
+  async addServiceSubCategoriesViaExcelSheet(req, res) {
+    const { subcategories } = req.body;
+    try {
+      const SubcategoryList = await ServicesSubcatagoryModel.insertMany(
+        subcategories
+      );
+      if (SubcategoryList.length > 0) {
+        const responseSubcategories = SubcategoryList.map((subcategory) => ({
+          SubcatagoryName: subcategory.SubcatagoryName,
+          catagoryName: subcategory.catagoryName,
+          _id: subcategory._id,
+        }));
+        return res.json({
+          success: "Subcategory Added",
+          subcategories: responseSubcategories,
+        });
+      } else {
+        return res.status(400).json({ error: "Failed to add" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  }
+
   async getSubcategoriesservicesByCategory(req, res) {
     const catagoryname = req.params.categoryId;
     try {

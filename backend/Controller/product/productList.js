@@ -16,6 +16,8 @@ class ProductList {
       productDiscount,
       productRange,
       productvalue,
+      serviceProductMaxRange,
+      serviceProductMinRange,
     } = req.body;
     let file = req.file?.filename;
     try {
@@ -24,7 +26,6 @@ class ProductList {
         userId,
         catagoryName,
         SubcatagoryName,
-
         productName,
         productPrice,
         productDescription,
@@ -35,6 +36,8 @@ class ProductList {
         productDiscount,
         productRange,
         productvalue,
+        serviceProductMaxRange,
+        serviceProductMinRange,
       });
       if (!file) {
         return res.status(500).json({
@@ -230,6 +233,8 @@ class ProductList {
         productBrand,
         productSize,
         productRange,
+        serviceProductMaxRange,
+        serviceProductMinRange,
       } = req.body;
       const file = req.file?.filename;
 
@@ -248,6 +253,10 @@ class ProductList {
       if (productStatus) existingProduct.productStatus = productStatus;
       if (productBrand) existingProduct.productBrand = productBrand;
       if (productSize) existingProduct.productSize = productSize;
+      if (productMaximumRange)
+        existingProduct.productMaximumRange = productMaximumRange;
+      if (productMinimumRange)
+        existingProduct.productMinimumRange = productMinimumRange;
       if (file) existingProduct.productImage = file;
 
       const updatedProduct = await existingProduct.save();

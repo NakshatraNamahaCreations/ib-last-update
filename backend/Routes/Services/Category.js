@@ -23,6 +23,12 @@ router.get(
   "/getservicecatagory",
   catagoryserviceController.getAllcatagoryservices
 );
+
+router.post(
+  "/addservicecatogoriesviaexcelesheet",
+  catagoryserviceController.addSerivceCategoriesViaExcelSheet
+);
+
 router.post(
   "/deleteservicecatagory/:catagoryid",
   catagoryserviceController.deleteserviceCatagory

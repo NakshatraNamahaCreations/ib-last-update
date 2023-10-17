@@ -54,6 +54,12 @@ const ProductList = new Schema({
   productvalue: {
     type: String,
   },
+  serviceProductMinRange: {
+    type: Number,
+  },
+  serviceProductMaxRange: {
+    type: Number,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

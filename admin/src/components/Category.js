@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./layout/Header";
-import Sidenav from "../Sidenav";
 import axios from "axios";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -10,6 +8,9 @@ import DataTable from "react-data-table-component";
 import SubCategory from "./Subcategory";
 import { Modal } from "react-bootstrap";
 import ProductApproval from "./ProductApproval";
+import { CSVLink } from "react-csv";
+import { Button } from "react-bootstrap";
+import * as XLSX from "xlsx";
 
 function Category() {
   const [categoryTab, setCategoryTab] = useState(true);
@@ -18,6 +19,8 @@ function Category() {
   const [catagory, setCatagory] = useState([]);
   const [catagoryName, setCatagoryName] = useState(true);
   const [image, setImage] = useState(false);
+  const [hideUploadButton, setHideUploadButton] = useState(true);
+
   //search
   const [searchCategory, setSearchCategory] = useState("");
   const [filterdata, setfilterdata] = useState([]);
@@ -55,7 +58,7 @@ function Category() {
       const config = {
         url: "/vendor/product/catagory/addcatagory",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -73,7 +76,7 @@ function Category() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -81,6 +84,7 @@ function Category() {
       setfilterdata(res.data?.catagory);
     }
   };
+
   useEffect(() => {
     getAllCatagory();
   }, []);
@@ -89,7 +93,7 @@ function Category() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/product/catagory/deletecatagory/` +
+          `http://localhost:8000/api/vendor/product/catagory/deletecatagory/` +
             data._id
         )
         .then(function (res) {
@@ -117,7 +121,7 @@ function Category() {
       const config = {
         url: `/vendor/product/catagory/updateproductcategory/${categoryId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -147,7 +151,7 @@ function Category() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/catagory/${row.catagoryImage}`}
+            src={`http://localhost:8000/catagory/${row.catagoryImage}`}
             alt=""
             style={{ padding: "7px", width: "35%" }}
           />
@@ -194,6 +198,75 @@ function Category() {
     };
     searchResults();
   }, [searchCategory]);
+
+  const [excel, setExcel] = useState(null);
+  console.log("excel upload", excel);
+
+  const handleImport = async () => {
+    if (excel) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        const formData = new FormData();
+
+        for (let i = 0; i < jsonData.length; i++) {
+          const imageFile = jsonData[i].imageFile;
+          const imageName = jsonData[i].imageName;
+
+          formData.append(imageName, imageFile);
+        }
+        try {
+          const response = await axios.post(
+            "http://localhost:8000/api/vendor/product/catagory/addcustomersviaexcelesheet",
+            jsonData
+          );
+          alert(response.data.success);
+          setHideUploadButton(false);
+          getAllCatagory();
+          // window.location.reload();
+          console.log("Response from backend:", response.data);
+        } catch (error) {
+          console.error("Error sending data to backend:", error);
+        }
+      };
+      reader.readAsArrayBuffer(excel);
+    }
+  };
+
+  // const formData = new FormData();
+  // console.log("bulkImages", bulkImages);
+
+  // const uploadImages = async (e) => {
+  //   e.preventDefault();
+
+  //   Array.from(bulkImages).forEach((file) => {
+  //     formData.append("catagoryImage", file);
+  //   });
+  //   console.log("bulkImages Inside", bulkImages);
+  //   try {
+  //     const config = {
+  //       url: "/bulkimageuploading",
+  //       method: "post",
+  //       baseURL: "http://localhost:8000/api/vendor/product/catagory",
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //       data: formData,
+  //     };
+  //     let res = await axios(config);
+  //     if (res.status === 200) {
+  //       console.log(res.data);
+  //       alert("Image Uploaded Successfully");
+  //       getAllCatagory();
+  //       // window.location.reload();
+  //       return res;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="row me-0">
@@ -274,6 +347,74 @@ function Category() {
                   placeholder="Search by category"
                   onChange={(e) => setSearchCategory(e.target.value)}
                 />
+
+                <div className="mt-2">
+                  <CSVLink data={catagory} filename={"Product Category.csv"}>
+                    {" "}
+                    <Button
+                      className="btn btn-danger me-1"
+                      style={{ backgroundColor: "#a9042e", border: 0 }}
+                    >
+                      Download
+                    </Button>
+                  </CSVLink>
+
+                  <input
+                    accept=".xlsx,.xls,.csv"
+                    style={{ display: "none" }}
+                    id="icon-button-file"
+                    type="file"
+                    onChange={(e) => setExcel(e.target.files[0])}
+                  />
+                  <label
+                    className="btn btn-outline-danger "
+                    style={{ borderColor: "#a9042e" }}
+                    htmlFor="icon-button-file"
+                  >
+                    Upload Category
+                  </label>
+
+                  {excel && hideUploadButton ? (
+                    <Button
+                      className="btn btn-danger ms-1"
+                      style={{ backgroundColor: "#a9042e", border: 0 }}
+                      onClick={() => {
+                        handleImport();
+                      }}
+                    >
+                      Upload
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                  {/* {uploadCategory ? (
+                    <>
+                      <input
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        id="icon-button-file1"
+                        type="file"
+                        multiple
+                        onChange={(e) => setBulkImages(e.target.files)}
+                      />
+                      <label
+                        className="btn btn-outline-info "
+                        htmlFor="icon-button-file1"
+                      >
+                        Select Images
+                      </label>
+                      <Button
+                        className="btn btn-danger"
+                        style={{ backgroundColor: "#a9042e", border: 0 }}
+                        onClick={uploadImages}
+                      >
+                        Upload Images
+                      </Button>
+                    </>
+                  ) : (
+                    ""
+                  )} */}
+                </div>
               </div>
               <div>
                 <button
@@ -395,7 +536,7 @@ function Category() {
           {!selectedImage && (
             <img
               className="pt-2"
-              src={`https://api.infinitimart.in/catagory/${editCategory?.catagoryImage}`}
+              src={`http://localhost:8000/catagory/${editCategory?.catagoryImage}`}
               alt=""
               width="25%"
             />

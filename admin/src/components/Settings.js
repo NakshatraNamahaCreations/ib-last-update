@@ -4,14 +4,26 @@ import { Button, Card, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
+import Offcanvas from "react-bootstrap/Offcanvas";
 
 function Settings() {
   const adminData = JSON.parse(sessionStorage.getItem("adminData"));
+  // console.log("adminData====", adminData);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [showeditprofile, setShowEditProfile] = useState(false);
+
+  const handleEditprofileClose = () => setShowEditProfile(false);
+  const handleEditprofileShow = () => setShowEditProfile(true);
+  // admin profile update
+  const [adminName, setAdminName] = useState(adminData.name);
+  const [adminEmail, setAdminEmail] = useState(adminData.email);
+  const [adminMobileNumber, setAdminMobileNumber] = useState(
+    adminData.mobileNumber
+  );
 
   // open modal to adding sub admin
   const [show, setShow] = useState(false);
@@ -32,7 +44,7 @@ function Settings() {
   const handleChangePassword = async () => {
     try {
       const response = await fetch(
-        "https://api.infinitimart.in/api/superadmin/superadminchangepassword",
+        `http://localhost:8000/api/superadmin/superadminchangepassword/${adminData._id}`,
         {
           method: "POST",
           headers: {
@@ -61,15 +73,72 @@ function Settings() {
     }
   };
 
-  //adding subadmin
-  // console.log("viewSubAdmin", viewSubAdmin);
+  // const updateProfile = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:8000/api/superadmin/updatesuperadminprofile/${adminData._id}`,
+  //       {
+  //         method: "put",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           adminName,
+  //           adminMobileNumber,
+  //           adminEmail,
+  //         }),
+  //       }
+  //     );
+
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       console.log("Profile updated successfully:", data);
+  //       alert("Profile updated successfully");
+  //       window.location.reload("");
+  //     } else {
+  //       console.error("Error updating profile:", data.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //   }
+  // };
+
+  const updateProfile = async () => {
+    try {
+      const config = {
+        url: `/superadmin/updatesuperadminprofile/${adminData._id}`,
+        method: "put",
+        baseURL: "http://localhost:8000/api",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          name: adminName,
+          mobileNumber: adminMobileNumber,
+          email: adminEmail,
+        },
+      };
+      await axios(config).then(function (res) {
+        if (res.status === 200) {
+          console.log("success", res);
+          sessionStorage.removeItem("adminData");
+          alert(res.data.Success);
+          window.location.assign("/");
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      alert("not able to complete");
+    }
+  };
+
   const addSubAdmin = async () => {
     // e.preventDefault();
     try {
       const response = {
         url: "/subadmin/createsubadmin",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: {
           "Content-Type": "application/json",
         },
@@ -102,12 +171,32 @@ function Settings() {
     }
   };
 
+  const signout = () => {
+    try {
+      axios
+        .get(
+          `http://localhost:8000/api/superadmin/superadminsignout/${adminData._id}`
+        )
+        .then(function (res) {
+          if (res.status === 200) {
+            sessionStorage.removeItem("adminData");
+            alert("Signout Success!");
+            window.location.assign("/");
+          } else {
+            alert("Signout Unsuccessfully");
+            console.log(res);
+          }
+        });
+    } catch (error) {
+      console.log(error);
+      // alert(error.);
+    }
+  };
+
   const deleteSubAdmin = async (data) => {
     try {
       axios
-        .post(
-          `https://api.infinitimart.in/api/subadmin/deletesubadmin/` + data._id
-        )
+        .post(`http://localhost:8000/api/subadmin/deletesubadmin/` + data._id)
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
@@ -123,10 +212,10 @@ function Settings() {
 
   const getAllSubAdmins = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/subadmin/getallsubadmins"
+      "http://localhost:8000/api/subadmin/getallsubadmins"
     );
     if (res.status === 200) {
-      console.log(res);
+      // console.log(res);
       setAllSubAdmins(res.data?.allSubAdmin);
     }
   };
@@ -245,10 +334,23 @@ function Settings() {
           </>
         ) : (
           <>
-            <h2>
-              {" "}
-              <i class="fa-solid fa-gear" style={{ fontSize: "25px" }}></i>{" "}
-              Account Settings
+            <h2
+              className="ps-3 pe-5"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div>
+                <i class="fa-solid fa-gear" style={{ fontSize: "25px" }}></i>{" "}
+                Account Settings
+              </div>
+              <div>
+                {" "}
+                <i
+                  class="fa-solid fa-arrow-right-to-bracket"
+                  title="Signout"
+                  style={{ cursor: "pointer" }}
+                  onClick={signout}
+                ></i>
+              </div>
             </h2>
             <div className="shadow-lg bg-white rounded p-3 m-auto mt-3">
               <h5 className="ps-4">
@@ -260,21 +362,14 @@ function Settings() {
                   <div className="row me-0">
                     <div className="col-md-4">
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        {/* <img
-                      src="../images/testimonial.jpg"
-                      alt=""
-                      style={{ width: "25%", borderRadius: "100%" }}
-                    /> */}
                         <div style={{ marginLeft: "1rem" }}>
                           <div style={{ fontSize: "18px", fontWeight: "500" }}>
-                            {adminData?.name}
+                            {adminData?.name}{" "}
                           </div>
                           <div style={{ color: "#6f8d93", fontWeight: "400" }}>
-                            {/* <i>Super Admin</i> */}
                             <i>{adminData?.email}</i>
                           </div>
                           <div style={{ color: "#6f8d93", fontWeight: "400" }}>
-                            {/* <i>Bangalore, India</i> */}
                             <i>+91 {adminData?.mobileNumber}</i>
                           </div>
                         </div>
@@ -287,30 +382,38 @@ function Settings() {
                         <div>
                           <u
                             className="admin-profile-edit"
+                            title="Edit Profile"
+                            onClick={handleEditprofileShow}
+                          >
+                            Edit Profile
+                            {/* <i class="fa-solid fa-pen"></i> */}
+                          </u>{" "}
+                          <br />
+                          <u
+                            className="admin-profile-edit"
                             title="Change Password"
                             onClick={() => setShowChangePassword(true)}
                           >
                             Change Password
                             {/* <i class="fa-solid fa-pen"></i> */}
+                          </u>{" "}
+                          <br />
+                          <u
+                            className="admin-profile-edit"
+                            title="Add"
+                            onClick={handleShow}
+                          >
+                            Add Sub Admin
+                            {/* <i class="fa-solid fa-plus"></i> */}
                           </u>
-                          <p>
-                            <u
-                              className="admin-profile-edit"
-                              title="Add"
-                              onClick={handleShow}
-                            >
-                              Add Sub Admin
-                              {/* <i class="fa-solid fa-plus"></i> */}
-                            </u>{" "}
-                            <br />
-                            <u
-                              className="admin-profile-edit"
-                              title="View"
-                              onClick={() => setViewSubAdmin(true)}
-                            >
-                              View Sub Admin
-                            </u>
-                          </p>
+                          <br />
+                          <u
+                            className="admin-profile-edit"
+                            title="View"
+                            onClick={() => setViewSubAdmin(true)}
+                          >
+                            View Sub Admin
+                          </u>
                         </div>
                       </div>
                     </div>
@@ -397,6 +500,68 @@ function Settings() {
           </>
         )}
       </div>
+
+      <Offcanvas
+        show={showeditprofile}
+        placement="end"
+        onHide={handleEditprofileClose}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Edit Profile</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <div className="row me-0">
+            <div className="col-md-6 pt-2">
+              <div className="subadmin-label-edit">Name</div>
+              <div className="group pt-1">
+                <input
+                  className="col-md-12 vhs-input-value"
+                  type="text"
+                  value={adminName}
+                  onChange={(e) => setAdminName(e.target.value)}
+                />
+              </div>
+            </div>{" "}
+            <br />
+            <div className="col-md-6 pt-2">
+              <div className="subadmin-label-edit">Mobile Number</div>
+              <div className="group pt-1">
+                <input
+                  type="text"
+                  className="col-md-12 vhs-input-value"
+                  value={adminMobileNumber}
+                  onChange={(e) => setAdminMobileNumber(e.target.value)}
+                  isReadOnly={false}
+                />
+              </div>
+            </div>{" "}
+            <br /> <br />
+            <div className="col-md-8 pt-2">
+              <div className="subadmin-label-edit"> Email</div>
+              <div className="group pt-1">
+                <input
+                  type="text"
+                  className="col-md-12 vhs-input-value"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>{" "}
+          <br />
+          <div
+            className=" mt-2 d-flex justify-center"
+            style={{ justifyContent: "center", marginTop: "20px" }}
+          >
+            <Button
+              style={{ backgroundColor: "maroon", borderColor: "maroon" }}
+              onClick={updateProfile}
+            >
+              Update
+            </Button>
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
       <Modal
         show={show}
         onHide={handleClose}
@@ -484,7 +649,7 @@ function Settings() {
           >
             <Button
               style={{ backgroundColor: "maroon", borderColor: "maroon" }}
-              onClick={addSubAdmin}
+              onClick={handleEditprofileClose}
             >
               Add
             </Button>

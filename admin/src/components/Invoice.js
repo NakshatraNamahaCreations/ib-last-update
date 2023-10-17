@@ -61,7 +61,18 @@ function Invoice() {
               <div className="col-md-3">
                 <b>Date:</b>
               </div>
-              <div className="col-md-9">{moment().format("DD-MM-YYYY")}</div>
+              <div className="col-md-9">
+                {/* {invoiceData.PaymentDetails[0]?.createdAt} */}
+                {invoiceData.PaymentDetails.length > 0 ? (
+                  <>
+                    {moment(invoiceData.PaymentDetails[0]?.createdAt).format(
+                      "dddd, MMMM Do YYYY"
+                    )}
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
 
             <div className="row">
