@@ -30,7 +30,7 @@ function SubAdminAccess() {
       const config = {
         url: `/giverightsforsubadmin/${assignRights._id}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api/subadmin",
+        baseURL: "http://localhost:8000/api/subadmin",
         headers: { "content-type": "application/json" },
         data: {
           bannerAccess: banner,

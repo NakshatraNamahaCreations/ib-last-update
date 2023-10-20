@@ -22,7 +22,7 @@ function ServiceBanner() {
       const config = {
         url: "/service/addservicebanner",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -45,7 +45,7 @@ function ServiceBanner() {
 
   const getAllBanner = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/service/getservicebanner"
+      "http://localhost:8000/api/service/getservicebanner"
     );
     if (res.status === 200) {
       console.log(res);
@@ -57,8 +57,7 @@ function ServiceBanner() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/service/deleteservicebanner/` +
-            data._id
+          `http://localhost:8000/api/service/deleteservicebanner/` + data._id
         )
         .then(function (res) {
           if (res.status === 200) {
@@ -91,7 +90,7 @@ function ServiceBanner() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/serviceBanner/${row.bannerImage}`}
+            src={`http://localhost:8000/serviceBanner/${row.bannerImage}`}
             alt=""
             width="50%"
           />

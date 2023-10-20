@@ -209,6 +209,52 @@ function ServiceApproval() {
     navigate(`/sapprovaldetails/${row.userId._id}`);
   };
 
+  const [commonUserIds, setCommonUserIds] = useState([]);
+  const [commonUserData, setCommonUserData] = useState([]);
+
+  const columns1 = [
+    {
+      name: "User ID",
+      selector: "userId._id",
+      width: "100px",
+    },
+    {
+      name: "First Name",
+      selector: "userId.firstname",
+      width: "100px",
+    },
+  ];
+  const commonUserData1 = commonUserIds.map((userId) => {
+    const commonItem = serviceData.find((item) => item.userId?._id === userId);
+    return commonItem;
+  });
+
+  useEffect(() => {
+    const userIdCount = new Map();
+    const commonIds = [];
+
+    serviceData.forEach((item) => {
+      const userId = item.userId?._id;
+
+      if (userId) {
+        userIdCount.set(userId, (userIdCount.get(userId) || 0) + 1);
+
+        // If it's the second occurrence of a user ID, add it to the commonIds array
+        if (userIdCount.get(userId) === 2) {
+          commonIds.push(userId);
+        }
+      }
+    });
+
+    setCommonUserIds(commonIds);
+
+    // Filter the productData to include only common user IDs
+    const commonData = serviceData.filter((item) =>
+      commonIds.includes(item.userId?._id)
+    );
+    setCommonUserData(commonData);
+  }, [serviceData]);
+
   return (
     <div>
       <div>
@@ -226,7 +272,7 @@ function ServiceApproval() {
           {" "}
           <DataTable
             columns={columns}
-            data={filteredService || serviceData}
+            data={commonUserData1}
             pagination
             fixedHeader
             selectableRowsHighlight

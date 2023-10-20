@@ -63,7 +63,7 @@ function Products() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log("catagory===", res);
@@ -72,9 +72,7 @@ function Products() {
   };
 
   const getAllProduct = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/product/getproduct"
-    );
+    let res = await axios.get("http://localhost:8000/api/product/getproduct");
     if (res.status === 200) {
       console.log("productList===", res);
       setproductData(res.data?.productData);
@@ -87,7 +85,7 @@ function Products() {
 
   const getAllSubCatagory = async () => {
     let res = await axios.post(
-      "https://api.infinitimart.in/api/vendor/product/subcatagory/postsubcatagory",
+      "http://localhost:8000/api/vendor/product/subcatagory/postsubcatagory",
       { catagoryName: user.category }
     );
     if (res.status === 200) {
@@ -98,7 +96,7 @@ function Products() {
 
   // const getAllSubCatagory = async () => {
   //   let res = await axios.post(
-  //     "https://api.infinitimart.in/api/vendor/product/subcatagory/postsubcatagory",
+  //     "http://localhost:8000/api/vendor/product/subcatagory/postsubcatagory",
   //     { catagoryName: user.category }
   //   );
   //   if (res.status === 200) {
@@ -125,7 +123,7 @@ function Products() {
       const config = {
         url: "/product/addproduct",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -193,7 +191,7 @@ function Products() {
                         <td>{ele?.productQuantity}</td>
                         <td>
                           <img
-                            src={`https://api.infinitimart.in/productlist/${ele.productImage}`}
+                            src={`http://localhost:8000/productlist/${ele.productImage}`}
                             className="td-img"
                             alt="..."
                             style={{ width: "100%" }}

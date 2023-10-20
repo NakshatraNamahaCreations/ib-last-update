@@ -131,6 +131,53 @@ class vendorProfile {
     }
   }
 
+  async createAccount1(req, res) {
+    try {
+      const { email, phoneNumber } = req.body;
+
+      const existingEmail = await VendorModel.findOne({ email });
+      const existingPhone = await VendorModel.findOne({ phoneNumber });
+
+      if (existingEmail && existingPhone) {
+        return res
+          .status(400)
+          .json({ error: "Email and mobile number already exist" });
+      } else if (existingEmail) {
+        return res.status(400).json({ error: "Email already exists" });
+      } else if (existingPhone) {
+        return res.status(400).json({ error: "Mobile number already exists" });
+      }
+    } catch (error) {
+      console.error("Error creating account:", error);
+      return res.status(500).json({ error: "An error occurred" });
+    }
+    // 29AIZPH5569G1ZE
+  }
+
+  async gstverify(req, res) {
+    try {
+      const { gst } = req.body;
+      console.log(gst);
+      if (gst.length === 15) {
+        const existingGst = await VendorModel.findOne({ gst });
+        console.log(existingGst);
+
+        if (existingGst) {
+          return res.status(200).json({ error: "GST already exists" });
+        } else {
+          return res.status(400).json({ message: "GST is available" });
+        }
+      } else {
+        return res.status(400).json({ error: "Invalid GST length" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Server error" });
+    }
+  }
+
+  // 29AAACM0829Q1Z0 exits
+
   async postsubcategory(req, res) {
     let { businesstype } = req.body;
     let vendorprofile = await VendorModel.find({ businesstype }).sort({
@@ -198,28 +245,53 @@ class vendorProfile {
     }
   }
 
-  async vendorLoginwithvendorcode(req, res) {
-    const { phoneNumber, customNumber } = req.body; // Extract phoneNumber and customNumber
+  // async vendorLoginwithvendorcode(req, res) {
+  //   const { phoneNumber, customNumber } = req.body; // Extract phoneNumber and customNumber
 
+  //   try {
+  //     if (!phoneNumber) {
+  //       return res.status(400).json({ error: "Please enter your phoneNumber" });
+  //     }
+  //     if (!customNumber) {
+  //       return res
+  //         .status(400)
+  //         .json({ error: "Please enter your customNumber" });
+  //     }
+  //     const user = await VendorModel.findOne({ phoneNumber });
+  //     if (!user) {
+  //       return res.status(404).json({ error: "User not found" });
+  //     }
+  //     // const passwordMatch = customNumber === user.customNumber;
+  //     // if (!passwordMatch) {
+  //     //   return res.status(401).json({ error: "Invalid customNumber" });
+  //     // }
+  //     if (customNumber !== user.customNumber) {
+  //       return res.status(401).json({ error: "Invalid customNumber" });
+  //     }
+  //     await VendorModel.findOneAndUpdate({ phoneNumber }, { status: "Online" });
+  //     return res.json({ success: "Login successful", user });
+  //   } catch (error) {
+  //     console.error("Something went wrong", error);
+  //     return res.status(500).json({ error: "Internal server error" });
+  //   }
+  // }
+
+  async vendorLoginwithvendorcode(req, res) {
+    const { phoneNumber, password } = req.body;
     try {
       if (!phoneNumber) {
         return res.status(400).json({ error: "Please enter your phoneNumber" });
       }
-      if (!customNumber) {
-        return res
-          .status(400)
-          .json({ error: "Please enter your customNumber" });
+      if (!password) {
+        return res.status(400).json({ error: "Please enter your password" });
       }
       const user = await VendorModel.findOne({ phoneNumber });
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({ error: "invalid Mobile Number" });
       }
-      // const passwordMatch = customNumber === user.customNumber;
-      // if (!passwordMatch) {
-      //   return res.status(401).json({ error: "Invalid customNumber" });
-      // }
-      if (customNumber !== user.customNumber) {
-        return res.status(401).json({ error: "Invalid customNumber" });
+      const passwordMatch = bcrypt.compareSync(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Invalid password" });
       }
       await VendorModel.findOneAndUpdate({ phoneNumber }, { status: "Online" });
       return res.json({ success: "Login successful", user });
@@ -295,23 +367,44 @@ class vendorProfile {
       });
   }
 
-  async userupdate(req, res) {
+  // async userupdate(req, res) {
+  //   let id = req.params.id;
+  //   let { firstname, lastname, email, password, phoneNumber } = req.body;
+  //   let data = await VendorModel.findOneAndUpdate(
+  //     { _id: id },
+  //     {
+  //       firstname,
+  //       lastname,
+  //       email,
+  //       password,
+  //       phoneNumber,
+  //     }
+  //   );
+  //   if (data) {
+  //     return res
+  //       .status(200)
+  //       .json({ Success: "Account created. Please login", user: data });
+  //   }
+  // }
+
+  async updateProfile(req, res) {
     let id = req.params.id;
-    let { firstname, lastname, email, password, phoneNumber } = req.body;
-    let data = await VendorModel.findOneAndUpdate(
-      { _id: id },
-      {
-        firstname,
-        lastname,
-        email,
-        password,
-        phoneNumber,
+    const { firstname, lastname, email, password, phoneNumber } = req.body;
+    try {
+      const updatedUser = await VendorModel.findByIdAndUpdate(
+        id,
+        { firstname, lastname, email, password, phoneNumber },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
       }
-    );
-    if (data) {
       return res
         .status(200)
-        .json({ Success: "Account created. Please login", user: data });
+        .json({ success: "Profile updated successfully", user: updatedUser });
+    } catch (error) {
+      console.log("Error updating profile:", error);
+      return res.status(500).json({ error: "An error occurred" });
     }
   }
 

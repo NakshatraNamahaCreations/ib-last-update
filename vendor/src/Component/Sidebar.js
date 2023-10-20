@@ -11,7 +11,7 @@ function Sidebar() {
   const signout = () => {
     try {
       axios
-        .get(`https://api.infinitimart.in/api/vendor/signout/` + user._id)
+        .get(`http://localhost:8000/api/vendor/signout/` + user._id)
         .then(function (res) {
           if (res.status === 200) {
             // alert("Signout Success!");

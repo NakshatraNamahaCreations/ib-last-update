@@ -22,166 +22,327 @@ import EditServices from "./Component/EditServices";
 import SettingsCopy from "./Component/SettingsCopy";
 
 function App() {
+  const admin = JSON.parse(sessionStorage.getItem("vendor"));
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/home"
-          element={
-            <Layout
-              children={
-                <>
-                  <Dashboard />
-                </>
+    <div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Router>
+      {admin == null ? (
+        <div>
+          {" "}
+          <Router>
+            <Routes>
+              <Route path="/" element={<Login />} />
+            </Routes>
+          </Router>
+        </div>
+      ) : (
+        <Router>
+          <Routes>
+            {" "}
+            <Route
+              path="/home"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Dashboard />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        {/* <Route
-          path="/settings"
-          element={
-            <>
-              <Header />
-              <Settings />
-            </>
-          }
-        /> */}
-        <Route
-          path="/settings"
-          element={
-            <Layout
-              children={
-                <>
-                  <Settings />
-                </>
+            <Route
+              path="/settings"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Settings />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/banner"
-          element={
-            <Layout
-              children={
-                <>
-                  <Banner />
-                </>
+            <Route
+              path="/banner"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Banner />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/Products"
-          element={
-            <Layout
-              children={
-                <>
-                  <Products />
-                </>
+            <Route
+              path="/Products"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Products />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/services"
-          element={
-            <Layout
-              children={
-                <>
-                  <Services />
-                </>
+            <Route
+              path="/services"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Services />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/voucher"
-          element={
-            <Layout
-              children={
-                <>
-                  <Voucher />
-                </>
+            <Route
+              path="/voucher"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Voucher />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/payment"
-          element={
-            <Layout
-              children={
-                <>
-                  <Paymentsreports />
-                </>
+            <Route
+              path="/payment"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Paymentsreports />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/review"
-          element={
-            <Layout
-              children={
-                <>
-                  <Review />
-                </>
+            <Route
+              path="/review"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <Review />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/contentmanagement"
-          element={
-            <Layout
-              children={
-                <>
-                  <ContentManagement />
-                </>
+            <Route
+              path="/contentmanagement"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <ContentManagement />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
-        <Route
-          path="/editproducts"
-          element={
-            <Layout
-              children={
-                <>
-                  <EditProducts />
-                </>
+            <Route
+              path="/editproducts"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <EditProducts />
+                    </>
+                  }
+                />
               }
             />
-          }
-        />
+            <Route
+              path="/editservices"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <EditServices />
+                    </>
+                  }
+                />
+              }
+            />
+            <Route
+              path="/SettingsCopy"
+              element={
+                <Layout
+                  children={
+                    <>
+                      <SettingsCopy />
+                    </>
+                  }
+                />
+              }
+            />
+          </Routes>
+        </Router>
+      )}
+    </div>
 
-        <Route
-          path="/editservices"
-          element={
-            <Layout
-              children={
-                <>
-                  <EditServices />
-                </>
-              }
-            />
-          }
-        />
-        <Route
-          path="/SettingsCopy"
-          element={
-            <Layout
-              children={
-                <>
-                  <SettingsCopy />
-                </>
-              }
-            />
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <Route path="/" element={<Login />} />
+    //     <Route
+    //       path="/home"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Dashboard />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+
+    //     <Route
+    //       path="/settings"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Settings />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/banner"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Banner />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/Products"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Products />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/services"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Services />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/voucher"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Voucher />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/payment"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Paymentsreports />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/review"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <Review />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/contentmanagement"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <ContentManagement />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/editproducts"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <EditProducts />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+
+    //     <Route
+    //       path="/editservices"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <EditServices />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //     <Route
+    //       path="/SettingsCopy"
+    //       element={
+    //         <Layout
+    //           children={
+    //             <>
+    //               <SettingsCopy />
+    //             </>
+    //           }
+    //         />
+    //       }
+    //     />
+    //   </Routes>
+    // </BrowserRouter>
   );
 }
 

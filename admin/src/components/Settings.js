@@ -44,7 +44,7 @@ function Settings() {
   const handleChangePassword = async () => {
     try {
       const response = await fetch(
-        `https://api.infinitimart.in/api/superadmin/superadminchangepassword/${adminData._id}`,
+        `http://localhost:8000/api/superadmin/superadminchangepassword/${adminData._id}`,
         {
           method: "POST",
           headers: {
@@ -76,7 +76,7 @@ function Settings() {
   // const updateProfile = async () => {
   //   try {
   //     const response = await fetch(
-  //       `https://api.infinitimart.in/api/superadmin/updatesuperadminprofile/${adminData._id}`,
+  //       `http://localhost:8000/api/superadmin/updatesuperadminprofile/${adminData._id}`,
   //       {
   //         method: "put",
   //         headers: {
@@ -108,7 +108,7 @@ function Settings() {
       const config = {
         url: `/superadmin/updatesuperadminprofile/${adminData._id}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: {
           "Content-Type": "application/json",
         },
@@ -138,7 +138,7 @@ function Settings() {
       const response = {
         url: "/subadmin/createsubadmin",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: {
           "Content-Type": "application/json",
         },
@@ -175,7 +175,7 @@ function Settings() {
     try {
       axios
         .get(
-          `https://api.infinitimart.in/api/superadmin/superadminsignout/${adminData._id}`
+          `http://localhost:8000/api/superadmin/superadminsignout/${adminData._id}`
         )
         .then(function (res) {
           if (res.status === 200) {
@@ -196,9 +196,7 @@ function Settings() {
   const deleteSubAdmin = async (data) => {
     try {
       axios
-        .post(
-          `https://api.infinitimart.in/api/subadmin/deletesubadmin/` + data._id
-        )
+        .post(`http://localhost:8000/api/subadmin/deletesubadmin/` + data._id)
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
@@ -214,7 +212,7 @@ function Settings() {
 
   const getAllSubAdmins = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/subadmin/getallsubadmins"
+      "http://localhost:8000/api/subadmin/getallsubadmins"
     );
     if (res.status === 200) {
       // console.log(res);

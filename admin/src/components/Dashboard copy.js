@@ -11,9 +11,7 @@ function Dashboard() {
   const [Subcatagory, setSubcatagory] = useState([]);
 
   const getvendor = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/getalluser"
-    );
+    let res = await axios.get("http://localhost:8000/api/vendor/getalluser");
     if (res.status === 200) {
       setdata(res.data.vendorprofile);
     } else {
@@ -23,7 +21,7 @@ function Dashboard() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -33,7 +31,7 @@ function Dashboard() {
 
   const getAllSubCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/subcatagory/getsubcatagory"
+      "http://localhost:8000/api/vendor/product/subcatagory/getsubcatagory"
     );
     if (res.status === 200) {
       console.log("subcatagory===", res);

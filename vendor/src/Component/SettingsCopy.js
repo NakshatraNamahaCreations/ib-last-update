@@ -125,7 +125,7 @@ function SettingsCopy() {
                         <div className="col-md-6 pb-3">
                           {" "}
                           <img
-                            src={`https://api.infinitimart.in/documents/${user?.adharfrontendimg}`}
+                            src={`http://localhost:8000/documents/${user?.adharfrontendimg}`}
                             class="img-radius"
                             alt={user?.adharfrontendimg}
                             title={user?.aadhaarNumber}
@@ -133,7 +133,7 @@ function SettingsCopy() {
                         </div>
                         <div className="col-md-6 pb-3">
                           <img
-                            src={`https://api.infinitimart.in/documents/${user?.adharbackendimg}`}
+                            src={`http://localhost:8000/documents/${user?.adharbackendimg}`}
                             class="img-radius"
                             alt={user?.adharbackendimg}
                             title={user?.aadhaarNumber}
@@ -142,7 +142,7 @@ function SettingsCopy() {
                         <div className="col-md-6">
                           <div class="m-b-10 f-w-600">PAN Card </div>
                           <img
-                            src={`https://api.infinitimart.in/documents/${user?.panimg}`}
+                            src={`http://localhost:8000/documents/${user?.panimg}`}
                             class="img-radius"
                             alt={user?.panimg}
                             title={user?.panNumber}
@@ -212,7 +212,7 @@ function SettingsCopy() {
                     <div class="card-block text-center text-white">
                       <div class="m-b-25">
                         <img
-                          src={`https://api.infinitimart.in/documents/${user?.selfie}`}
+                          src={`http://localhost:8000/documents/${user?.selfie}`}
                           class="img-radius"
                           alt="User-Profile-Image"
                         />
@@ -331,7 +331,7 @@ export default SettingsCopy;
 //   <Form.Group as={Col} controlId="formGridPassword">
 //     <Form.Label className="lable-text">Aadhaar Front</Form.Label>
 //     <img
-//       src={`https://api.infinitimart.in/documents/${user?.adharfrontendimg}`}
+//       src={`http://localhost:8000/documents/${user?.adharfrontendimg}`}
 //       className="td-img"
 //       alt="not available"
 //       style={{ width: "15%" }}
@@ -340,7 +340,7 @@ export default SettingsCopy;
 //   <Form.Group as={Col} controlId="formGridPassword">
 //     <Form.Label className="lable-text">Aadhaar Back</Form.Label>
 //     <img
-//       src={`https://api.infinitimart.in/documents/${user?.adharbackendimg}`}
+//       src={`http://localhost:8000/documents/${user?.adharbackendimg}`}
 //       alt="not available"
 //       width="15%"
 //     />
@@ -348,7 +348,7 @@ export default SettingsCopy;
 //   <Form.Group as={Col} controlId="formGridPassword">
 //     <Form.Label className="lable-text">PAN Card</Form.Label>
 //     <img
-//       src={`https://api.infinitimart.in/documents/${user?.panimg}`}
+//       src={`http://localhost:8000/documents/${user?.panimg}`}
 //       alt="not available"
 //       width="15%"
 //     />

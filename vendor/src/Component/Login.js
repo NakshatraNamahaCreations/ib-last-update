@@ -46,18 +46,19 @@ export function Login() {
 
   const vendor = async (e) => {
     e.preventDefault();
-    if (!email || !password || !enquiryNumber) {
+    // || !enquiryNumber
+    if (!email || !password) {
       alert("Please fill all fields");
     } else {
       try {
         const config = {
-          url: "https://api.infinitimart.in/api/vendor/login",
+          url: "http://localhost:8000/api/vendor/login",
           method: "POST",
           headers: { "content-type": "application/json" },
           data: {
-            email: email,
-            password: password,
-            customNumber: enquiryNumber,
+            email: email.toLowerCase(),
+            password: password.toLowerCase(),
+            // customNumber: enquiryNumber,
           },
         };
 
@@ -224,7 +225,7 @@ export function Login() {
                                 </Form.Group>
                               )}
                             </Row>
-                            <Row className="mb-3">
+                            {/* <Row className="mb-3">
                               <Form.Group as={Col} controlId="formGridEmail">
                                 <Form.Control
                                   type="text"
@@ -234,7 +235,7 @@ export function Login() {
                                   }
                                 />
                               </Form.Group>
-                            </Row>
+                            </Row> */}
                           </Row>
                         </div>
                         <div class="form-check" style={{ marginLeft: "114px" }}>

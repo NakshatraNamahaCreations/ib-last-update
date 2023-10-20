@@ -14,7 +14,7 @@ export function Login() {
     try {
       // Make the API request
       const response = await fetch(
-        "https://api.infinitimart.in/api/superadmin/superadminlogin",
+        "http://localhost:8000/api/superadmin/superadminlogin",
         {
           method: "POST",
           headers: {

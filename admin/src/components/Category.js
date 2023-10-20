@@ -58,7 +58,7 @@ function Category() {
       const config = {
         url: "/vendor/product/catagory/addcatagory",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -76,7 +76,7 @@ function Category() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -93,7 +93,7 @@ function Category() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/product/catagory/deletecatagory/` +
+          `http://localhost:8000/api/vendor/product/catagory/deletecatagory/` +
             data._id
         )
         .then(function (res) {
@@ -121,7 +121,7 @@ function Category() {
       const config = {
         url: `/vendor/product/catagory/updateproductcategory/${categoryId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -151,7 +151,7 @@ function Category() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/catagory/${row.catagoryImage}`}
+            src={`http://localhost:8000/catagory/${row.catagoryImage}`}
             alt=""
             style={{ padding: "7px", width: "35%" }}
           />
@@ -221,7 +221,7 @@ function Category() {
         }
         try {
           const response = await axios.post(
-            "https://api.infinitimart.in/api/vendor/product/catagory/addcustomersviaexcelesheet",
+            "http://localhost:8000/api/vendor/product/catagory/addcustomersviaexcelesheet",
             jsonData
           );
           alert(response.data.success);
@@ -251,7 +251,7 @@ function Category() {
   //     const config = {
   //       url: "/bulkimageuploading",
   //       method: "post",
-  //       baseURL: "https://api.infinitimart.in/api/vendor/product/catagory",
+  //       baseURL: "http://localhost:8000/api/vendor/product/catagory",
   //       headers: { "Content-Type": "multipart/form-data" },
   //       data: formData,
   //     };
@@ -536,7 +536,7 @@ function Category() {
           {!selectedImage && (
             <img
               className="pt-2"
-              src={`https://api.infinitimart.in/catagory/${editCategory?.catagoryImage}`}
+              src={`http://localhost:8000/catagory/${editCategory?.catagoryImage}`}
               alt=""
               width="25%"
             />

@@ -59,7 +59,7 @@ function Servicescategory() {
       const config = {
         url: "/vendor/services/catagory/addservicecatagory",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -77,7 +77,7 @@ function Servicescategory() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
+      "http://localhost:8000/api/vendor/services/catagory/getservicecatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -93,7 +93,7 @@ function Servicescategory() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/services/catagory/deleteservicecatagory/` +
+          `http://localhost:8000/api/vendor/services/catagory/deleteservicecatagory/` +
             data._id
         )
         .then(function (res) {
@@ -121,7 +121,7 @@ function Servicescategory() {
       const config = {
         url: `/vendor/services/catagory/updateservicecategory/${categoryId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -152,7 +152,7 @@ function Servicescategory() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/ServiceCategory/${row?.categoryimage}`}
+            src={`http://localhost:8000/ServiceCategory/${row?.categoryimage}`}
             alt=""
             style={{ padding: "7px", width: "35%" }}
           />
@@ -219,7 +219,7 @@ function Servicescategory() {
         }
         try {
           const response = await axios.post(
-            "https://api.infinitimart.in/api/vendor/services/catagory/addservicecatogoriesviaexcelesheet",
+            "http://localhost:8000/api/vendor/services/catagory/addservicecatogoriesviaexcelesheet",
             jsonData
           );
           alert(response.data.success);
@@ -471,7 +471,7 @@ function Servicescategory() {
           <h5>Image</h5>
           {!selectedImage && (
             <img
-              src={`https://api.infinitimart.in/ServiceCategory/${editCategory?.categoryimage}`}
+              src={`http://localhost:8000/ServiceCategory/${editCategory?.categoryimage}`}
               alt=""
               width="25%"
             />

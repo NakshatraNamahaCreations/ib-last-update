@@ -19,7 +19,7 @@ function Settings() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -37,7 +37,7 @@ function Settings() {
       const config = {
         url: `/vendor/updatevendorprofile/${userId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: { "content-type": "application/json" },
         data: {
           firstname: firstName,
@@ -68,7 +68,7 @@ function Settings() {
       const config = {
         url: `/vendor/updateprofile/${userId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         headers: { "content-type": "application/json" },
         data: formdata,
       };
@@ -107,7 +107,7 @@ function Settings() {
                     user?.profileImage === "" ||
                     user?.profileImage === undefined
                       ? "/images/camera.png"
-                      : `https://api.infinitimart.in/documents/${user?.profileImage}`
+                      : `http://localhost:8000/documents/${user?.profileImage}`
                   }
                   alt=""
                   style={{

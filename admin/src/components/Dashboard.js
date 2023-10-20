@@ -29,9 +29,7 @@ function Dashboard() {
     useState(0);
 
   const getVendor = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/getalluser"
-    );
+    let res = await axios.get("http://localhost:8000/api/vendor/getalluser");
     if (res.status === 200) {
       setVendor(res.data.vendorprofile);
     } else {
@@ -41,9 +39,7 @@ function Dashboard() {
   // console.log("vendor", vendor);
 
   const getPayment = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/payment/getpayments"
-    );
+    let res = await axios.get("http://localhost:8000/api/payment/getpayments");
     if (res.status === 200) {
       setPayment(res.data.success);
     } else {
@@ -53,9 +49,7 @@ function Dashboard() {
 
   const getAllBuyres = async () => {
     try {
-      let res = await axios.get(
-        "https://api.infinitimart.in/api/buyer/getalluser"
-      );
+      let res = await axios.get("http://localhost:8000/api/buyer/getalluser");
       if (res.status === 200) {
         const buyerDetails = res.data?.buyerProfile;
         setBuyerData(buyerDetails);
@@ -214,7 +208,7 @@ function Dashboard() {
       const config = {
         url: "/admin/updatevendorcodesequence",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: {
           vendorSequenceNumber: vendorSequence,
         },
@@ -235,7 +229,7 @@ function Dashboard() {
   const getSequenceNumber = async () => {
     try {
       let res = await axios.get(
-        "https://api.infinitimart.in/api/admin/getsequencecode"
+        "http://localhost:8000/api/admin/getsequencecode"
       );
       if (res.status === 200) {
         const theSequence = res.data?.Sequence;

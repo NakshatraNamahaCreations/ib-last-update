@@ -16,7 +16,7 @@ function ProductApproval() {
 
   const getAllProducts = async () => {
     let res = await axios.get(
-      `https://api.infinitimart.in/api/product/getproductswithusersdetails`
+      `http://localhost:8000/api/product/getproductswithusersdetails`
     );
     if (res.status === 200) {
       console.log("getAllProduct===", res);
@@ -40,7 +40,7 @@ function ProductApproval() {
   const handleApprove = async (productId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/product/productapprove/${productId}`
+        `http://localhost:8000/api/product/productapprove/${productId}`
       );
       // Refresh data after approval
       //   window.location.assign();
@@ -53,7 +53,7 @@ function ProductApproval() {
   const handleDisapprove = async (productId) => {
     try {
       await axios.put(
-        `https://api.infinitimart.in/api/product/productdisapprove/${productId}`
+        `http://localhost:8000/api/product/productdisapprove/${productId}`
       );
       // Refresh data after disapproval
       //   window.location.assign();
@@ -69,17 +69,17 @@ function ProductApproval() {
       selector: (row, index) => index + 1,
       width: "70px",
     },
-    {
-      name: "Vendor",
-      selector: (row) => (
-        <>
-          <p className="mt-2">Name : {row.userId?.firstname}</p>
-          <p>Category: {row.userId?.category} </p>
-          <p className="mb-2">Vendor Code: {row.userId?.customNumber} </p>
-        </>
-      ),
-      width: "200px",
-    },
+    // {
+    //   name: "Vendor",
+    //   selector: (row) => (
+    //     <>
+    //       <p className="mt-2">Name : {row.userId?.firstname}</p>
+    //       <p>Category: {row.userId?.category} </p>
+    //       <p className="mb-2">Vendor Code: {row.userId?.customNumber} </p>
+    //     </>
+    //   ),
+    //   width: "200px",
+    // },
 
     {
       name: "Product Name",
@@ -107,7 +107,7 @@ function ProductApproval() {
       selector: (row) => (
         <>
           <img
-            src={`https://api.infinitimart.in/productlist/${row.productImage}`}
+            src={`http://localhost:8000/productlist/${row.productImage}`}
             alt=""
             style={{ padding: "7px", width: "76%" }}
           />
