@@ -19,7 +19,7 @@ function Vendorprofile() {
       const config = {
         url: `/approvevendor/${item._id}`,
         method: "post",
-        baseURL: "http://localhost:8000/api/vendor",
+        baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           vendorstatus: "approved",
@@ -42,7 +42,7 @@ function Vendorprofile() {
       const config = {
         url: `/disapprovevendor/${item._id}`,
         method: "post",
-        baseURL: "http://localhost:8000/api/vendor",
+        baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           vendorstatus: "disapproved", // Change the vendorstatus to "disapproved"
@@ -66,7 +66,7 @@ function Vendorprofile() {
       const config = {
         url: `/productslimits/${item._id}`,
         method: "put",
-        baseURL: "http://localhost:8000/api/vendor",
+        baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           ProductLimits: limitProducts,
@@ -123,7 +123,7 @@ function Vendorprofile() {
           <div className="d-flex">
             {/* <div>
               <img
-                src={`http://localhost:8000/documents/${item?.selfie}`}
+                src={`https://api.infinitimart.in/documents/${item?.selfie}`}
                 className="vendorprofile"
               />
             </div> */}
@@ -169,7 +169,7 @@ function Vendorprofile() {
             <div className="col-md-4">
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  src={`http://localhost:8000/documents/${item?.selfie}`}
+                  src={`https://api.infinitimart.in/documents/${item?.selfie}`}
                   className="vendorprofile"
                   alt=""
                   style={{ width: "25%", borderRadius: "100%" }}

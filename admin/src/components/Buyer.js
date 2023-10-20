@@ -46,7 +46,9 @@ function Buyer() {
 
   const getAllBuyres = async () => {
     try {
-      let res = await axios.get("http://localhost:8000/api/buyer/getalluser");
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/buyer/getalluser"
+      );
       if (res.status === 200) {
         const buyerDetails = res.data?.buyerProfile;
         setBuyerData(buyerDetails);

@@ -25,7 +25,7 @@ function EditProducts(props) {
   const getSubcategoriesByCategory = async () => {
     try {
       let res = await axios.post(
-        `http://localhost:8000/api/vendor/product/subcatagory/postsubcatagory/`,
+        `https://api.infinitimart.in/api/vendor/product/subcatagory/postsubcatagory/`,
         {
           catagoryName: category,
         }
@@ -62,7 +62,7 @@ function EditProducts(props) {
       const config = {
         url: `/product/updateproduct/${productId}`,
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -215,7 +215,7 @@ function EditProducts(props) {
               )}
               {!selectedImage && (
                 <img
-                  src={`http://localhost:8000/productlist/${
+                  src={`https://api.infinitimart.in/productlist/${
                     productObj.productImage ? productObj.productImage : ""
                   }`}
                   className="edit-product-image"

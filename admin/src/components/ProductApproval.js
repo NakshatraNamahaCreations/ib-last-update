@@ -13,7 +13,7 @@ function ProductApproval() {
 
   const getAllProducts = async () => {
     let res = await axios.get(
-      `http://localhost:8000/api/product/getproductswithusersdetails`
+      `https://api.infinitimart.in/api/product/getproductswithusersdetails`
     );
     if (res.status === 200) {
       console.log("getAllProduct===", res);
@@ -35,7 +35,7 @@ function ProductApproval() {
   const handleApprove = async (productId) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/product/productapprove/${productId}`
+        `https://api.infinitimart.in/api/product/productapprove/${productId}`
       );
       // Refresh data after approval
       //   window.location.assign();
@@ -48,7 +48,7 @@ function ProductApproval() {
   const handleDisapprove = async (productId) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/product/productdisapprove/${productId}`
+        `https://api.infinitimart.in/api/product/productdisapprove/${productId}`
       );
       // Refresh data after disapproval
       //   window.location.assign();
@@ -126,7 +126,7 @@ function ProductApproval() {
       selector: (row) => (
         <>
           <img
-            src={`http://localhost:8000/productlist/${row.productImage}`}
+            src={`https://api.infinitimart.in/productlist/${row.productImage}`}
             alt=""
             style={{ padding: "7px", width: "76%" }}
           />

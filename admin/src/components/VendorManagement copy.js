@@ -20,7 +20,7 @@ function VendorManagement() {
 
   // const getvendor = async () => {
   //   try {
-  //     let res = await axios.get("http://localhost:8000/api/vendor/getalluser");
+  //     let res = await axios.get("https://api.infinitimart.in/api/vendor/getalluser");
   //     if (res.status === 200) {
   //       console.log("data--", data);
   //       const arrayData = res.data?.vendorprofile.slice().reverse();
@@ -34,7 +34,7 @@ function VendorManagement() {
   const getvendorWithPayments = async () => {
     try {
       let res = await axios.get(
-        "http://localhost:8000/api/vendor/getuserswithpaymentsdata"
+        "https://api.infinitimart.in/api/vendor/getuserswithpaymentsdata"
       );
       if (res.status === 200) {
         const vendorsPayments = res.data?.vendorsPayments;
@@ -58,7 +58,7 @@ function VendorManagement() {
       const config = {
         url: `/approvevendor/${rowdata._id}`,
         method: "post",
-        baseURL: "http://localhost:8000/api/vendor",
+        baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
           vendorstatus: "approved",

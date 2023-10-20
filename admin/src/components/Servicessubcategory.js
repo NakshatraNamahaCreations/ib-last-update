@@ -62,7 +62,7 @@ function ServicessubCategory() {
       const config = {
         url: "/vendor/services/subcatagory/addsubcatagoryservices",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -86,7 +86,7 @@ function ServicessubCategory() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "http://localhost:8000/api/vendor/services/catagory/getservicecatagory"
+      "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
     );
     if (res.status === 200) {
       console.log("catagory===", res);
@@ -96,7 +96,7 @@ function ServicessubCategory() {
 
   const getAllSubCatagory = async () => {
     let res = await axios.get(
-      "http://localhost:8000/api/vendor/services/subcatagory/getsubcatagoryservices"
+      "https://api.infinitimart.in/api/vendor/services/subcatagory/getsubcatagoryservices"
     );
     if (res.status === 200) {
       console.log("subcatagory===", res);
@@ -109,7 +109,7 @@ function ServicessubCategory() {
     try {
       axios
         .post(
-          `http://localhost:8000/api/vendor/services/subcatagory/deletesubcatagoryservices/` +
+          `https://api.infinitimart.in/api/vendor/services/subcatagory/deletesubcatagoryservices/` +
             data._id
         )
         .then(function (res) {
@@ -138,7 +138,7 @@ function ServicessubCategory() {
       const config = {
         url: `/vendor/services/subcatagory/updateservicesubcategory/${subCategoryId}`,
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -172,7 +172,7 @@ function ServicessubCategory() {
       selector: (row, index) => (
         <>
           <img
-            src={`http://localhost:8000/servicesubcatagory/${row.SubcatagoryImage}`}
+            src={`https://api.infinitimart.in/servicesubcatagory/${row.SubcatagoryImage}`}
             alt=""
             width="50%"
           />
@@ -276,7 +276,7 @@ function ServicessubCategory() {
       const config = {
         url: "/vendor/services/subcatagory/addservicesubcatogoriesviaexcelesheet",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         headers: { "content-type": "application/json" },
         data: {
           subcategories: jsonData.map((ele) => ({
@@ -480,7 +480,7 @@ function ServicessubCategory() {
           <h5>Image</h5>
           {!selectedImage && (
             <img
-              src={`http://localhost:8000/servicesubcatagory/${editSubcategory?.SubcatagoryImage}`}
+              src={`https://api.infinitimart.in/servicesubcatagory/${editSubcategory?.SubcatagoryImage}`}
               alt=""
               width="25%"
             />

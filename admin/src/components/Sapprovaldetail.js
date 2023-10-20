@@ -13,7 +13,7 @@ function Sapprovaldetail() {
 
   const getAllservices = async () => {
     let res = await axios.get(
-      `http://localhost:8000/api/vendor/services/productlist/getserviceswithusersdetails`
+      `https://api.infinitimart.in/api/vendor/services/productlist/getserviceswithusersdetails`
     );
     if (res.status === 200) {
       console.log("getAllServices==", res);
@@ -37,7 +37,7 @@ function Sapprovaldetail() {
   const handleApprove = async (serviceId) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/service/productlist/serviceapprove/${serviceId}`
+        `https://api.infinitimart.in/api/service/productlist/serviceapprove/${serviceId}`
       );
       // Refresh data after approval
       //   window.location.assign();
@@ -50,7 +50,7 @@ function Sapprovaldetail() {
   const handleDisapprove = async (serviceId) => {
     try {
       await axios.put(
-        `http://localhost:8000/api/service/productlist/servicedisapprove/${serviceId}`
+        `https://api.infinitimart.in/api/service/productlist/servicedisapprove/${serviceId}`
       );
       // Refresh data after disapproval
       //   window.location.assign();
@@ -113,7 +113,7 @@ function Sapprovaldetail() {
       selector: (row) => (
         <>
           <img
-            src={`http://localhost:8000/ServiceProductList/${row.serviceProductImage}`}
+            src={`https://api.infinitimart.in/ServiceProductList/${row.serviceProductImage}`}
             alt=""
             style={{ padding: "7px", width: "76%" }}
           />

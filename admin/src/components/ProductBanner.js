@@ -25,7 +25,7 @@ function ProductBanner() {
       const config = {
         url: "/product/addproductbanner",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -47,7 +47,7 @@ function ProductBanner() {
 
   const getAllBanner = async () => {
     let res = await axios.get(
-      "http://localhost:8000/api/product/getproductbanner"
+      "https://api.infinitimart.in/api/product/getproductbanner"
     );
     if (res.status === 200) {
       console.log(res);
@@ -59,7 +59,8 @@ function ProductBanner() {
     try {
       axios
         .post(
-          `http://localhost:8000/api/product/deleteproductbanner/` + data._id
+          `https://api.infinitimart.in/api/product/deleteproductbanner/` +
+            data._id
         )
         .then(function (res) {
           if (res.status === 200) {
@@ -92,7 +93,7 @@ function ProductBanner() {
       selector: (row, index) => (
         <>
           <img
-            src={`http://localhost:8000/productBanner/${row.bannerImage}`}
+            src={`https://api.infinitimart.in/productBanner/${row.bannerImage}`}
             alt=""
             width="50%"
           />

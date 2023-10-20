@@ -63,7 +63,7 @@ function SubCategory() {
       const config = {
         url: "/vendor/product/subcatagory/addsubcatagory",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -86,7 +86,7 @@ function SubCategory() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
+      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log("catagory===", res);
@@ -96,7 +96,7 @@ function SubCategory() {
 
   const getAllSubCatagory = async () => {
     let res = await axios.get(
-      "http://localhost:8000/api/vendor/product/subcatagory/getsubcatagory"
+      "https://api.infinitimart.in/api/vendor/product/subcatagory/getsubcatagory"
     );
     if (res.status === 200) {
       console.log("subcatagory===", res);
@@ -109,7 +109,7 @@ function SubCategory() {
     try {
       axios
         .post(
-          `http://localhost:8000/api/vendor/product/subcatagory/deletesubcatagory/` +
+          `https://api.infinitimart.in/api/vendor/product/subcatagory/deletesubcatagory/` +
             data._id
         )
         .then(function (res) {
@@ -138,7 +138,7 @@ function SubCategory() {
       const config = {
         url: `/vendor/product/subcatagory/updateproductsubcategory/${subCategoryId}`,
         method: "put",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -172,7 +172,7 @@ function SubCategory() {
       selector: (row, index) => (
         <>
           <img
-            src={`http://localhost:8000/subcatagory/${row.SubcatagoryImage}`}
+            src={`https://api.infinitimart.in/subcatagory/${row.SubcatagoryImage}`}
             alt=""
             style={{ padding: "7px", width: "50%" }}
           />
@@ -275,7 +275,7 @@ function SubCategory() {
       const config = {
         url: "/vendor/product/subcatagory/addsubcatogoriesviaexcelesheet",
         method: "post",
-        baseURL: "http://localhost:8000/api",
+        baseURL: "https://api.infinitimart.in/api",
         headers: { "content-type": "application/json" },
         data: {
           subcategories: jsonData.map((ele) => ({
@@ -310,7 +310,7 @@ function SubCategory() {
 
   //       try {
   //         const response = await axios.post(
-  //           "http://localhost:8000/api/vendor/product/subcatagory/addsubcatogoriesviaexcelesheet",
+  //           "https://api.infinitimart.in/api/vendor/product/subcatagory/addsubcatogoriesviaexcelesheet",
   //           { subcategories: jsonData }
   //         );
   //         console.log(jsonData, "jsonData");
@@ -514,7 +514,7 @@ function SubCategory() {
           {!selectedImage && (
             <img
               className="pt-2"
-              src={`http://localhost:8000/subcatagory/${editSubcategory?.SubcatagoryImage}`}
+              src={`https://api.infinitimart.in/subcatagory/${editSubcategory?.SubcatagoryImage}`}
               alt=""
               width="25%"
             />
