@@ -1,24 +1,68 @@
 const productBannerModel = require("../../Model/admin/productBanner");
 
 class banner {
+  // async postbanner(req, res) {
+  //   let { bannerContent, userId, bannerPlacement, bannerType } = req.body;
+  //   let file = req.file?.filename;
+  //   try {
+  //     let newbanner = new productBannerModel({
+  //       bannerImage: file,
+  //       bannerContent: bannerContent,
+  //       userId: userId,
+  //       bannerPlacement: bannerPlacement,
+  //     });
+  //     let save = newbanner.save();
+  //     if (save) {
+  //       return res.status(200).json({ success: "banner Added" });
+  //     } else {
+  //       return res.status(500).json({ Error: "Something wrong" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   async postbanner(req, res) {
-    let { bannerContent, userId, bannerPlacement, bannerType } = req.body;
-    let file = req.file?.filename;
+    const { bannerContent, userId, bannerPlacement, bannerType } = req.body;
+    const file = req.file?.filename;
+    const errors = [];
+
+    if (!bannerContent) {
+      errors.push("Please provide a value for bannerContent.");
+    }
+
+    if (!bannerPlacement) {
+      errors.push("Please provide a value for bannerPlacement.");
+    }
+
+    if (!file) {
+      errors.push("Please upload a bannerImage.");
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).json({
+        errors,
+      });
+    }
+
     try {
-      let newbanner = new productBannerModel({
+      const newbanner = new productBannerModel({
         bannerImage: file,
         bannerContent: bannerContent,
         userId: userId,
         bannerPlacement: bannerPlacement,
       });
-      let save = newbanner.save();
+
+      const save = await newbanner.save();
+
       if (save) {
         return res.status(200).json({ success: "banner Added" });
       } else {
-        return res.status(500).json({ Error: "Something wrong" });
+        return res.status(500).json({ error: "Something went wrong" });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 

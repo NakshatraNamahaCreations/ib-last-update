@@ -84,7 +84,7 @@ function ProductApproval() {
   });
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
       width: "70px",
     },
@@ -190,6 +190,25 @@ function ProductApproval() {
   ];
 
   //search
+  // useEffect(() => {
+  //   const filteredData = productData.filter((item) => {
+  //     const searchString = unifiedSearchTerm.toLowerCase();
+  //     const vendorNameMatch = item.userId?.firstname
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const productNameMatch = item.productName
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const vendorIdMatch = item.userId?.customNumber
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+
+  //     return vendorNameMatch || productNameMatch || vendorIdMatch;
+  //   });
+
+  //   setFilteredProduct(filteredData);
+  // }, [unifiedSearchTerm, productData]);
+
   useEffect(() => {
     const filteredData = productData.filter((item) => {
       const searchString = unifiedSearchTerm.toLowerCase();

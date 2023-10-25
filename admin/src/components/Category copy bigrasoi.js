@@ -141,7 +141,7 @@ function Category() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
     },
     {

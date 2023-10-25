@@ -59,7 +59,14 @@ const Sidebar = ({ children }) => {
   ];
   return (
     <div>
-      <div style={{ width: isOpen ? "220px" : "50px" }} className="sidebar">
+      <div
+        style={{
+          width: isOpen ? "220px" : "50px",
+          position: "fixed",
+          marginTop: "41px",
+        }}
+        className="sidebar"
+      >
         <div className="top_section">
           <img src="./images/newlogo.png" style={{ width: "85%" }} alt="" />
         </div>

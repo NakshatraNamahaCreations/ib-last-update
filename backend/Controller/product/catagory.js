@@ -27,7 +27,7 @@ class Catagory {
 
   async getAllcatagory(req, res) {
     try {
-      let catagory = await catagoryModal.find({});
+      let catagory = await catagoryModal.find({}).sort({ _id: -1 });
       if (catagory) {
         return res.json({ catagory: catagory });
       }

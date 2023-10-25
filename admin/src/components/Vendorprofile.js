@@ -4,6 +4,8 @@ import Sidebar from "../components/layout/Sidebar";
 
 import { Link, useLocation } from "react-router-dom";
 import moment from "moment/moment";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 function Vendorprofile() {
   const [limitProducts, setLimitProducts] = useState("");
@@ -23,11 +25,9 @@ function Vendorprofile() {
         console.log("delete successfully");
         window.location.assign("/vendormanagement");
       } else {
-        // Handle errors if necessary
         alert("Error", "Account deletion failed. Please try again later.");
       }
     } catch (error) {
-      // Handle network errors or other exceptions
       console.error("Error:", error);
       alert(
         "Error",
@@ -35,6 +35,11 @@ function Vendorprofile() {
       );
     }
   };
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   console.log("yeyeyey", item._id);
 
@@ -70,12 +75,11 @@ function Vendorprofile() {
         baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
         data: {
-          vendorstatus: "disapproved", // Change the vendorstatus to "disapproved"
+          vendorstatus: "disapproved",
         },
       };
       await axios(config).then(function (response) {
         if (response.status === 200) {
-          // alert("Vendor registration has been successfully approved");
           window.location.reload("");
         }
       });
@@ -105,7 +109,6 @@ function Vendorprofile() {
       });
     } catch (error) {
       console.error(error);
-      // alert(error.);
     }
   };
 
@@ -132,11 +135,6 @@ function Vendorprofile() {
     }
   };
 
-  // const ViewInvoice = (e) => {
-  //   setInvoice(e);
-
-  // };
-
   const returnAmount = checkPaymentsLength();
   console.log("returnAmount", returnAmount);
 
@@ -158,7 +156,7 @@ function Vendorprofile() {
                 className="vendorprofile"
               />
             </div> */}
-            <div className="mx-4">
+            {/* <div className="mx-4">
               <div>
                 <p>{item?.firstname}</p>
                 <p>{item?.lastname}</p>
@@ -166,8 +164,13 @@ function Vendorprofile() {
               <p>
                 <b>{item?.phoneNumber}</b>
               </p>
-            </div>
-            <div>
+            </div> */}
+            <div className="mx-4">
+              <a href="/vendormanagement">
+                <div className="back-icon">
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </a>
               <span>
                 <b>Products Limited</b>{" "}
               </span>{" "}
@@ -199,13 +202,19 @@ function Vendorprofile() {
           <div className="row me-0">
             <div className="col-md-4">
               <div style={{ display: "flex", alignItems: "center" }}>
-                <img
+                {/* <img
                   src={`https://api.infinitimart.in/documents/${item?.selfie}`}
                   className="vendorprofile"
                   alt=""
                   style={{ width: "25%", borderRadius: "100%" }}
-                />
-                <div style={{ marginLeft: "1rem" }}>
+                /> */}
+                {/* <img
+                  src="/images/newlogo.png"
+                  className="vendorprofile"
+                  alt=""
+                  style={{ width: "25%", borderRadius: "100%" }}
+                /> */}
+                <div style={{ marginLeft: "1.5rem", marginTop: "10px" }}>
                   <div style={{ fontSize: "18px", fontWeight: "500" }}>
                     {item?.firstname} {item?.lastname}
                   </div>
@@ -235,20 +244,11 @@ function Vendorprofile() {
                 </div>
                 <div className="row p-2">
                   <div className="col-4">
-                    <b>first Name</b>
+                    <b> Name</b>
                   </div>
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>{item?.firstname}</span>
-                  </div>
-                </div>
-                <div className="row p-2">
-                  <div className="col-4">
-                    <b>Last Name</b>
-                  </div>
-                  <div className="col-1">:</div>
-                  <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.lastname}</span>
                   </div>
                 </div>
 
@@ -264,15 +264,6 @@ function Vendorprofile() {
                   </div>
                 </div>
 
-                <div className="row p-2">
-                  <div className="col-4">
-                    <b>DOB</b>
-                  </div>
-                  <div className="col-1">:</div>
-                  <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.dob}</span>
-                  </div>
-                </div>
                 <div className="row p-2">
                   <div className="col-4">
                     <b>Email</b>
@@ -357,10 +348,7 @@ function Vendorprofile() {
             style={{ justifyContent: "space-evenly" }}
           >
             <div>
-              <Link
-                to="/invoice" // Adjust the path based on your route setup
-                state={{ invoiceData: item }} // Pass the invoice data as a parameter
-              >
+              <Link to="/invoice" state={{ invoiceData: item }}>
                 <button
                   disabled={item.PaymentDetails.length === 0}
                   style={{
@@ -376,9 +364,8 @@ function Vendorprofile() {
                 </button>
               </Link>
             </div>
-            <div>
+            <div onClick={() => setShowTransactions(true)}>
               <button
-                // disabled={item?.vendorstatus === "approved"}
                 style={{
                   backgroundColor: "rgb(36 150 255)",
                   border: 0,
@@ -387,134 +374,69 @@ function Vendorprofile() {
                   padding: "4px 15px",
                   fontWeight: "700",
                 }}
-                onClick={() => setShowTransactions(true)}
+                onClick={handleShow}
               >
                 View Payments
               </button>
             </div>
-            {/* <div>
-              {item?.vendorstatus === "approved" ? (
-                <p style={{ color: "#01ad3d" }}>Approved</p>
-              ) : (
-                <button
-                  disabled={item?.vendorstatus === "approved"}
-                  style={{
-                    backgroundColor: "#01ad3d",
-                    border: 0,
-                    borderRadius: "10px",
-                    color: "white",
-                    padding: "4px 15px",
-                    fontWeight: "700",
-                  }}
-                  onClick={Approve}
-                >
-                  Approve
-                </button>
-              )}
-            </div>
-            <div>
-              {item?.vendorstatus === "disapproved" ? (
-                <p style={{ color: "#01ad3d" }}>Disapproved</p>
-              ) : (
-                <button
-                  dis
-                  style={{
-                    backgroundColor: "#fbbc05",
-                    border: 0,
-                    borderRadius: "10px",
-                    color: "white",
-                    padding: "4px 15px",
-                    fontWeight: "700",
-                  }}
-                  onClick={Disapprove}
-                >
-                  Disapprove
-                </button>
-              )}
-            </div>
-            <div>
-              <button
-                onClick={deleteUserAccount}
-                style={{
-                  backgroundColor: "#ff4131",
-                  border: 0,
-                  borderRadius: "10px",
-                  color: "white",
-                  padding: "4px 15px",
-                  fontWeight: "700",
-                }}
-              >
-                Delete
-              </button>
-            </div> */}
           </div>
-          {/* {object.keys(item).length > 0 (
-            <> */}
-          {showTransactions && item.PaymentDetails.length !== 0 ? (
-            <div className="pb-5">
-              <div className="vendor-payment-details">
-                <div className="svg-container">
-                  <p
-                    className="transaction-id"
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      color: "#0044ff",
-                      display: "flex",
-                      fontSize: "12px",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Transaction ID:{" "}
-                    {item.PaymentDetails[0]?.data?.transactionId}
-                  </p>
-                  <p className="total-paid" style={{ color: "#9da1ac" }}>
-                    <b>TOTAL PAID</b>
-                  </p>
-                  <h4
-                    className="amount"
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "55px",
-                      color: "#444c66",
-                    }}
-                  >
-                    <td>₹ {(checkPaymentsLength() / 100).toFixed(2)} </td>
-                  </h4>
-                  {/* <h4>
-                    {item.PaymentDetails[0]?.length > 0
-                      ? item.PaymentDetails.filter(
-                          (detail) => detail.code === "PAYMENT_SUCCESS"
-                        )
-                          .sort(
-                            (a, b) =>
-                              new Date(b.createdAt) - new Date(a.createdAt)
-                          )
-                          .map((successDetail, index) => (
-                            <div key={index}>{successDetail.data.amount}</div>
-                          ))
-                      : null}
-                  </h4> */}
 
-                  <div className="created-at">
-                    {moment(item.PaymentDetails[0]?.createdAt).format(
-                      "dddd, MMMM Do YYYY"
-                    )}
+          <Modal show={show} onHide={handleClose} centered animation={false}>
+            <Modal.Header closeButton>
+              <Modal.Title>Transaction Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {showTransactions && item.PaymentDetails.length !== 0 ? (
+                <div className="pb-5">
+                  <div className="">
+                    <div className="svg-container">
+                      <p
+                        className="transaction-id"
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          color: "#0044ff",
+                          display: "flex",
+                          fontSize: "12px",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Transaction ID:{" "}
+                        {item.PaymentDetails[0]?.data?.transactionId}
+                      </p>
+                      <p className="total-paid" style={{ color: "#9da1ac" }}>
+                        <b>TOTAL PAID</b>
+                      </p>
+                      <h4
+                        className="amount"
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "55px",
+                          color: "#444c66",
+                        }}
+                      >
+                        <td>₹ {(checkPaymentsLength() / 100).toFixed(2)} </td>
+                      </h4>
+
+                      <div className="created-at">
+                        {moment(item.PaymentDetails[0]?.createdAt).format(
+                          "dddd, MMMM Do YYYY"
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ) : (
-            <>
-              {showTransactions && item.PaymentDetails.length === 0 ? (
-                <div className="pb-5">No Payment History</div>
               ) : (
-                ""
+                <>
+                  {showTransactions && item.PaymentDetails.length === 0 ? (
+                    <div className="pb-5">No Payment History</div>
+                  ) : (
+                    ""
+                  )}
+                </>
               )}
-            </>
-          )}
-          {/* </>
-          ):""} */}
+            </Modal.Body>
+          </Modal>
         </div>
       </div>
     </div>

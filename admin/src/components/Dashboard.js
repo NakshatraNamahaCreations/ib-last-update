@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import Sidebar from "./layout/Sidebar";
 
 function Dashboard() {
   const [vendor, setVendor] = useState([]);
@@ -20,6 +21,7 @@ function Dashboard() {
   const [buyerData, setBuyerData] = useState([]);
   const [sequenceData, setSequenceData] = useState([]);
   const [vendorSequence, setVendorSequence] = useState("");
+  const [vendorSequenceError, setVendorSequenceError] = useState("");
 
   const [lastWeekPercentageOfVendor, setLastWeekPercentageOfVendor] =
     useState(0);
@@ -209,6 +211,22 @@ function Dashboard() {
   const lenht = payment.filter((item) => item.code === "PAYMENT_SUCCESS");
   // console.log("Payment success length", lenht.length);
 
+  const validateForm = () => {
+    if (!vendorSequence) {
+      setVendorSequenceError("Please enter a vendor code sequence.");
+      return false;
+    } else {
+      setVendorSequenceError("");
+      return true;
+    }
+  };
+
+  const handleFormSubmit = async () => {
+    if (validateForm()) {
+      await addSequences();
+    }
+  };
+
   const addSequences = async () => {
     try {
       const config = {
@@ -222,8 +240,10 @@ function Dashboard() {
       await axios(config).then(function (res) {
         if (res.status === 200) {
           console.log("success");
-          alert(res.data.success);
-          window.location.reload();
+          // alert(res.data.success);
+          setVendorSequence("");
+          // window.location.reload();
+          getSequenceNumber();
         }
       });
     } catch (error) {
@@ -248,203 +268,216 @@ function Dashboard() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: " #f9f9f9",
-        // "#f7f7f7"
-      }}
-    >
-      <div
-        className="d-flex p-5"
-        style={{ display: "flex", justifyContent: "space-between" }}
-      >
-        <h2>Analytics Dashboard</h2>
-        <div>
-          <input
-            type="text"
-            placeholder="Enter Vendor Code Sequence"
-            style={{
-              borderRadius: "7px",
-              padding: "5px 7px",
-              boxShadow: "0px 1px 3px 0px gray",
-              border: 0,
-            }}
-            onChange={(e) => setVendorSequence(e.target.value)}
-          />{" "}
-          <button
-            style={{
-              border: 0,
-              borderRadius: "7px",
-              padding: "4px 7px",
-              backgroundColor: "#b8b5e8",
-              boxShadow: "0px 1px 3px 0px gray",
-            }}
-            onClick={addSequences}
-          >
-            Add
-          </button>{" "}
-          <br />
-          {sequenceData[0]?.vendorSequenceNumber}
-        </div>
+    <div className="row">
+      <div className="col-md-2">
+        <Sidebar />
       </div>
+      <div className="col-md-10">
+        <div
+          style={{
+            backgroundColor: " #f9f9f9",
+            // "#f7f7f7"
+          }}
+        >
+          <div className=" p-5">
+            <h2>Analytics Dashboard</h2>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Enter Vendor Code Sequence"
+                  style={{
+                    borderRadius: "7px",
+                    padding: "5px 7px",
+                    boxShadow: "0px 1px 3px 0px gray",
+                    border: 0,
+                    width: "-webkit-fill-available",
+                    outline: "none",
+                  }}
+                  value={vendorSequence}
+                  onChange={(e) => {
+                    setVendorSequence(e.target.value);
+                    setVendorSequenceError("");
+                  }}
+                />
+                {vendorSequenceError && (
+                  <div style={{ color: "red" }}>{vendorSequenceError}</div>
+                )}
+                {sequenceData[0]?.vendorSequenceNumber}
+              </div>
+              <div className="col-md-2">
+                <button
+                  style={{
+                    border: 0,
+                    borderRadius: "7px",
+                    padding: "4px 7px",
+                    backgroundColor: "#b8b5e8",
+                    boxShadow: "0px 1px 3px 0px gray",
+                  }}
+                  onClick={handleFormSubmit}
+                >
+                  Add
+                </button>{" "}
+              </div>
+              <br />
+            </div>
+          </div>
 
-      <div className="row me-0">
-        <div className="col-md-6">
-          <div className="d-flex" style={{ justifyContent: "space-around" }}>
-            <div className="col-grid">
-              <a href="/banner" className="cm-redirect">
-                <div className="content-mana-card">
-                  <div className="cm-card-bg">
-                    <div className="count_content cm-font-awsm">
-                      <p>Revenue</p>{" "}
-                      <h3 className="count_content-head">
-                        ₹{" "}
-                        <span class="counter">
-                          {(totalAmount / 100).toFixed(2)}{" "}
+          <div className="row m-auto">
+            <div className="col-md-6">
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-around" }}
+              >
+                <div className="col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Revenue</p>{" "}
+                        <h3 className="count_content-head">
+                          ₹{" "}
+                          <span class="counter">
+                            {(totalAmount / 100).toFixed(2)}{" "}
+                          </span>
+                        </h3>
+                      </div>
+                      <a class="notification_btn">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "rgb(174 174 255 / 57%)",
+                            color: "rgb(0 0 255)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {lastWeekPercentageOfPayment} %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
                         </span>
-                      </h3>
+                      </div>
                     </div>
-                    <a class="notification_btn">
-                      <i class="fa-solid fa-indian-rupee-sign"></i>
-                    </a>
-                    <div>
-                      {" "}
-                      <span
-                        className="dashboard-status"
-                        style={{
-                          backgroundColor: "rgb(174 174 255 / 57%)",
-                          color: "rgb(0 0 255)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {lastWeekPercentageOfPayment} %
-                      </span>{" "}
-                      <span className="dashboard-status-text">
-                        Since last week
-                      </span>
-                    </div>
+                    {/* <div className="cm-text-content">Products</div> */}
                   </div>
-                  {/* <div className="cm-text-content">Products</div> */}
                 </div>
-              </a>
-            </div>
-            <div className="col-grid">
-              <a href="/editproducts" className="cm-redirect">
-                <div className="content-mana-card">
-                  <div className="cm-card-bg">
-                    <div className="count_content cm-font-awsm">
-                      <p>Orders</p>{" "}
-                      <h3 className="count_content-head">
-                        <span class="counter">0</span>
-                      </h3>
-                    </div>
-                    <a
-                      class="notification_btn"
-                      style={{ backgroundColor: "#055160" }}
-                    >
-                      <i class="fa-solid fa-cart-shopping"></i>
-                    </a>
-                    <div>
-                      {" "}
-                      <span
-                        className="dashboard-status"
-                        style={{
-                          backgroundColor: "rgb(5 81 96 / 29%)",
-                          color: "rgb(5 81 96)",
-                          fontWeight: 500,
-                        }}
+                <div className="col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Orders</p>{" "}
+                        <h3 className="count_content-head">
+                          <span class="counter">0</span>
+                        </h3>
+                      </div>
+                      <a
+                        class="notification_btn"
+                        style={{ backgroundColor: "#055160" }}
                       >
-                        0 %
-                      </span>{" "}
-                      <span className="dashboard-status-text">
-                        Since last week
-                      </span>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "rgb(5 81 96 / 29%)",
+                            color: "rgb(5 81 96)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          0 %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
+                        </span>
+                      </div>
                     </div>
+                    {/* <div className="cm-text-content">Products</div> */}
                   </div>
-                  {/* <div className="cm-text-content">Products</div> */}
                 </div>
-              </a>
-            </div>
-          </div>
-          <div className="d-flex" style={{ justifyContent: "space-around" }}>
-            <div className=" col-grid">
-              <a href="/editproducts" className="cm-redirect">
-                <div className="content-mana-card">
-                  <div className="cm-card-bg">
-                    <div className="count_content cm-font-awsm">
-                      <p>Vendor</p>{" "}
-                      <h3 className="count_content-head">
-                        <span class="counter">{vendor?.length} </span>
-                      </h3>
-                    </div>
-                    <a
-                      class="notification_btn"
-                      style={{ backgroundColor: "#fe4d3c" }}
-                    >
-                      <i class="fa-solid fa-user-large"></i>
-                    </a>
-                    <div>
-                      {" "}
-                      <span
-                        className="dashboard-status"
-                        style={{
-                          backgroundColor: "#ff281421",
-                          color: "#fe4d3c",
-                          fontWeight: 500,
-                        }}
+              </div>
+              <div
+                className="d-flex"
+                style={{ justifyContent: "space-around" }}
+              >
+                <div className=" col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Vendor</p>{" "}
+                        <h3 className="count_content-head">
+                          <span class="counter">{vendor?.length} </span>
+                        </h3>
+                      </div>
+                      <a
+                        class="notification_btn"
+                        style={{ backgroundColor: "#fe4d3c" }}
                       >
-                        {lastWeekPercentageOfVendor} %
-                      </span>{" "}
-                      <span className="dashboard-status-text">
-                        Since last week
-                      </span>
+                        <i class="fa-solid fa-user-large"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "#ff281421",
+                            color: "#fe4d3c",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {lastWeekPercentageOfVendor} %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
+                        </span>
+                      </div>
                     </div>
+                    {/* <div className="cm-text-content">Products</div> */}
                   </div>
-                  {/* <div className="cm-text-content">Products</div> */}
                 </div>
-              </a>
-            </div>
-            <div className="col-grid">
-              <a href="/editproducts" className="cm-redirect">
-                <div className="content-mana-card">
-                  <div className="cm-card-bg">
-                    <div className="count_content cm-font-awsm">
-                      <p>Buyer</p>{" "}
-                      <h3 className="count_content-head">
-                        <span class="counter">{buyerData?.length} </span>
-                      </h3>
-                    </div>
-                    <a
-                      class="notification_btn"
-                      style={{ backgroundColor: "#1eb852" }}
-                    >
-                      <i class="fa-brands fa-cotton-bureau"></i>
-                    </a>
-                    <div>
-                      {" "}
-                      <span
-                        className="dashboard-status"
-                        style={{
-                          backgroundColor: "rgb(30 184 82 / 25%)",
-                          color: "rgb(30 184 82)",
-                          fontWeight: 500,
-                        }}
+                <div className="col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Buyer</p>{" "}
+                        <h3 className="count_content-head">
+                          <span class="counter">{buyerData?.length} </span>
+                        </h3>
+                      </div>
+                      <a
+                        class="notification_btn"
+                        style={{ backgroundColor: "#1eb852" }}
                       >
-                        {lastWeekPercentageOfBuyers} %
-                      </span>{" "}
-                      <span className="dashboard-status-text">
-                        Since last week
-                      </span>
+                        <i class="fa-brands fa-cotton-bureau"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "rgb(30 184 82 / 25%)",
+                            color: "rgb(30 184 82)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {lastWeekPercentageOfBuyers} %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </a>
-            </div>
-          </div>
-          <div className="ms-3 me-3">
-            <div className="content-mana-chart p-3">
-              <h5 className="pb-3">Vendors Registered by Month</h5>
-              {/* <ResponsiveContainer width="100%" height={300}>
+              </div>
+              <div className="ms-1">
+                <div className="content-mana-chart p-3">
+                  <h5 className="pb-3">Vendors Registered by Month</h5>
+                  {/* <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={transformDataForPaymentChart()}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
@@ -453,37 +486,37 @@ function Dashboard() {
                   <Bar dataKey="Payments" fill="#8884d8" />
                 </BarChart>
               </ResponsiveContainer> */}
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={transformDataForVendorChart()}>
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="count" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={transformDataForVendorChart()}>
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="count" fill="#8884d8" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="col-md-6">
-          <div className="content-mana-chart p-3">
-            <h5 className="pb-3">Payments by Month</h5>
-            <ResponsiveContainer width="100%" height={213}>
-              <AreaChart data={transformDataForPaymentChart()}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="Payments"
-                  fill="#8884d8"
-                  stroke="#8884d8"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-          {/* <ResponsiveContainer width="100%" height={300}>
+            <div className="col-md-6">
+              <div className="content-mana-chart p-3">
+                <h5 className="pb-3">Payments by Month</h5>
+                <ResponsiveContainer width="100%" height={213}>
+                  <AreaChart data={transformDataForPaymentChart()}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area
+                      type="monotone"
+                      dataKey="Payments"
+                      fill="#8884d8"
+                      stroke="#8884d8"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              {/* <ResponsiveContainer width="100%" height={300}>
             <BarChart data={transformDataForChart()}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
@@ -492,6 +525,8 @@ function Dashboard() {
               <Bar dataKey="Payments" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer> */}
+            </div>
+          </div>
         </div>
       </div>
     </div>

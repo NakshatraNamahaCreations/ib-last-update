@@ -68,8 +68,8 @@ function SubCategory() {
       };
       await axios(config).then(function (res) {
         if (res.status === 200) {
-          console.log("success");
-          alert(res.data.success);
+          // console.log("success");
+          // alert(res.data.success);
           getAllSubCatagory();
         }
       });
@@ -115,8 +115,8 @@ function SubCategory() {
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
-            alert(res.data.success);
-            getAllSubCatagory(); // Refresh the subcategory list
+            // alert(res.data.success);
+            getAllSubCatagory();
           }
         });
     } catch (error) {
@@ -156,16 +156,21 @@ function SubCategory() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
     },
     {
       name: "Category",
-      selector: (row, index) => row.catagoryName,
+      // selector: (row, index) => row.catagoryName,
+      selector: (row, index) =>
+        row.catagoryName.charAt(0).toUpperCase() + row.catagoryName.slice(1),
     },
     {
       name: "Subcategory",
-      selector: (row, index) => row.SubcatagoryName,
+      // selector: (row, index) => row.SubcatagoryName,
+      selector: (row, index) =>
+        row.SubcatagoryName.charAt(0).toUpperCase() +
+        row.SubcatagoryName.slice(1),
     },
     {
       name: "Image",
@@ -348,7 +353,7 @@ function SubCategory() {
                   className="btn btn-danger me-1"
                   style={{ backgroundColor: "#a9042e", border: 0 }}
                 >
-                  Download
+                  Download csv
                 </Button>
               </CSVLink>
               <input
@@ -364,7 +369,7 @@ function SubCategory() {
                 htmlFor="icon-button-file"
               >
                 {" "}
-                Upload Subcategory
+                Upload Bulk Subcategory
               </label>{" "}
               {excel && hideUploadButton ? (
                 <Button
@@ -372,7 +377,7 @@ function SubCategory() {
                   style={{ backgroundColor: "#a9042e", border: 0 }}
                   onClick={handleImport}
                 >
-                  Upload
+                  Bulk Upload
                 </Button>
               ) : (
                 ""

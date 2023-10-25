@@ -710,6 +710,8 @@ a {
   font-weight: 600;
   border-radius: 18px;
   top: 200px;
+  margin-top: 20px;
+  text-align:center;
 }
 .setting-response-message-card {
   position: absolute;
@@ -732,4 +734,54 @@ a {
 }
 .invoiceBorder {
   border: 1px solid rgb(173, 173, 173);
+}
+
+.bSqufN {
+  position: relative;
+  width: 100%;
+  border-radius: inherit;
+   overflow: auto;
+  min-height: auto !important;
+  max-height: auto !important;
+}
+.back-icon{
+  background-color: blue;
+  padding: 8px;
+  color: white;
+  border-radius: 50px;
+  font-size: 18px;
+  width: 43px;
+  text-align: center;
+}
+.tab-text-a{
+  color: white !important;
+  background-color: blue !important;
+  padding: 3px 20px !important;
+  border-radius: 5px !important;
+}
+.blGEez {
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: inherit;
+  justify-content: inherit;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  user-select: none;
+  overflow: hidden;
+  justify-content: center !important;
+}
+.ikexHN {
+  -webkit-box-flex: 1;
+  flex: 1 0 0px;
+  max-width: 100%;
+  min-width: 100px;
+  justify-content: center !important;
+}
+.hgByPU div:first-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center !important;
 }

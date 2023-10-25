@@ -68,7 +68,7 @@ function ServicessubCategory() {
       await axios(config).then(function (res) {
         if (res.status === 200) {
           console.log("success");
-          alert(res.data.message);
+          // alert(res.data.message);
           getAllSubCatagory();
           // window.location.reload();
         }
@@ -115,7 +115,7 @@ function ServicessubCategory() {
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
-            alert(res.data.success);
+            // alert(res.data.success);
             getAllSubCatagory();
           }
         });
@@ -156,7 +156,7 @@ function ServicessubCategory() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -319,7 +319,7 @@ function ServicessubCategory() {
                   className="btn btn-danger me-1"
                   style={{ backgroundColor: "#a9042e", border: 0 }}
                 >
-                  Download
+                  Download csv
                 </Button>
               </CSVLink>
               <input
@@ -335,7 +335,7 @@ function ServicessubCategory() {
                 htmlFor="icon-button-file"
               >
                 {" "}
-                Upload Subcategory
+                Upload Bulk Subcategory
               </label>{" "}
               {excel && hideUploadButton ? (
                 <Button
@@ -343,7 +343,7 @@ function ServicessubCategory() {
                   style={{ backgroundColor: "#a9042e", border: 0 }}
                   onClick={handleImport}
                 >
-                  Upload
+                  Bulk Upload
                 </Button>
               ) : (
                 ""

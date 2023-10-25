@@ -51,7 +51,10 @@ class Otp {
       console.log(phoneNumber);
 
       if (response.status === 200) {
-        const newOTP = new otpModel({ phoneNumber: phoneNumber, otp: otp });
+        const newOTP = new otpModel({
+          phoneNumber: phoneNumber,
+          otp: otp,
+        });
         await newOTP.save();
         res.json({ success: true, message: "OTP sent successfully." });
       }

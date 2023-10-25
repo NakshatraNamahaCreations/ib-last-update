@@ -40,5 +40,9 @@ router.post("/disapprovevendor/:id", vendorProfileController.vendordisapprove);
 router.post("/updateuser/:id", vendorProfileController.approveupdate);
 router.post("/delete/:id", vendorProfileController.deletevendor);
 router.post("/userupdate/:id", vendorProfileController.updateProfile);
+router.put(
+  "/updatevendorprofile/:id",
+  vendorProfileController.updateVendorsProfile
+);
 
 module.exports = router;

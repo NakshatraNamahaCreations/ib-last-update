@@ -59,7 +59,7 @@ function ServiceApproval() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
       width: "70px",
     },

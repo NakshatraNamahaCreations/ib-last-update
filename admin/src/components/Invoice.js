@@ -50,10 +50,10 @@ function Invoice() {
             </h3>
           </div>
           <div className="col-md-6 invoiceBorder pt-2 ps-1 pb-2">
-            <h6 style={{ fontSize: "20px" }}>Infinity Business Ventures</h6>
+            <h6 style={{ fontSize: "20px" }}>Infiniti Business Ventures</h6>
             <div>GST NO: 29CIYPA9033R2Z5</div>
             <div>Contact: 9108819955/ 9108817722</div>
-            <div>Email ID: info@infinitymart.in</div>
+            <div>Email ID: info@infinitimart.in</div>
           </div>
           <div className="col-md-6 invoiceBorder  pt-2 ps-1 pb-2">
             <h6> </h6>

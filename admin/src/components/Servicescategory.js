@@ -65,8 +65,9 @@ function Servicescategory() {
       await axios(config).then(function (res) {
         if (res.status === 200) {
           console.log("success");
-          alert(res.data.message);
-          window.location.reload();
+          // alert(res.data.message);
+          // window.location.reload();
+          getAllCatagory();
         }
       });
     } catch (error) {
@@ -99,7 +100,7 @@ function Servicescategory() {
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
-            alert(res.data.success);
+            // alert(res.data.success);
             getAllCatagory();
           }
         });
@@ -139,12 +140,14 @@ function Servicescategory() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
     },
     {
       name: "Category",
-      selector: (row, index) => row.categoryname,
+      // selector: (row, index) => row.categoryname,
+      selector: (row, index) =>
+        row.categoryname.charAt(0).toUpperCase() + row.categoryname.slice(1),
     },
 
     {
@@ -323,7 +326,7 @@ function Servicescategory() {
                       className="btn btn-danger me-1"
                       style={{ backgroundColor: "#a9042e", border: 0 }}
                     >
-                      Download
+                      Download csv
                     </Button>
                   </CSVLink>
                   <input
@@ -339,7 +342,7 @@ function Servicescategory() {
                     htmlFor="icon-button-file"
                   >
                     {" "}
-                    Upload Category
+                    Upload Bulk Category
                   </label>{" "}
                   {excel && hideUploadButton ? (
                     <Button
@@ -347,7 +350,7 @@ function Servicescategory() {
                       style={{ backgroundColor: "#a9042e", border: 0 }}
                       onClick={handleImport}
                     >
-                      Upload
+                      Bulk Upload
                     </Button>
                   ) : (
                     ""

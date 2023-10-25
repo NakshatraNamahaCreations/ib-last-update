@@ -13,6 +13,7 @@ export function Login() {
   const [enquiryNumber, setEnquiryNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const user = JSON.parse(sessionStorage.getItem("vendor"));
+  
 
   const [loginWithEmail, setLoginWithEmail] = useState(true);
   const [loginWithMobile, setLoginWithMobile] = useState(false);
@@ -198,7 +199,7 @@ export function Login() {
                                     style={{
                                       position: "absolute",
                                       left: "86%",
-                                      bottom: "50%",
+                                      bottom: "24%",
                                     }}
                                     onClick={handlehide}
                                   ></i>
@@ -214,11 +215,11 @@ export function Login() {
                                   />
 
                                   <i
-                                    class="fa-solid fa-eye-slash "
+                                    class="fa-solid fa-eye-slash"
                                     style={{
                                       position: "absolute",
                                       left: "86%",
-                                      bottom: "50%",
+                                      bottom: "24%",
                                     }}
                                     onClick={handleshow}
                                   ></i>

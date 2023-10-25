@@ -4,15 +4,73 @@ import { Link } from "react-router-dom";
 import { Form, Row, Col } from "react-bootstrap";
 import { useContext } from "react";
 import { CreateToggle } from "./TogglerProvider";
+import { toast } from "react-toastify";
 
 export function Login() {
   const { toggle, handleshow, handlehide } = useContext(CreateToggle);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [error, setError] = useState("");
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible); // Toggle password visibility
+  };
+
+  // const handleLogin = async () => {
+  //   try {
+  //     // Make the API request
+  //     const response = await fetch(
+  //       "https://api.infinitimart.in/api/superadmin/superadminlogin",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           email,
+  //           password,
+  //         }),
+  //       }
+  //     );
+
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       // alert(data.success);
+  //       toast.success("Login successful", {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //         autoClose: 6000, // milliseconds
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         draggable: true,
+  //         theme: "colored",
+  //       });
+  //       console.log(data.success);
+  //       // Store admin data in session storage
+  //       sessionStorage.setItem("adminData", JSON.stringify(data.user));
+
+  //       // Redirect to dashboard or wherever you need to go
+  //       // For example, you can use React Router to navigate to the dashboard
+  //       window.location.assign("/home");
+  //     } else {
+  //       // Handle error messages or invalid login
+  //       console.log(data.error);
+  //       alert(data.error);
+  //       // alert("Try again");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error logging in:", error);
+  //   }
+  // };
 
   const handleLogin = async () => {
+    setEmailError(""); // Reset email error
+    setPasswordError(""); // Reset password error
+    setError(""); // Reset general error
+
     try {
-      // Make the API request
       const response = await fetch(
         "https://api.infinitimart.in/api/superadmin/superadminlogin",
         {
@@ -29,25 +87,31 @@ export function Login() {
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.success);
-        console.log(data.success);
-        // Store admin data in session storage
-        sessionStorage.setItem("adminData", JSON.stringify(data.user));
+        toast.success("Login successful", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 6000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          draggable: true,
+          theme: "colored",
+        });
 
-        // Redirect to dashboard or wherever you need to go
-        // For example, you can use React Router to navigate to the dashboard
+        sessionStorage.setItem("adminData", JSON.stringify(data.user));
         window.location.assign("/home");
-      } else {
-        // Handle error messages or invalid login
-        console.log(data.error);
-        alert(data.error);
-        // alert("Try again");
+      } else if (data.error) {
+        setError(data.error); // Set the general error message
+      } else if (data.field) {
+        // Set error messages for specific fields
+        if (data.field === "email") {
+          setEmailError(data.message);
+        } else if (data.field === "password") {
+          setPasswordError(data.message);
+        }
       }
     } catch (error) {
       console.error("Error logging in:", error);
     }
   };
-
   return (
     <div style={{ height: "100vh" }}>
       <div
@@ -97,10 +161,14 @@ export function Login() {
                               type="email"
                               placeholder="Email"
                               onChange={(e) => setEmail(e.target.value)}
+                              isInvalid={emailError !== ""}
                             />
                           </Form.Group>
+                          {emailError && (
+                            <div style={{ color: "red" }}>{emailError}</div>
+                          )}
                         </Row>
-                        <Row className="mb-3">
+                        {/* <Row className="mb-3">
                           {!toggle ? (
                             <Form.Group as={Col} controlId="formGridEmail">
                               <Form.Control
@@ -137,21 +205,48 @@ export function Login() {
                               ></i>
                             </Form.Group>
                           )}
+                        </Row> */}
+                        <Row className="mb-3">
+                          <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Control
+                              type={passwordVisible ? "text" : "password"}
+                              placeholder="Password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              isInvalid={passwordError !== ""}
+                            />
+                            <i
+                              className={`fa-regular fa-eye${
+                                passwordVisible ? "" : "-slash"
+                              }`}
+                              style={{
+                                position: "absolute",
+                                left: "86%",
+                                bottom: "26%",
+                                cursor: "pointer",
+                              }}
+                              onClick={togglePasswordVisibility}
+                            ></i>
+                          </Form.Group>
                         </Row>
-                        {/* <toggle/> */}
-                        {/* <Link
-                          style={{
-                            position: "absolute",
-                            left: "50%",
-                            top: "90%",
-                          }}
-                          to="/Settings"
-                        >
-                          Forgot Password?
-                        </Link> */}
+                        {passwordError && (
+                          <div style={{ color: "red" }}>{passwordError}</div>
+                        )}
                       </Row>
                     </div>
+                    {error && (
+                      <p
+                        style={{
+                          color: "red",
+                          marginTop: -30,
+                          textAlign: "center",
+                        }}
+                      >
+                        {error}
+                      </p>
+                    )}
                   </div>
+
                   {/* <div class="form-check" style={{ marginLeft: "114px" }}>
                     <Form.Group className="mb-3" id="formGridCheckbox">
                       <Form.Check type="checkbox" label="Remeber me" />

@@ -62,21 +62,21 @@ function Sapprovaldetail() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL NO",
       selector: (row, index) => index + 1,
       width: "70px",
     },
-    {
-      name: "Vendor",
-      selector: (row) => (
-        <>
-          <p className="mt-2">Name : {row.userId?.firstname}</p>
-          <p>Category: {row.userId?.category} </p>
-          <p className="mb-2">Vendor Code: {row.userId?.customNumber} </p>
-        </>
-      ),
-      width: "200px",
-    },
+    // {
+    //   name: "Vendor",
+    //   selector: (row) => (
+    //     <>
+    //       <p className="mt-2">Name : {row.userId?.firstname}</p>
+    //       <p>Category: {row.userId?.category} </p>
+    //       <p className="mb-2">Vendor Code: {row.userId?.customNumber} </p>
+    //     </>
+    //   ),
+    //   width: "200px",
+    // },
     {
       name: "Catagory",
       selector: (row) => row.serviceCatagoryName,

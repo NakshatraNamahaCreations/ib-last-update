@@ -30,7 +30,9 @@ class Catagory {
 
   async getAllcatagoryservices(req, res) {
     try {
-      let categoryservices = await ServiceCategoryModel.find({});
+      let categoryservices = await ServiceCategoryModel.find({}).sort({
+        _id: -1,
+      });
       if (categoryservices) {
         return res.json({ categoryservices: categoryservices });
       } else {

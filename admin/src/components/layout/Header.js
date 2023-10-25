@@ -12,6 +12,9 @@ function Header() {
         style={{
           backgroundColor: "blue",
           height: "42px",
+          position: "fixed",
+          width: "-webkit-fill-available",
+          zIndex: 1,
         }}
       >
         <Link to="/settings">

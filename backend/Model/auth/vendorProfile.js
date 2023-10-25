@@ -121,6 +121,10 @@ const Vendor = new Schema({
   panimg: {
     type: String,
   },
+  newupdate: {
+    //  type:String,
+    type: Boolean,
+  },
   createAt: {
     type: Date,
     default: Date.now(),

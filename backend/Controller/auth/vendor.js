@@ -37,6 +37,7 @@ class vendorProfile {
         referalCode,
         packageId,
         city,
+        newupdate,
       } = req.body;
 
       const file = req.files[0]?.filename;
@@ -118,6 +119,7 @@ class vendorProfile {
         packageId,
         city,
         // selfieImage: file3,
+        newupdate,
       });
 
       const savedVendor = await newVendor.save();
@@ -405,6 +407,38 @@ class vendorProfile {
     } catch (error) {
       console.log("Error updating profile:", error);
       return res.status(500).json({ error: "An error occurred" });
+    }
+  }
+
+  async updateVendorsProfile(req, res) {
+    try {
+      const vendorId = req.params.id;
+      const { firstname, dob, phoneNumber, businessName } = req.body;
+      const findVendor = await VendorModel.findOne({
+        _id: vendorId,
+      });
+      if (!findVendor) {
+        return res.json({ error: "No such record found" });
+      }
+      findVendor.firstname = firstname || findVendor.firstname;
+      findVendor.phoneNumber = phoneNumber || findVendor.phoneNumber;
+      findVendor.dob = dob || findVendor.dob;
+      findVendor.businessName = businessName || findVendor.businessName;
+
+      // let updateVendor = await VendorModel.findOneAndUpdate(
+      //   { _id: vendorId },
+      //   updateVendor,
+      //   { new: true }
+      // );
+      const updatedVendor = await findVendor.save();
+
+      return res.status(200).json({
+        Success:
+          "Updated successfully. For an better experience please login again",
+        user: updatedVendor,
+      });
+    } catch (error) {
+      console.log("error:", error);
     }
   }
 

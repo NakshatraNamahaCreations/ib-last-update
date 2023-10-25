@@ -40,7 +40,7 @@ function Category() {
     setShowEdit(true);
   };
   const handleClose = () => {
-    setShowEdit(false); // Hide the edit form after submitting it or canceling it by pressing
+    setShowEdit(false);
   };
 
   //choose image
@@ -49,6 +49,7 @@ function Category() {
     setSelectedImage(URL.createObjectURL(file));
     setEditCatagoryImage(file);
   };
+
   const AddCatagory = async (e) => {
     const formdata = new FormData();
     e.preventDefault();
@@ -64,8 +65,9 @@ function Category() {
       await axios(config).then(function (res) {
         if (res.status === 200) {
           console.log("success");
-          alert(res.data.success);
-          window.location.reload();
+          // alert(res.data.success);
+          // window.location.reload();
+          getAllCatagory();
         }
       });
     } catch (error) {
@@ -99,8 +101,8 @@ function Category() {
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
-            alert(res.data.success);
-            window.location.assign("/category");
+
+            getAllCatagory();
           }
         });
     } catch (error) {
@@ -127,9 +129,9 @@ function Category() {
       const response = await axios(config);
       if (response.status === 200) {
         console.log("success");
-        alert(response.data.message);
-        getAllCatagory(); // Refresh the category list
-        setShowEdit(false); // Close the modal
+        // alert(response.data.message);
+        getAllCatagory();
+        setShowEdit(false);
       }
     } catch (error) {
       console.log(error);
@@ -144,7 +146,8 @@ function Category() {
     },
     {
       name: "Category",
-      selector: (row, index) => row.catagoryName,
+      selector: (row, index) =>
+        row.catagoryName.charAt(0).toUpperCase() + row.catagoryName.slice(1),
     },
     {
       name: "Image",
@@ -355,7 +358,7 @@ function Category() {
                       className="btn btn-danger me-1"
                       style={{ backgroundColor: "#a9042e", border: 0 }}
                     >
-                      Download
+                      Download csv
                     </Button>
                   </CSVLink>
 
@@ -371,7 +374,7 @@ function Category() {
                     style={{ borderColor: "#a9042e" }}
                     htmlFor="icon-button-file"
                   >
-                    Upload Category
+                    Upload Bulk Category
                   </label>
 
                   {excel && hideUploadButton ? (
@@ -382,7 +385,7 @@ function Category() {
                         handleImport();
                       }}
                     >
-                      Upload
+                      Bulk Upload
                     </Button>
                   ) : (
                     ""

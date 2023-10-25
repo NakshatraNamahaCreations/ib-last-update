@@ -10,13 +10,13 @@ import { Form } from "react-bootstrap";
 function VendorManagement() {
   const [search, setSearch] = useState("");
   const [filterdata, setFilterdata] = useState([]);
-  // const [filteredProducData, setFilteredData] = useState();
 
   const [vendorPaymentsData, setVendorPaymentsData] = useState([]);
   const [rowdata, setrowdata] = useState([]);
   const [smShow, setSmShow] = useState(false);
   const handleClose = () => setSmShow(false);
   const handleShow = () => setSmShow(true);
+  const [filterOption, setFilterOption] = useState("all");
 
   const getvendorWithPayments = async () => {
     try {
@@ -95,38 +95,13 @@ function VendorManagement() {
       name: "Vendor Code",
       selector: (row) => row.customNumber,
     },
-    // {
-    //   name: "Status",
-    //   cell: (row) => (
-    //     <div>
-    //       {row.vendorstatus ? (
-    //         <p
-    //           style={{
-    //             fontSize: "15px",
-    //             color: "#ffc217",
-    //             fontWeight: "bolder",
-    //           }}
-    //         >
-    //           Approved <i class="fa-regular fa-circle-check"></i>{" "}
-    //         </p>
-    //       ) : (
-    //         <button
-    //           className="bt"
-    //           style={{ border: 0, backgroundColor: "green", color: "white" }}
-    //           onClick={() => edit(row)}
-    //         >
-    //           Approve
-    //         </button>
-    //       )}
-    //     </div>
-    //   ),
-    // },
+
     {
       name: "Action",
       cell: (row) => (
         <>
           <Link to="/Vendorprofile" state={{ item: row }}>
-            <b className="vendor-mng-view"> View </b>
+            <b className="vendor-mng-view tab-text-a"> View </b>
           </Link>
         </>
       ),
@@ -138,15 +113,22 @@ function VendorManagement() {
     handleShow(true);
   };
 
-  // const searchResults = (searchTerm) => {
-  //   const searchWords = searchTerm.toLowerCase();
-
+  // useEffect(() => {
   //   const filteredData = vendorPaymentsData.filter((item) => {
-  //     const itemFirstName = (item.firstname || "").toLowerCase();
-  //     return itemFirstName.includes(searchWords);
+  //     const searchString = search.toLowerCase();
+  //     const vendorNameMatch = item.firstname
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const businessNameMatch = item.businessName
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const vendorIdMatch = item.customNumber
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     return vendorNameMatch || businessNameMatch || vendorIdMatch;
   //   });
   //   setFilterdata(filteredData);
-  // };
+  // }, [search, vendorPaymentsData]);
 
   useEffect(() => {
     const filteredData = vendorPaymentsData.filter((item) => {
@@ -160,19 +142,37 @@ function VendorManagement() {
       const vendorIdMatch = item.customNumber
         ?.toLowerCase()
         .includes(searchString);
-      return vendorNameMatch || businessNameMatch || vendorIdMatch;
+
+      // Filter by the selected filter option
+      const currentDate = new Date();
+      if (filterOption === "new") {
+        const createdAtDate = new Date(item.createAt);
+        const timeDiff = currentDate - createdAtDate;
+        // Filter by vendors created today
+        return (
+          (vendorNameMatch || businessNameMatch || vendorIdMatch) &&
+          timeDiff < 86400000 // Milliseconds in a day
+        );
+      } else if (filterOption === "old") {
+        const createdAtDate = new Date(item.createAt);
+        const timeDiff = currentDate - createdAtDate;
+
+        return (
+          (vendorNameMatch || businessNameMatch || vendorIdMatch) &&
+          timeDiff >= 86400000 &&
+          timeDiff < 172800000
+        );
+      } else {
+        return vendorNameMatch || businessNameMatch || vendorIdMatch;
+      }
     });
+
     setFilterdata(filteredData);
-  }, [search, vendorPaymentsData]);
+  }, [search, vendorPaymentsData, filterOption]);
 
-  // const handleSearch = () => {
-  //   const filteredData = searchResults();
-  //   setFilterdata(filteredData);
-  // };
-
-  // useEffect(() => {
-  //   searchResults();
-  // }, [search, vendorPaymentsData]);
+  const handleFilterChange = (selectedOption) => {
+    setFilterOption(selectedOption);
+  };
 
   return (
     <div className="row me-0">
@@ -183,7 +183,7 @@ function VendorManagement() {
         <div className="mt-3 p-2">
           <h4>Vendor Management </h4>
         </div>
-        <div className="mt-5">
+        <div className="mt-3 d-flex">
           <Form.Control
             type="text"
             placeholder="Search by vendor name, business, vendor code"
@@ -191,7 +191,21 @@ function VendorManagement() {
             // value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+
+          <select
+            className="form-select mx-3"
+            style={{ width: "100px" }}
+            aria-label="Default select example"
+            onChange={(e) => handleFilterChange(e.target.value)}
+          >
+            <option value="all" selected>
+              All
+            </option>
+            <option value="new">New</option>
+            <option value="old">Old</option>
+          </select>
         </div>
+
         <div className="mt-1 border">
           <DataTable
             columns={columns}

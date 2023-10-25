@@ -19,12 +19,14 @@ function Order() {
     setSelected(divNum);
   };
   const [data, setData] = useState({});
-   const [storeData,setStoreData] = useState([])
+  const [storeData, setStoreData] = useState([]);
   const handleData = (e) => {
     const { name, value } = e.target;
     setData((previousData) => ({ ...previousData, [name]: value }));
   };
-  const hadleSave = () => {setStoreData([...storeData,data])};
+  const hadleSave = () => {
+    setStoreData([...storeData, data]);
+  };
 
   return (
     <div className="row">
@@ -61,7 +63,7 @@ function Order() {
                   <thead className="text-align-center">
                     <tr className="table-secondary ">
                       <th className="table-head" scope="col">
-                        S.No
+                        SL NO
                       </th>
                       <th className="table-head" scope="col">
                         User Name
@@ -105,36 +107,32 @@ function Order() {
                     </tr>
                   </thead>
                   <tbody className="justify-content-center">
-              {
-                storeData.map((ele,i)=>{
-                  return(
-                    <tr className="user-tbale-body">
-                    <td className="text-center">{ele.i}</td>
-                    <td className="text-center">{ele.firstname}</td>
-                    <td className="text-center">{ele.email}</td>
-                    <td className="text-center">
-                    {ele.address}
-                    </td>
-                    <td className="text-center">{ele.phone}</td>
-                    <td className="text-center">{ele.ProductName}</td>
-                    <td className="text-center">{ele.price}</td>
-                    <td className="text-center">{ele.brand}</td>
-                    <td>{ele.size}</td>
-                    <td>12 {ele.volume}</td>
-                    <td>
-                      <img
-                        src={ele.image}
-                        width={"30px"}
-                        height={"30px"}
-                      />
-                    </td>
-                    <td>{ele.discount}</td>
-                    <td>{ele.category}</td>
-                    <td>{ele.discription}</td>
-                  </tr>
-                  )
-                })
-              }
+                    {storeData.map((ele, i) => {
+                      return (
+                        <tr className="user-tbale-body">
+                          <td className="text-center">{ele.i}</td>
+                          <td className="text-center">{ele.firstname}</td>
+                          <td className="text-center">{ele.email}</td>
+                          <td className="text-center">{ele.address}</td>
+                          <td className="text-center">{ele.phone}</td>
+                          <td className="text-center">{ele.ProductName}</td>
+                          <td className="text-center">{ele.price}</td>
+                          <td className="text-center">{ele.brand}</td>
+                          <td>{ele.size}</td>
+                          <td>12 {ele.volume}</td>
+                          <td>
+                            <img
+                              src={ele.image}
+                              width={"30px"}
+                              height={"30px"}
+                            />
+                          </td>
+                          <td>{ele.discount}</td>
+                          <td>{ele.category}</td>
+                          <td>{ele.discription}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>{" "}
               </>
