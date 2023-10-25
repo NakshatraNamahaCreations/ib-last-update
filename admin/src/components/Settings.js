@@ -180,7 +180,7 @@ function Settings() {
         .then(function (res) {
           if (res.status === 200) {
             sessionStorage.removeItem("adminData");
-            alert("Signout Success!");
+            // alert("Signout Success!");
             window.location.assign("/");
           } else {
             alert("Signout Unsuccessfully");
@@ -227,7 +227,7 @@ function Settings() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {

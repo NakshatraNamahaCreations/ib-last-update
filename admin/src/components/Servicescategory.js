@@ -17,8 +17,49 @@ function Servicescategory() {
   const [subCategoryTab, setSubCategoryTab] = useState(false);
   const [serviceApprovalTab, setServiceApprovalTab] = useState(false);
   const [catagory, setCatagory] = useState([]);
-  const [catagoryName, setCatagoryName] = useState(true);
-  const [image, setImage] = useState();
+  const [catagoryName, setCatagoryName] = useState("");
+  const [image, setImage] = useState("");
+  const [catagoryNameError, setCatagoryNameError] = useState("");
+  const [imageError, setImageError] = useState("");
+
+  const [show, setShow] = useState(false);
+
+  const handleClosemodel = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const validateForm = () => {
+    let hasErrors = false;
+
+    if (!catagoryName) {
+      setCatagoryNameError("Please Enter Your Catagory Name");
+      hasErrors = true;
+    } else {
+      setCatagoryNameError("");
+    }
+
+    if (!image) {
+      setImageError("Please upload a banner image.");
+      hasErrors = true;
+    } else {
+      setImageError("");
+
+      if (!image.type.startsWith("image/")) {
+        setImageError("Please upload a valid image file.");
+        hasErrors = true;
+      }
+    }
+
+    return !hasErrors;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      await AddCatagory(e);
+    }
+  };
+
   //search
   const [searchServiceCategory, setSearchServiceCategory] = useState("");
   const [filterdata, setfilterdata] = useState([]);
@@ -67,6 +108,7 @@ function Servicescategory() {
           console.log("success");
           // alert(res.data.message);
           // window.location.reload();
+          handleClosemodel();
           getAllCatagory();
         }
       });
@@ -140,7 +182,7 @@ function Servicescategory() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -361,8 +403,9 @@ function Servicescategory() {
                 <button
                   type="button"
                   class="btn btn-primary _btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#exampleModal"
+                  onClick={handleShow}
                 >
                   Add Category
                 </button>
@@ -499,6 +542,52 @@ function Servicescategory() {
           <button className="update-button" onClick={updateCategory}>
             Update
           </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal */}
+      <Modal show={show} onHide={handleClosemodel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="group pt-1">
+            <Form>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    placeholder=" Category"
+                    onChange={(e) => {
+                      setCatagoryName(e.target.value);
+                      setCatagoryNameError("");
+                    }}
+                  />
+                  {catagoryNameError && (
+                    <div style={{ color: "red" }}>{catagoryNameError}</div>
+                  )}
+                  <br />
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="categoryimage"
+                    onChange={(e) => {
+                      setImage(e.target.files[0]);
+                      setImageError("");
+                    }}
+                  />
+                  {imageError && (
+                    <div style={{ color: "red" }}>{imageError}</div>
+                  )}
+                </Form.Group>
+              </Row>
+            </Form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleFormSubmit}>
+            Save
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

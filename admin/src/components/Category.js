@@ -17,8 +17,10 @@ function Category() {
   const [subCategoryTab, setSubCategoryTab] = useState(false);
   const [productApprovalTab, setProductApprovalTab] = useState(false);
   const [catagory, setCatagory] = useState([]);
-  const [catagoryName, setCatagoryName] = useState(true);
-  const [image, setImage] = useState(false);
+  const [catagoryName, setCatagoryName] = useState("");
+  const [image, setImage] = useState("");
+  const [catagoryNameError, setCatagoryNameError] = useState("");
+  const [imageError, setImageError] = useState("");
   const [hideUploadButton, setHideUploadButton] = useState(true);
 
   //search
@@ -30,6 +32,44 @@ function Category() {
   const [showEdit, setShowEdit] = useState(false);
   const [editCategory, setEditCategory] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const [show, setShow] = useState(false);
+
+  const handleClosemodel = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const validateForm = () => {
+    let hasErrors = false;
+
+    if (!catagoryName) {
+      setCatagoryNameError("Please Enter Your Catagory Name");
+      hasErrors = true;
+    } else {
+      setCatagoryNameError("");
+    }
+
+    if (!image) {
+      setImageError("Please upload a banner image.");
+      hasErrors = true;
+    } else {
+      setImageError("");
+
+      if (!image.type.startsWith("image/")) {
+        setImageError("Please upload a valid image file.");
+        hasErrors = true;
+      }
+    }
+
+    return !hasErrors;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      await AddCatagory(e);
+    }
+  };
 
   const handleEdit = (category) => {
     setEditCategory(category);
@@ -59,7 +99,7 @@ function Category() {
       const config = {
         url: "/vendor/product/catagory/addcatagory",
         method: "post",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       await axios(config).then(function (res) {
@@ -68,6 +108,7 @@ function Category() {
           // alert(res.data.success);
           // window.location.reload();
           getAllCatagory();
+          handleClosemodel();
         }
       });
     } catch (error) {
@@ -78,7 +119,7 @@ function Category() {
 
   const getAllCatagory = async () => {
     let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      "http://localhost:8000/api/vendor/product/catagory/getcatagory"
     );
     if (res.status === 200) {
       console.log(res);
@@ -95,7 +136,7 @@ function Category() {
     try {
       axios
         .post(
-          `https://api.infinitimart.in/api/vendor/product/catagory/deletecatagory/` +
+          `http://localhost:8000/api/vendor/product/catagory/deletecatagory/` +
             data._id
         )
         .then(function (res) {
@@ -123,7 +164,7 @@ function Category() {
       const config = {
         url: `/vendor/product/catagory/updateproductcategory/${categoryId}`,
         method: "put",
-        baseURL: "https://api.infinitimart.in/api",
+        baseURL: "http://localhost:8000/api",
         data: formdata,
       };
       const response = await axios(config);
@@ -141,7 +182,7 @@ function Category() {
 
   const columns = [
     {
-      name: "S.No",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -154,7 +195,7 @@ function Category() {
       selector: (row, index) => (
         <>
           <img
-            src={`https://api.infinitimart.in/catagory/${row.catagoryImage}`}
+            src={`http://localhost:8000/catagory/${row.catagoryImage}`}
             alt=""
             style={{ padding: "7px", width: "35%" }}
           />
@@ -224,7 +265,7 @@ function Category() {
         }
         try {
           const response = await axios.post(
-            "https://api.infinitimart.in/api/vendor/product/catagory/addcustomersviaexcelesheet",
+            "http://localhost:8000/api/vendor/product/catagory/addcustomersviaexcelesheet",
             jsonData
           );
           alert(response.data.success);
@@ -254,7 +295,7 @@ function Category() {
   //     const config = {
   //       url: "/bulkimageuploading",
   //       method: "post",
-  //       baseURL: "https://api.infinitimart.in/api/vendor/product/catagory",
+  //       baseURL: "http://localhost:8000/api/vendor/product/catagory",
   //       headers: { "Content-Type": "multipart/form-data" },
   //       data: formData,
   //     };
@@ -423,8 +464,9 @@ function Category() {
                 <button
                   type="button"
                   className="btn btn-primary _btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#exampleModal"
+                  onClick={handleShow}
                 >
                   Add Category
                 </button>
@@ -539,7 +581,7 @@ function Category() {
           {!selectedImage && (
             <img
               className="pt-2"
-              src={`https://api.infinitimart.in/catagory/${editCategory?.catagoryImage}`}
+              src={`http://localhost:8000/catagory/${editCategory?.catagoryImage}`}
               alt=""
               width="25%"
             />
@@ -566,6 +608,52 @@ function Category() {
           <button className="update-button" onClick={updateCategory}>
             Update
           </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal */}
+      <Modal show={show} onHide={handleClosemodel}>
+        <Modal.Header closeButton>
+          <Modal.Title>Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="group pt-1">
+            <Form>
+              <Row className="mb-3">
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Control
+                    placeholder=" Category"
+                    onChange={(e) => {
+                      setCatagoryName(e.target.value);
+                      setCatagoryNameError("");
+                    }}
+                  />
+                  {catagoryNameError && (
+                    <div style={{ color: "red" }}>{catagoryNameError}</div>
+                  )}
+                  <br />
+                  <Form.Label>Image</Form.Label>
+                  <Form.Control
+                    type="file"
+                    name="categoryimage"
+                    onChange={(e) => {
+                      setImage(e.target.files[0]);
+                      setImageError("");
+                    }}
+                  />
+                  {imageError && (
+                    <div style={{ color: "red" }}>{imageError}</div>
+                  )}
+                </Form.Group>
+              </Row>
+            </Form>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleFormSubmit}>
+            Save
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

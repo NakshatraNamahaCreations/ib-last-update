@@ -228,7 +228,7 @@ function Settings() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {

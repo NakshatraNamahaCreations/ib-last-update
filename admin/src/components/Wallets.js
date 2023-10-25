@@ -188,7 +188,7 @@ function Wallets() {
               <thead>
                 <tr className="table-secondary">
                   <th className="table-head" scope="col">
-                    SL NO
+                    SL.NO
                   </th>
                   <th className="table-head" scope="col">
                     Date

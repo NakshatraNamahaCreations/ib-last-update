@@ -18,8 +18,11 @@ function Header() {
         }}
       >
         <Link to="/settings">
-          <i class="fa-solid fa-user h-icon" style={{ float: "right" }}>
-            Super
+          <i
+            class="fa-solid fa-user h-icon"
+            style={{ float: "right", marginRight: "10px" }}
+          >
+            {/* Super */}
           </i>
         </Link>
       </div>

@@ -79,8 +79,8 @@ export function Login() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email,
-            password,
+            email: email.toLowerCase(),
+            password: password.toLowerCase(),
           }),
         }
       );

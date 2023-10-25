@@ -17,7 +17,10 @@ function ServicessubCategory() {
   const [subCatagory, setSubcatagory] = useState([]);
   const [catagoryName, setCatagoryName] = useState("");
   const [subcatagoryName, setSubcatagoryName] = useState("");
-  const [subcatagory_image, setSubcatagory_image] = useState();
+  const [subcatagory_image, setSubcatagory_image] = useState("");
+  const [catagoryNameError, setCatagoryNameError] = useState("");
+  const [subcatagoryNameError, setSubcatagoryNameError] = useState("");
+  const [subcatagory_imageError, setSubcatagory_imageError] = useState("");
   //search
   const [searchServiceSubCategory, setServiceSearchSubCategory] = useState("");
   const [filterdata, setfilterdata] = useState([]);
@@ -32,6 +35,51 @@ function ServicessubCategory() {
   const [showEdit, setShowEdit] = useState(false);
   const [editSubcategory, setEditSubcategory] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const [show, setShow] = useState(false);
+
+  const handleClosemodel = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const validateForm = () => {
+    let hasErrors = false;
+
+    if (!catagoryName) {
+      setCatagoryNameError("Please Enter Your Catagory Name");
+      hasErrors = true;
+    } else {
+      setCatagoryNameError("");
+    }
+
+    if (!subcatagoryName) {
+      setSubcatagoryNameError("Please select Subcatagory Name.");
+      hasErrors = true;
+    } else {
+      setSubcatagoryNameError("");
+    }
+
+    if (!subcatagory_image) {
+      setSubcatagory_imageError("Please upload a  image.");
+      hasErrors = true;
+    } else {
+      setSubcatagory_imageError("");
+
+      if (!subcatagory_image.type.startsWith("image/")) {
+        setSubcatagory_imageError("Please upload a valid image file.");
+        hasErrors = true;
+      }
+    }
+
+    return !hasErrors;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      await AddSubCatagory(e);
+    }
+  };
 
   const handleEdit = (subcategory) => {
     setEditSubcategory(subcategory);
@@ -69,6 +117,7 @@ function ServicessubCategory() {
         if (res.status === 200) {
           console.log("success");
           // alert(res.data.message);
+          handleClosemodel();
           getAllSubCatagory();
           // window.location.reload();
         }
@@ -156,7 +205,7 @@ function ServicessubCategory() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -355,8 +404,9 @@ function ServicessubCategory() {
             <button
               type="button"
               class="btn btn-primary _btn"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
+              // data-bs-toggle="modal"
+              // data-bs-target="#exampleModal"
+              onClick={handleShow}
             >
               Add Subcategory
             </button>
@@ -505,6 +555,71 @@ function ServicessubCategory() {
           <button className="update-button" onClick={updateSubCategory}>
             Update
           </button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modal */}
+      {/* Modal */}
+      <Modal show={show} onHide={handleClosemodel}>
+        <Modal.Header closeButton>
+          <Modal.Title> Subcategory</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mt-1">
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Category Name</Form.Label>
+              <Form.Select
+                defaultValue="Choose..."
+                onChange={(e) => {
+                  setCatagoryName(e.target.value);
+                  setCatagoryNameError("");
+                }}
+              >
+                <option>--Select All--</option>
+                {catagory.map((data) => (
+                  <option value={data?.id}>{data?.categoryname} </option>
+                ))}
+              </Form.Select>
+              {catagoryNameError && (
+                <div style={{ color: "red" }}>{catagoryNameError}</div>
+              )}
+            </Form.Group>
+          </div>
+
+          <div className="mt-1">
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Subcategory Name</Form.Label>
+              <Form.Control
+                onChange={(e) => {
+                  setSubcatagoryName(e.target.value);
+                  setSubcatagoryNameError("");
+                }}
+              />
+              {subcatagoryNameError && (
+                <div style={{ color: "red" }}>{subcatagoryNameError}</div>
+              )}
+            </Form.Group>
+          </div>
+          <div className="mt-1">
+            <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>Select Banner Image</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(e) => {
+                  setSubcatagory_image(e.target.files[0]);
+                  setSubcatagory_imageError("");
+                }}
+              />
+              {subcatagory_imageError && (
+                <div style={{ color: "red" }}>{subcatagory_imageError}</div>
+              )}
+            </Form.Group>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleFormSubmit}>
+            Save
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

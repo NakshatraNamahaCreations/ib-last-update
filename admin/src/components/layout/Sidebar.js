@@ -67,9 +67,12 @@ const Sidebar = ({ children }) => {
         }}
         className="sidebar"
       >
-        <div className="top_section">
-          <img src="./images/newlogo.png" style={{ width: "85%" }} alt="" />
-        </div>
+        <a href="/home">
+          <div className="top_section">
+            <img src="./images/newlogo.png" style={{ width: "85%" }} alt="" />
+          </div>
+        </a>
+
         <hr />
         {menuItem.map((item, index) => (
           <NavLink

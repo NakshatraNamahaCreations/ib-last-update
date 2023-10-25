@@ -168,7 +168,7 @@ function Vendorprofile() {
             <div className="mx-4">
               <a href="/vendormanagement">
                 <div className="back-icon">
-                  <i class="fa-solid fa-arrow-right"></i>
+                  <i class="fa-solid fa-arrow-left"></i>
                 </div>
               </a>
               <span>
@@ -214,14 +214,14 @@ function Vendorprofile() {
                   alt=""
                   style={{ width: "25%", borderRadius: "100%" }}
                 /> */}
-                <div style={{ marginLeft: "1.5rem", marginTop: "10px" }}>
+                {/* <div style={{ marginLeft: "1.5rem", marginTop: "10px" }}>
                   <div style={{ fontSize: "18px", fontWeight: "500" }}>
                     {item?.firstname} {item?.lastname}
                   </div>
                   <div style={{ color: "#6f8d93", fontWeight: "400" }}>
                     <i>{item?.phoneNumber}</i>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -347,23 +347,28 @@ function Vendorprofile() {
             className="d-flex p-5"
             style={{ justifyContent: "space-evenly" }}
           >
-            <div>
-              <Link to="/invoice" state={{ invoiceData: item }}>
-                <button
-                  disabled={item.PaymentDetails.length === 0}
-                  style={{
-                    backgroundColor: "rgb(112 112 112)",
-                    border: 0,
-                    borderRadius: "10px",
-                    color: "white",
-                    padding: "4px 15px",
-                    fontWeight: "700",
-                  }}
-                >
-                  View Invoice
-                </button>
-              </Link>
-            </div>
+            {item.PaymentDetails.length === 0 ? (
+              ""
+            ) : (
+              <div>
+                <Link to="/invoice" state={{ invoiceData: item }}>
+                  <button
+                    disabled={item.PaymentDetails.length === 0}
+                    style={{
+                      backgroundColor: "rgb(112 112 112)",
+                      border: 0,
+                      borderRadius: "10px",
+                      color: "white",
+                      padding: "4px 15px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    View Invoice
+                  </button>
+                </Link>
+              </div>
+            )}
+
             <div onClick={() => setShowTransactions(true)}>
               <button
                 style={{

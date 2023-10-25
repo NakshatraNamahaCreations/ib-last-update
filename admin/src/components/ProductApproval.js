@@ -59,7 +59,7 @@
 
 //   const columns = [
 //     {
-//       name: "SL NO",
+//       name: "SL.NO",
 //       selector: (row, index) => index + 1,
 //       width: "70px",
 //     },
@@ -307,7 +307,7 @@ function ProductApproval() {
   });
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
       width: "70px",
     },

@@ -65,7 +65,7 @@ function ProductApproval() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
       width: "70px",
     },
@@ -158,9 +158,11 @@ function ProductApproval() {
           ) : (
             <>
               {row.productStatus === "approved" ? (
-                <p style={{ color: "green" }}> Approved</p>
+                <p style={{ color: "green", textAlign: "center" }}> Approved</p>
               ) : (
-                <p style={{ color: "#c0352f" }}>Dispproved</p>
+                <p style={{ color: "#c0352f", textAlign: "center" }}>
+                  Dispproved
+                </p>
               )}
             </>
           )}
@@ -197,7 +199,7 @@ function ProductApproval() {
   return (
     <div>
       <div className="row m-auto">
-        <div className="pt-3 pb-3">
+        <div className="pt-3 pb-3 mt-5">
           <div>
             <Form.Control
               type="text"

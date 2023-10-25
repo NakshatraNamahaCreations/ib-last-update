@@ -130,7 +130,7 @@ function ServiceBanner() {
 
   const columns = [
     {
-      name: "SL NO",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -138,8 +138,10 @@ function ServiceBanner() {
       selector: (row, index) => row.bannerPlacement,
     },
     {
-      name: "Content",
-      selector: (row, index) => row.bannerContent,
+      name: "Description",
+      // selector: (row, index) => row.bannerContent,
+      selector: (row, index) =>
+        row.bannerContent.charAt(0).toUpperCase() + row.bannerContent.slice(1),
     },
     {
       name: "Image",
@@ -279,13 +281,13 @@ function ServiceBanner() {
         </Modal.Header>
         <Modal.Body>
           <div>
-            <h6>Enter Content </h6>
+            <h6>Enter Description </h6>
           </div>
           <div>
             <input
               type="text"
               className="mx-1 p-2"
-              placeholder="Enter Banner"
+              placeholder="Enter Description"
               style={{ width: "70%" }}
               onChange={(e) => {
                 setcontent(e.target.value);

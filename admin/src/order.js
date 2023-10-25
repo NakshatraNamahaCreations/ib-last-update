@@ -63,7 +63,7 @@ function Order() {
                   <thead className="text-align-center">
                     <tr className="table-secondary ">
                       <th className="table-head" scope="col">
-                        SL NO
+                        SL.NO
                       </th>
                       <th className="table-head" scope="col">
                         User Name
