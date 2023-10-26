@@ -393,9 +393,10 @@ function SubCategory() {
             <Form.Control
               type="text"
               placeholder="Search by Subcategory"
+              className="buyer-search-input "
               onChange={(e) => setSearchSubCategory(e.target.value)}
             />
-            <div className="mt-2">
+            <div className="pt-2 buyer-search-input ">
               <CSVLink data={csvData} filename={"Product Subcategory.csv"}>
                 {" "}
                 <Button

@@ -63,7 +63,7 @@ function VendorManagement() {
 
   const columns = [
     {
-      name: "Sl  No",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -180,10 +180,10 @@ function VendorManagement() {
         <Sidebar />
       </div>
       <div className="col-md-10 pt-3">
-        <div className="mt-3 p-2">
+        <div className="" style={{ marginTop: "64px", marginLeft: "30px" }}>
           <h4>Vendor Management </h4>
         </div>
-        <div className="mt-3 d-flex">
+        <div className="mt-3 d-flex" style={{ marginLeft: "30px" }}>
           <Form.Control
             type="text"
             placeholder="Search by vendor name, business, vendor code"
@@ -206,7 +206,7 @@ function VendorManagement() {
           </select>
         </div>
 
-        <div className="mt-1 border">
+        <div className="mt-3">
           <DataTable
             columns={columns}
             data={filterdata}

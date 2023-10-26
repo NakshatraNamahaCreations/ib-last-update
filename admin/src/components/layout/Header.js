@@ -10,21 +10,28 @@ function Header() {
       <div
         className="row"
         style={{
-          backgroundColor: "blue",
-          height: "42px",
+          backgroundColor: "#80808061",
+          height: "auto",
           position: "fixed",
           width: "-webkit-fill-available",
           zIndex: 1,
         }}
       >
-        <Link to="/settings">
-          <i
-            class="fa-solid fa-user h-icon"
-            style={{ float: "right", marginRight: "10px" }}
-          >
-            {/* Super */}
-          </i>
-        </Link>
+        <div className="col-md-10">
+          <img
+            src="./images/newlogo.png"
+            style={{ width: "100px", height: "60px" }}
+            alt=""
+          />
+        </div>
+        <div className="col-md-2 d-flex header-profile-logo">
+          <Link to="/settings">
+            <i
+              class="fa-solid fa-user h-icon"
+              style={{ marginRight: "10px", marginTop: "-3px" }}
+            ></i>
+          </Link>
+        </div>
       </div>
     </div>
   );

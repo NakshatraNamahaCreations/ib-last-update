@@ -183,24 +183,21 @@ function ProductBanner() {
   ];
 
   return (
-    <div div className="row me-0 ">
+    <div div className="row ">
       <div className="col-md-2">
         <Sidebar />
       </div>
       <div className="col-md-10 pt-3">
-        <div className="mt-3 p-2">
-          <h4>
-            {productBannerTab
-              ? "PRODUCT BANNER"
-              : serviceBannerTab
-              ? "SERVICE BANNER"
-              : ""}{" "}
-          </h4>
-        </div>
+        <h4 className="" style={{ marginLeft: "30px", marginTop: "63px" }}>
+          {productBannerTab
+            ? "PRODUCT BANNER"
+            : serviceBannerTab
+            ? "SERVICE BANNER"
+            : ""}{" "}
+        </h4>
 
-        <div className="pt-4">
+        <div className="mt-3" style={{ marginLeft: "30px" }}>
           <span>
-            {" "}
             <input
               type="radio"
               value={productBannerTab}
@@ -210,11 +207,10 @@ function ProductBanner() {
                 setProductBannerTab(!productBannerTab);
                 setServiceBannerTab(false);
               }}
-            />{" "}
-            <label> PRODUCT BANNER</label>
-          </span>{" "}
+            />
+            <label style={{ marginLeft: "5px" }}> PRODUCT BANNER</label>
+          </span>
           <span>
-            {" "}
             <input
               className="ms-3"
               type="radio"
@@ -232,10 +228,7 @@ function ProductBanner() {
 
         {productBannerTab && !serviceBannerTab ? (
           <>
-            <div
-              className="d-flex pt-3 pb-3"
-              style={{ justifyContent: "space-between" }}
-            >
+            <div className="d-flex pt-3 pb-3" style={{ justifyContent: "end" }}>
               <button
                 type="button"
                 class="btn btn-primary _btn"
@@ -244,6 +237,7 @@ function ProductBanner() {
                 Add Product Banner
               </button>
             </div>
+            {/* <div className="row m-auto" > */}
             <DataTable
               columns={columns}
               data={Banner}
@@ -253,6 +247,7 @@ function ProductBanner() {
               subHeaderAlign="left"
               highlightOnHover
             />
+            {/* </div> */}
           </>
         ) : (
           <>

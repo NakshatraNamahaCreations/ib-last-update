@@ -263,6 +263,7 @@ function ServiceApproval() {
             <Form.Control
               type="text"
               placeholder="Search by Vendor Name, Service Name, Vendor Id"
+              className="buyer-search-input"
               style={{ width: "35%" }}
               onChange={(e) => setUnifiedSearchTerm(e.target.value)}
             />

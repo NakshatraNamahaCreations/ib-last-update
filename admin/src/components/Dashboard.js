@@ -279,10 +279,12 @@ function Dashboard() {
             // "#f7f7f7"
           }}
         >
-          <div className=" p-5">
-            <h2>Analytics Dashboard</h2>
-            <div className="row">
-              <div className="col-md-3">
+          <div className="p-3" style={{ marginTop: "65px" }}>
+            <div className="row" style={{ justifyContent: "flex-end" }}>
+              <div className="col-md-6 mt-2">
+                <h2>Analytics Dashboard</h2>
+              </div>
+              <div className="col-md-4 mt-2">
                 <input
                   type="text"
                   placeholder="Enter Vendor Code Sequence"
@@ -303,9 +305,11 @@ function Dashboard() {
                 {vendorSequenceError && (
                   <div style={{ color: "red" }}>{vendorSequenceError}</div>
                 )}
-                {sequenceData[0]?.vendorSequenceNumber}
+                <div className="mt-2">
+                  {sequenceData[0]?.vendorSequenceNumber}
+                </div>
               </div>
-              <div className="col-md-2">
+              <div className="col-md-2 mt-2 d-flex justify-content-center">
                 <button
                   style={{
                     border: 0,
@@ -313,6 +317,8 @@ function Dashboard() {
                     padding: "4px 7px",
                     backgroundColor: "#b8b5e8",
                     boxShadow: "0px 1px 3px 0px gray",
+                    height: "34px",
+                    width: "85px",
                   }}
                   onClick={handleFormSubmit}
                 >
@@ -368,46 +374,6 @@ function Dashboard() {
                   <div className="content-mana-card">
                     <div className="cm-card-bg">
                       <div className="count_content cm-font-awsm">
-                        <p>Orders</p>{" "}
-                        <h3 className="count_content-head">
-                          <span class="counter">0</span>
-                        </h3>
-                      </div>
-                      <a
-                        class="notification_btn"
-                        style={{ backgroundColor: "#055160" }}
-                      >
-                        <i class="fa-solid fa-cart-shopping"></i>
-                      </a>
-                      <div>
-                        {" "}
-                        <span
-                          className="dashboard-status"
-                          style={{
-                            backgroundColor: "rgb(5 81 96 / 29%)",
-                            color: "rgb(5 81 96)",
-                            fontWeight: 500,
-                          }}
-                        >
-                          0 %
-                        </span>{" "}
-                        <span className="dashboard-status-text">
-                          Since last week
-                        </span>
-                      </div>
-                    </div>
-                    {/* <div className="cm-text-content">Products</div> */}
-                  </div>
-                </div>
-              </div>
-              <div
-                className="d-flex"
-                style={{ justifyContent: "space-around" }}
-              >
-                <div className=" col-grid">
-                  <div className="content-mana-card">
-                    <div className="cm-card-bg">
-                      <div className="count_content cm-font-awsm">
                         <p>Vendor</p>{" "}
                         <h3 className="count_content-head">
                           <span class="counter">{vendor?.length} </span>
@@ -439,6 +405,78 @@ function Dashboard() {
                     {/* <div className="cm-text-content">Products</div> */}
                   </div>
                 </div>
+                {/* <div className="col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Orders</p>{" "}
+                        <h3 className="count_content-head">
+                          <span class="counter">0</span>
+                        </h3>
+                      </div>
+                      <a
+                        class="notification_btn"
+                        style={{ backgroundColor: "#055160" }}
+                      >
+                        <i class="fa-solid fa-cart-shopping"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "rgb(5 81 96 / 29%)",
+                            color: "rgb(5 81 96)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          0 %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
+                        </span>
+                      </div>
+                    </div>
+                  <div className="cm-text-content">Products</div> 
+                  </div>
+                </div> */}
+              </div>
+              <div className="d-flex" style={{ marginLeft: "7px" }}>
+                {/* <div className=" col-grid">
+                  <div className="content-mana-card">
+                    <div className="cm-card-bg">
+                      <div className="count_content cm-font-awsm">
+                        <p>Vendor</p>{" "}
+                        <h3 className="count_content-head">
+                          <span class="counter">{vendor?.length} </span>
+                        </h3>
+                      </div>
+                      <a
+                        class="notification_btn"
+                        style={{ backgroundColor: "#fe4d3c" }}
+                      >
+                        <i class="fa-solid fa-user-large"></i>
+                      </a>
+                      <div>
+                        {" "}
+                        <span
+                          className="dashboard-status"
+                          style={{
+                            backgroundColor: "#ff281421",
+                            color: "#fe4d3c",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {lastWeekPercentageOfVendor} %
+                        </span>{" "}
+                        <span className="dashboard-status-text">
+                          Since last week
+                        </span>
+                      </div>
+                    </div>
+                   <div className="cm-text-content">Products</div> 
+                  </div>
+                </div> */}
                 <div className="col-grid">
                   <div className="content-mana-card">
                     <div className="cm-card-bg">
@@ -474,7 +512,7 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-              <div className="ms-1">
+              <div className="ms-1 mb-3">
                 <div className="content-mana-chart p-3">
                   <h5 className="pb-3">Vendors Registered by Month</h5>
                   {/* <ResponsiveContainer width="100%" height={300}>

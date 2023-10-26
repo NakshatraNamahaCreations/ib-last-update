@@ -203,6 +203,7 @@ function ProductApproval() {
           <div>
             <Form.Control
               type="text"
+              className="buyer-search-input"
               placeholder="Search by Vendor Name, Product Name, Vendor Id"
               style={{ width: "35%" }}
               onChange={(e) => setUnifiedSearchTerm(e.target.value)}

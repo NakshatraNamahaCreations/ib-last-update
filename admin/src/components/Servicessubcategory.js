@@ -193,7 +193,7 @@ function ServicessubCategory() {
       const response = await axios(config);
       if (response.status === 200) {
         console.log("success");
-        alert(response.data.message);
+        // alert(response.data.message);
         getAllSubCatagory(); // Refresh the subcategory list
         setShowEdit(false); // Close the modal
       }
@@ -358,10 +358,11 @@ function ServicessubCategory() {
           <div>
             <Form.Control
               type="text"
+              className="buyer-search-input"
               placeholder="Search by Subcategory"
               onChange={(e) => setServiceSearchSubCategory(e.target.value)}
             />
-            <div className="mt-2">
+            <div className="pt-2 buyer-search-input">
               <CSVLink data={csvData} filename={"Service Subcategory.csv"}>
                 {" "}
                 <Button

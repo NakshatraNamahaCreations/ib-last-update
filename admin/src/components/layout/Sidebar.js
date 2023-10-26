@@ -63,17 +63,17 @@ const Sidebar = ({ children }) => {
         style={{
           width: isOpen ? "220px" : "50px",
           position: "fixed",
-          marginTop: "41px",
+          marginTop: "59px",
         }}
         className="sidebar"
       >
-        <a href="/home">
+        {/* <a href="/home">
           <div className="top_section">
             <img src="./images/newlogo.png" style={{ width: "85%" }} alt="" />
           </div>
         </a>
 
-        <hr />
+        <hr /> */}
         {menuItem.map((item, index) => (
           <NavLink
             to={item.path}

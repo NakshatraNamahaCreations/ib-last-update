@@ -66,7 +66,7 @@ function Buyer() {
 
   const columns = [
     {
-      name: "Sl  No",
+      name: "SL.NO",
       selector: (row, index) => index + 1,
     },
     {
@@ -101,12 +101,11 @@ function Buyer() {
       <div className="col-md-10">
         {toggle ? (
           <div>
-            <div className="mt-4 p-2 ">
+            <div className="" style={{ marginTop: "70px", marginLeft: "30px" }}>
               <h4>Buyer Management</h4>
             </div>
             <div
               style={{
-                paddingTop: "25px",
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -115,8 +114,9 @@ function Buyer() {
                 <Form.Control
                   type="search"
                   placeholder="Search by Name"
-                  className="me-2"
+                  className="buyer-search-input"
                   onChange={(e) => setName(e.target.value)}
+
                   // style={{ width: "25%" }}
                 />
                 {/* <i

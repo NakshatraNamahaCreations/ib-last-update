@@ -458,10 +458,11 @@ function ProductApproval() {
   return (
     <div>
       <div>
-        <div className="pt-3 pb-3">
+        <div className="pt-2 pb-3">
           <div>
             <Form.Control
               type="text"
+              className="buyer-search-input"
               placeholder="Search by Vendor Name, Product Name, Vendor Id"
               style={{ width: "35%" }}
               onChange={(e) => setUnifiedSearchTerm(e.target.value)}
@@ -469,7 +470,6 @@ function ProductApproval() {
           </div>
         </div>
         <div>
-          {" "}
           <DataTable
             columns={columns}
             data={commonUserData1}

@@ -318,7 +318,7 @@ function Category() {
         <Sidebar />
       </div>
       <div className="col-md-10 pt-3">
-        <h3>
+        <h3 style={{ marginTop: "64px", marginLeft: "30px" }}>
           {" "}
           {categoryTab
             ? "CATEGORY"
@@ -329,7 +329,7 @@ function Category() {
             : ""}{" "}
         </h3>
         <div className="container">
-          <div className="pt-4">
+          <div className="pt-2" style={{ marginLeft: "20px" }}>
             <span>
               {" "}
               <input
@@ -382,7 +382,7 @@ function Category() {
         {categoryTab && !subCategoryTab && !productApprovalTab ? (
           <>
             <div
-              className="pt-4 pb-3 d-flex"
+              className="pb-3 d-flex"
               style={{ justifyContent: "space-between" }}
             >
               <div>
@@ -390,9 +390,10 @@ function Category() {
                   type="search"
                   placeholder="Search by category"
                   onChange={(e) => setSearchCategory(e.target.value)}
+                  className="buyer-search-input"
                 />
 
-                <div className="mt-2">
+                <div className="buyer-search-input pt-2">
                   <CSVLink data={catagory} filename={"Product Category.csv"}>
                     {" "}
                     <Button

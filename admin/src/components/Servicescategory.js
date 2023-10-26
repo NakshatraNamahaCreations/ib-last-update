@@ -170,7 +170,7 @@ function Servicescategory() {
       const response = await axios(config);
       if (response.status === 200) {
         console.log("success");
-        alert(response.data.message);
+        // alert(response.data.message);
         getAllCatagory(); // Refresh the category list
         setShowEdit(false); // Close the modal
       }
@@ -288,7 +288,7 @@ function Servicescategory() {
         <Sidebar />
       </div>
       <div className="col-md-10 pt-3">
-        <h3>
+        <h3 style={{ marginTop: "64px", marginLeft: "30px" }}>
           {" "}
           {categoryTab
             ? "CATEGORY"
@@ -299,7 +299,7 @@ function Servicescategory() {
             : ""}{" "}
         </h3>
         <div className="container">
-          <div className="pt-4">
+          <div className="pt-2" style={{ marginLeft: "20px" }}>
             <span>
               {" "}
               <input
@@ -352,16 +352,17 @@ function Servicescategory() {
         {categoryTab && !subCategoryTab && !serviceApprovalTab ? (
           <>
             <div
-              className=" d-flex pt-4 pb-3"
+              className=" d-flex pt-2 pb-3"
               style={{ justifyContent: "space-between" }}
             >
               <div>
                 <Form.Control
                   type="text"
                   placeholder="Search by category"
+                  className="buyer-search-input"
                   onChange={(e) => setSearchServiceCategory(e.target.value)}
                 />
-                <div className="mt-2">
+                <div className="pt-2 buyer-search-input">
                   <CSVLink data={csvData} filename={"Service Category.csv"}>
                     {" "}
                     <Button

@@ -216,7 +216,7 @@ function Sapprovaldetail() {
             <Form.Control
               type="text"
               placeholder="Search by Vendor Name, Service Name, Vendor Id"
-              style={{ width: "35%" }}
+              style={{ width: "35%", marginTop: "64px", marginLeft: "30px" }}
               onChange={(e) => setUnifiedSearchTerm(e.target.value)}
             />
           </div>
