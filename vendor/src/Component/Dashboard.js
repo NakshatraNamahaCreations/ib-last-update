@@ -7,17 +7,19 @@ function Dashboard() {
   return (
     <div className="row me-0">
       <div className="pb-4" style={{ display: "flex" }}>
-        <img
+        {/* <img
           src="../images/testimonial.jpg"
           alt=""
           style={{ width: "10%", borderRadius: "100%" }}
-        />
-        <div className="ms-2">
-          <h5>Hi, {user?.firstname},</h5>
-          <h2>Welcome back!</h2>
+        /> */}
+        <div className="" style={{ marginTop: "70px", marginLeft: "30px" }}>
+          <h5 style={{ fontSize: "17px" }}>
+            Hi, <span style={{ color: "#FF4131" }}>{user?.firstname},</span>
+          </h5>
+          <h2 style={{ fontSize: "19px" }}>Welcome back!</h2>
         </div>
       </div>
-      <div className="col vm-col-grid">
+      <div className="col vm-col-grid" style={{ marginLeft: "35px" }}>
         <a className="vm-redirect">
           <Card className="vm-content-mana-card">
             <div

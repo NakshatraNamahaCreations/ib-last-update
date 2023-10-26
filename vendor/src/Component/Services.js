@@ -38,6 +38,15 @@ function Services() {
   const [maxValue, setMaxValue] = useState(100000);
   const [subcatagorydata, setSubcatagorydata] = useState([]);
 
+  const [categoryError, setCategoryError] = useState("");
+  const [subCategoryError, setSubCategoryError] = useState("");
+  const [productNameError, setProductNameError] = useState("");
+  const [productPriceError, setProductPriceError] = useState("");
+  const [brandError, setBrandError] = useState("");
+  const [imageError, setImageError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [productbranderror, setproductbranderrorError] = useState("");
+
   // edit service
   const [EditService, setEditService] = useState({});
   const [showEdit, setShowEdit] = useState(false);
@@ -52,6 +61,65 @@ function Services() {
   useEffect(() => {
     getServiceProductListByUserId();
   }, [user._id]);
+
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!catagory) {
+      setCategoryError("Category is required");
+      isValid = false;
+    } else {
+      setCategoryError("");
+    }
+
+    if (!subcatagory) {
+      setSubCategoryError("Subcategory is required");
+      isValid = false;
+    } else {
+      setSubCategoryError("");
+    }
+
+    if (!ProductName) {
+      setProductNameError("Service Name is required");
+      isValid = false;
+    } else {
+      setProductNameError("");
+    }
+
+    if (!ProductPrice) {
+      setProductPriceError("Service Price is required");
+      isValid = false;
+    } else {
+      setProductPriceError("");
+    }
+
+    if (!Image) {
+      setImageError("Image is required");
+      isValid = false;
+    } else {
+      setImageError("");
+      if (!Image.type.startsWith("image/")) {
+        setImageError("Please upload a valid image file.");
+        isValid = false; // or you can set 'hasErrors' to true, which you later use
+      }
+    }
+
+    if (!Brand) {
+      setproductbranderrorError("Service Brand is required");
+      isValid = false;
+    } else {
+      setproductbranderrorError("");
+    }
+
+    if (!Description) {
+      setDescriptionError("Description is required");
+      isValid = false;
+    } else {
+      setDescriptionError("");
+    }
+
+    return isValid;
+  };
 
   const getServiceProductListByUserId = async () => {
     let res = await axios.post(
@@ -85,21 +153,11 @@ function Services() {
     }
   };
   const formdata = new FormData();
+
   const addServiceProducts = async (e) => {
     e.preventDefault();
-    if (
-      !catagory ||
-      !subcatagory ||
-      !ProductName ||
-      !ProductPrice ||
-      !maxValue ||
-      !minValue ||
-      !Image ||
-      !Description ||
-      !Brand
-    ) {
-      alert("  Please enter all the field");
-    } else {
+
+    if (validateForm()) {
       formdata.append("userId", user._id);
       formdata.append("serviceCatagoryName", catagory);
       formdata.append("serviceSubcatagoryName", subcatagory);
@@ -121,8 +179,9 @@ function Services() {
         await axios(config).then(function (res) {
           if (res.status === 200) {
             console.log("success");
-            alert(res.data.success);
-            window.location.reload();
+            // alert(res.data.success);
+            // window.location.reload();
+            getServiceProductListByUserId();
           } else {
             console.log("failed");
           }
@@ -132,6 +191,51 @@ function Services() {
         alert(error.response.data.error);
       }
     }
+
+    // if (
+    //   !catagory ||
+    //   !subcatagory ||
+    //   !ProductName ||
+    //   !ProductPrice ||
+    //   !maxValue ||
+    //   !minValue ||
+    //   !Image ||
+    //   !Description ||
+    //   !Brand
+    // ) {
+    //   alert("  Please enter all the field");
+    // } else {
+    //   formdata.append("userId", user._id);
+    //   formdata.append("serviceCatagoryName", catagory);
+    //   formdata.append("serviceSubcatagoryName", subcatagory);
+    //   formdata.append("serviceProductName", ProductName);
+    //   formdata.append("serviceProductPrice", ProductPrice);
+    //   formdata.append("serviceProductMaxRange", maxValue);
+    //   formdata.append("serviceProductMinRange", minValue);
+    //   formdata.append("serviceProductImage", Image);
+    //   formdata.append("serviceProductStatus", "");
+    //   formdata.append("serviceProductDescription", Description);
+    //   formdata.append("serviceProductBrand", Brand);
+    //   try {
+    //     const config = {
+    //       url: "/vendor/services/productlist/addserviceproducts",
+    //       method: "post",
+    //       baseURL: "https://api.infinitimart.in/api",
+    //       data: formdata,
+    //     };
+    //     await axios(config).then(function (res) {
+    //       if (res.status === 200) {
+    //         console.log("success");
+    //         alert(res.data.success);
+    //         window.location.reload();
+    //       } else {
+    //         console.log("failed");
+    //       }
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //     alert(error.response.data.error);
+    //   }
   };
 
   const handleMinInputChange = (e) => {
@@ -275,9 +379,15 @@ function Services() {
 
   return (
     <div className="row">
-      <h1> {!showEdit ? "SERVICES" : "EDIT SERVICES"} </h1>
+      <h1 style={{ marginTop: "75px", fontSize: "23px", marginLeft: "30px" }}>
+        {" "}
+        {!showEdit ? "SERVICES" : "EDIT SERVICES"}{" "}
+      </h1>
 
-      <div className="d-flex float-end mt-3 mb-3">
+      <div
+        className="d-flex float-end mt-3 mb-3"
+        style={{ marginLeft: "24px" }}
+      >
         {!showEdit && (
           <>
             <button
@@ -300,7 +410,7 @@ function Services() {
       </div>
 
       <div>
-        <div>
+        <div style={{ marginLeft: "30px", marginTop: "20px" }}>
           {selected === 0 && !showEdit ? (
             <DataTable
               columns={columns}
@@ -314,7 +424,7 @@ function Services() {
           ) : (
             <>
               {selected === 1 && !showEdit ? (
-                <div className="card mt-4">
+                <div className="card" style={{ marginLeft: "30px" }}>
                   <div className="card-body p-3">
                     {/* <div className="vhs-sub-heading pb-2">Add New Record</div> */}
 
@@ -326,13 +436,19 @@ function Services() {
                           <Form.Label>Select Catagory</Form.Label>
                           <Form.Select
                             defaultValue="Choose..."
-                            onChange={(e) => setcatagory(e.target.value)}
+                            onChange={(e) => {
+                              setcatagory(e.target.value);
+                              setCategoryError("");
+                            }}
                           >
                             <option>Choose...</option>
                             <option key={user?.id} value={user?.category}>
                               {user?.category}{" "}
                             </option>
                           </Form.Select>
+                          {categoryError && (
+                            <p className="error-message">{categoryError}</p>
+                          )}
                         </Form.Group>
 
                         <Form.Group className="product-grid">
@@ -340,20 +456,32 @@ function Services() {
                           <Form.Control
                             name="Productname"
                             // value={data.ProductName}
-                            onChange={(e) => setProductName(e.target.value)}
+                            onChange={(e) => {
+                              setProductName(e.target.value);
+                              setProductNameError("");
+                            }}
                             type="text"
                             placeholder="Enter Service"
                           />
+                          {productNameError && (
+                            <p className="error-message">{productNameError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group className="product-grid">
                           <Form.Label>Services Price</Form.Label>
                           <Form.Control
                             name="Product Price"
                             // value={data.ProductName}
-                            onChange={(e) => setProductPrice(e.target.value)}
+                            onChange={(e) => {
+                              setProductPrice(e.target.value);
+                              setProductPriceError("");
+                            }}
                             type="number"
                             placeholder="Enter Price"
                           />
+                          {productPriceError && (
+                            <p className="error-message">{productPriceError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group className="product-grid">
                           <Form.Label>Choose Image</Form.Label>
@@ -362,8 +490,14 @@ function Services() {
                             type="file"
                             // multiple
                             // value={data.image}
-                            onChange={(e) => setImage(e.target.files[0])}
+                            onChange={(e) => {
+                              setImage(e.target.files[0]);
+                              setImageError("");
+                            }}
                           />
+                          {imageError && (
+                            <p className="error-message">{imageError}</p>
+                          )}
                         </Form.Group>
                         <br />
                         <Button
@@ -380,7 +514,10 @@ function Services() {
                           <Form.Label>Select Subcatagory</Form.Label>
                           <Form.Select
                             defaultValue="Choose..."
-                            onChange={(e) => setSubcatagory(e.target.value)}
+                            onChange={(e) => {
+                              setSubcatagory(e.target.value);
+                              setSubCategoryError("");
+                            }}
                           >
                             <option>Choose...</option>
                             {subcatagorydata?.map((e) => (
@@ -389,6 +526,9 @@ function Services() {
                               </option>
                             ))}
                           </Form.Select>
+                          {subCategoryError && (
+                            <p className="error-message">{subCategoryError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group className="product-grid">
                           <Form.Label>Service Brand</Form.Label>
@@ -396,8 +536,14 @@ function Services() {
                             name="brand"
                             placeholder="Service Brand"
                             // value={data.brand}
-                            onChange={(e) => setBrand(e.target.value)}
+                            onChange={(e) => {
+                              setBrand(e.target.value);
+                              setBrandError("");
+                            }}
                           />
+                          {brandError && (
+                            <p className="error-message">{brandError}</p>
+                          )}
                         </Form.Group>
 
                         <Form.Group
@@ -462,8 +608,14 @@ function Services() {
                             as="textarea"
                             rows={3}
                             // value={data.discription}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                              setDescriptionError("");
+                            }}
                           />
+                          {descriptionError && (
+                            <p className="error-message">{descriptionError}</p>
+                          )}
                         </Form.Group>
                       </Col>
                       <Col md={1}></Col>

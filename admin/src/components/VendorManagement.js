@@ -3,9 +3,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import { Form } from "react-bootstrap";
+import { Navigate } from "react-big-calendar";
 
 function VendorManagement() {
   const [search, setSearch] = useState("");
@@ -17,6 +18,7 @@ function VendorManagement() {
   const handleClose = () => setSmShow(false);
   const handleShow = () => setSmShow(true);
   const [filterOption, setFilterOption] = useState("all");
+  const navigate = useNavigate();
 
   const getvendorWithPayments = async () => {
     try {
@@ -113,23 +115,6 @@ function VendorManagement() {
     handleShow(true);
   };
 
-  // useEffect(() => {
-  //   const filteredData = vendorPaymentsData.filter((item) => {
-  //     const searchString = search.toLowerCase();
-  //     const vendorNameMatch = item.firstname
-  //       ?.toLowerCase()
-  //       .includes(searchString);
-  //     const businessNameMatch = item.businessName
-  //       ?.toLowerCase()
-  //       .includes(searchString);
-  //     const vendorIdMatch = item.customNumber
-  //       ?.toLowerCase()
-  //       .includes(searchString);
-  //     return vendorNameMatch || businessNameMatch || vendorIdMatch;
-  //   });
-  //   setFilterdata(filteredData);
-  // }, [search, vendorPaymentsData]);
-
   useEffect(() => {
     const filteredData = vendorPaymentsData.filter((item) => {
       const searchString = search.toLowerCase();
@@ -174,6 +159,10 @@ function VendorManagement() {
     setFilterOption(selectedOption);
   };
 
+  // const handleRowClick = (row) => {
+  //   navigate(`/Vendorprofile/${row._id}`);
+  // };
+
   return (
     <div className="row me-0">
       <div className="col-md-2">
@@ -216,6 +205,7 @@ function VendorManagement() {
             selectableRowsHighlight
             subHeaderAlign="left"
             highlightOnHover
+            // onRowClicked={handleRowClick}
           />
         </div>
       </div>

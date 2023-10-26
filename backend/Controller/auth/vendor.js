@@ -231,9 +231,7 @@ class vendorProfile {
       }
       const user = await VendorModel.findOne({ email });
       if (!user) {
-        return res
-          .status(404)
-          .json({ error: "User not found or invalid password" });
+        return res.status(404).json({ error: "invalid Email" });
       }
       const passwordMatch = bcrypt.compareSync(password, user.password);
       if (!passwordMatch) {

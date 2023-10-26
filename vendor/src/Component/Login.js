@@ -13,13 +13,16 @@ export function Login() {
   const [enquiryNumber, setEnquiryNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const user = JSON.parse(sessionStorage.getItem("vendor"));
-  
 
   const [loginWithEmail, setLoginWithEmail] = useState(true);
   const [loginWithMobile, setLoginWithMobile] = useState(false);
   const [showOTPSection, setShowOTPSection] = useState(false);
   const [timer, setTimer] = useState(60); // Timer in seconds
   const [isTimerActive, setIsTimerActive] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [emailFromBackend, setEmailFromBackend] = useState("");
+  const [passwordFromBackend, setPasswordFromBackend] = useState("");
+  const [showError, setShowError] = useState(false);
 
   const startTimer = () => {
     setTimer(60);
@@ -45,11 +48,59 @@ export function Login() {
     return () => clearInterval(interval);
   }, [isTimerActive, timer]);
 
+  // const vendor = async (e) => {
+  //   e.preventDefault();
+  //   // || !enquiryNumber
+  //   if (!email || !password) {
+  //     alert("Please fill all fields");
+  //   } else {
+  //     try {
+  //       const config = {
+  //         url: "https://api.infinitimart.in/api/vendor/login",
+  //         method: "POST",
+  //         headers: { "content-type": "application/json" },
+  //         data: {
+  //           email: email.toLowerCase(),
+  //           password: password.toLowerCase(),
+  //           // customNumber: enquiryNumber,
+  //         },
+  //       };
+
+  //       let res = await axios(config);
+  //       console.log(res.data);
+  //       if (res.status === 200) {
+  //         // alert("Login successful");
+  //         toast.success("Login successful", {
+  //           position: toast.POSITION.TOP_RIGHT,
+  //           autoClose: 6000, // milliseconds
+  //           hideProgressBar: true,
+  //           closeOnClick: true,
+  //           draggable: true,
+  //           theme: "colored",
+  //         });
+  //         sessionStorage.setItem("vendor", JSON.stringify(res.data.user));
+  //         window.location.assign("/home");
+  //         return res;
+  //       } else {
+  //         alert("Email or Mobile Already Exist");
+  //         alert(res.data.error);
+  //       }
+  //     } catch (error) {
+  //       console.log(error.response);
+  //       if (error.response) {
+  //         // alert(error.response.data.message);
+  //         alert(error.response.data.error);
+  //       }
+  //     }
+  //   }
+  // };
+
   const vendor = async (e) => {
     e.preventDefault();
-    // || !enquiryNumber
+
     if (!email || !password) {
-      alert("Please fill all fields");
+      setShowError(true);
+      setErrorMessage("Please fill all fields");
     } else {
       try {
         const config = {
@@ -59,17 +110,16 @@ export function Login() {
           data: {
             email: email.toLowerCase(),
             password: password.toLowerCase(),
-            // customNumber: enquiryNumber,
           },
         };
 
         let res = await axios(config);
         console.log(res.data);
+
         if (res.status === 200) {
-          // alert("Login successful");
           toast.success("Login successful", {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 6000, // milliseconds
+            autoClose: 6000,
             hideProgressBar: true,
             closeOnClick: true,
             draggable: true,
@@ -77,20 +127,24 @@ export function Login() {
           });
           sessionStorage.setItem("vendor", JSON.stringify(res.data.user));
           window.location.assign("/home");
-          return res;
         } else {
-          alert("Email or Mobile Already Exist");
-          alert(res.data.error);
+          setShowError(true);
+          setErrorMessage(res.data.error);
+          setEmailFromBackend(res.data.user.email);
+          setPasswordFromBackend(""); // You may not want to display the password
         }
       } catch (error) {
         console.log(error.response);
         if (error.response) {
-          // alert(error.response.data.message);
-          alert(error.response.data.error);
+          setShowError(true);
+          setErrorMessage(error.response.data.error);
+          setEmailFromBackend(""); // You may not want to display the email
+          setPasswordFromBackend(""); // You may not want to display the password
         }
       }
     }
   };
+
   return (
     <div>
       <div
@@ -180,6 +234,7 @@ export function Login() {
                                 <Form.Control
                                   type="email"
                                   placeholder="Email"
+                                  value={emailFromBackend || email}
                                   onChange={(e) => setEmail(e.target.value)}
                                 />
                               </Form.Group>
@@ -190,6 +245,7 @@ export function Login() {
                                   <Form.Control
                                     type="text"
                                     placeholder="Password"
+                                    value={passwordFromBackend || password}
                                     onChange={(e) =>
                                       setPassword(e.target.value)
                                     }
@@ -239,11 +295,22 @@ export function Login() {
                             </Row> */}
                           </Row>
                         </div>
-                        <div class="form-check" style={{ marginLeft: "114px" }}>
+                        {showError && (
+                          <div
+                            className="text-danger text-center"
+                            style={{ marginTop: "-30px" }}
+                          >
+                            {errorMessage}
+                          </div>
+                        )}
+                        {/* <div
+                          class="form-check mt-2"
+                          style={{ marginLeft: "114px" }}
+                        >
                           <Form.Group className="mb-3" id="formGridCheckbox">
                             <Form.Check type="checkbox" label="Remeber me" />
                           </Form.Group>
-                        </div>
+                        </div> */}
                         <div className="text-center pt-3">
                           <Button
                             style={{

@@ -476,3 +476,46 @@ h6 {
   opacity: 0.5;
   /* backgroun */
 }
+.sidebar {
+  background: #fff;
+  color: black;
+  height: 100% !important;
+  /* width: 0px; */
+  transition: all 0.5s;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.link {
+  display: flex;
+  color: black;
+  padding: 10px 15px;
+  gap: 15px;
+  transition: all 0.5s;
+  border-bottom: 1px solid #e9e9e9;
+  text-decoration-line: none !important;
+}
+.link:hover {
+  transition: all 0.5s;
+  color: white;
+  font-weight: bold;
+  background-color: #ffc217;
+}
+.active {
+  background-color: #ffc217 !important;
+  color: white !important;
+  text-decoration-line: none !important;
+  /* font-weight: bold; */
+}
+.icon,
+.link_text {
+  font-size: 15px;
+}
+.logout-icon{
+  position: absolute;
+
+  top: 72px;
+  font-size: 23px;
+  right: 30px;
+}
+.error-message{
+  color: red;
+}

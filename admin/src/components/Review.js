@@ -114,9 +114,11 @@ function Review() {
       </div>
       <div className="col-md-10 pt-3">
         <div className="mt-3 p-2">
-          <h4>Review Management </h4>
+          <h4 style={{ marginTop: "54px", marginLeft: "15px" }}>
+            Review Management{" "}
+          </h4>
         </div>
-        <div className="mt-5">
+        <div className="mt-1" style={{ marginLeft: "30px" }}>
           <input
             type="text"
             placeholder="Search here.."

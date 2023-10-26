@@ -67,20 +67,8 @@ const Sidebar = ({ children }) => {
         }}
         className="sidebar"
       >
-        {/* <a href="/home">
-          <div className="top_section">
-            <img src="./images/newlogo.png" style={{ width: "85%" }} alt="" />
-          </div>
-        </a>
-
-        <hr /> */}
         {menuItem.map((item, index) => (
-          <NavLink
-            to={item.path}
-            key={index}
-            className="link"
-            // activeclassName="active"
-          >
+          <NavLink to={item.path} key={index} className="link">
             <div className="icon">{item.icon}</div>
             <div
               style={{ display: isOpen ? "block" : "none" }}

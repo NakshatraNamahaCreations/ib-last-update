@@ -10,19 +10,21 @@ function Header() {
       <div
         className="row"
         style={{
-          backgroundColor: "#80808061",
+          backgroundColor: "#e4e4e4",
           height: "auto",
           position: "fixed",
           width: "-webkit-fill-available",
-          zIndex: 1,
+          zIndex: 8,
         }}
       >
         <div className="col-md-10">
-          <img
-            src="./images/newlogo.png"
-            style={{ width: "100px", height: "60px" }}
-            alt=""
-          />
+          <Link to="/home">
+            <img
+              src="./images/newlogo.png"
+              style={{ width: "100px", height: "60px" }}
+              alt=""
+            />
+          </Link>
         </div>
         <div className="col-md-2 d-flex header-profile-logo">
           <Link to="/settings">

@@ -39,6 +39,13 @@ function Products() {
   const [subcatagorydata, setSubCatagorydata] = useState([]);
   const [minValue, setMinValue] = useState(1);
   const [maxValue, setMaxValue] = useState(100000);
+  const [categoryError, setCategoryError] = useState("");
+  const [subcatagoryError, setSubcatagoryError] = useState("");
+  const [ProductNameError, setProductNameError] = useState("");
+  const [ProductPriceError, setProductPriceError] = useState("");
+  const [ImageError, setImageError] = useState("");
+  const [DescriptionError, setDescriptionError] = useState("");
+  const [ProductbrandError, setProductbrandError] = useState("");
 
   const getProductsByUserId = async () => {
     let res = await axios.post(
@@ -84,55 +91,155 @@ function Products() {
     setShowEdit(true);
   };
 
-  const addproduct = async (e) => {
-    e.preventDefault();
-    if (
-      !category ||
-      !subcatagory ||
-      !ProductName ||
-      !ProductPrice ||
-      !Image ||
-      !Description
-    ) {
-      alert("All fields must be filled.");
-      return; // Stop execution if any mandatory field is empty
+  const validateForm = () => {
+    let isValid = true;
+
+    if (!category) {
+      setCategoryError("Category is required");
+      isValid = false;
+    } else {
+      setCategoryError("");
     }
 
-    const formdata = new FormData();
-    e.preventDefault();
-    formdata.append("userId", user._id);
-    formdata.append("catagoryName", category);
-    formdata.append("SubcatagoryName", subcatagory);
-    formdata.append("productName", ProductName);
-    formdata.append("productPrice", ProductPrice);
-    formdata.append("productBrand", Brand);
-    // formdata.append("productSize", Size);
-    formdata.append("productImage", Image);
-    formdata.append("productStatus", "");
-    formdata.append("productMaximumRange", maxValue);
-    formdata.append("productMinimumRange", minValue);
-    // formdata.append("productDiscount", Discount);
-    // formdata.append("productQuantity", Volume);
-    formdata.append("productDescription", Description);
-    formdata.append("productRange", minValue && minValue);
+    if (!subcatagory) {
+      setSubcatagoryError("Subcategory is required");
+      isValid = false;
+    } else {
+      setSubcatagoryError("");
+    }
 
-    try {
-      const config = {
-        url: "/product/addproduct",
-        method: "post",
-        baseURL: "https://api.infinitimart.in/api",
-        data: formdata,
-      };
-      await axios(config).then(function (res) {
-        if (res.status === 200) {
-          console.log("success");
-          alert("Product Added");
-          window.location.reload();
-        }
-      });
-    } catch (error) {
-      console.log(error);
-      alert("Unable to complete the request");
+    if (!ProductName) {
+      setProductNameError("Product Name is required");
+      isValid = false;
+    } else {
+      setProductNameError("");
+    }
+
+    if (!ProductPrice) {
+      setProductPriceError("Product Price is required");
+      isValid = false;
+    } else {
+      setProductPriceError("");
+    }
+
+    if (!Image) {
+      setImageError("Image is required");
+      isValid = false;
+    } else {
+      setImageError("");
+      if (!Image.type.startsWith("image/")) {
+        setImageError("Please upload a valid image file.");
+        isValid = false; // or you can set 'hasErrors' to true, which you later use
+      }
+    }
+
+    if (!Brand) {
+      setProductbrandError("Product Brand is required");
+      isValid = false;
+    } else {
+      setProductbrandError("");
+    }
+
+    if (!Description) {
+      setDescriptionError("Description is required");
+      isValid = false;
+    } else {
+      setDescriptionError("");
+    }
+
+    return isValid;
+  };
+
+  // const addproduct = async (e) => {
+  //   e.preventDefault();
+  //   if (
+  //     !category ||
+  //     !subcatagory ||
+  //     !ProductName ||
+  //     !ProductPrice ||
+  //     !Image ||
+  //     !Description
+  //   ) {
+  //     alert("All fields must be filled.");
+  //     return; // Stop execution if any mandatory field is empty
+  //   }
+
+  //   const formdata = new FormData();
+  //   e.preventDefault();
+  //   formdata.append("userId", user._id);
+  //   formdata.append("catagoryName", category);
+  //   formdata.append("SubcatagoryName", subcatagory);
+  //   formdata.append("productName", ProductName);
+  //   formdata.append("productPrice", ProductPrice);
+  //   formdata.append("productBrand", Brand);
+  //   // formdata.append("productSize", Size);
+  //   formdata.append("productImage", Image);
+  //   formdata.append("productStatus", "");
+  //   formdata.append("productMaximumRange", maxValue);
+  //   formdata.append("productMinimumRange", minValue);
+  //   // formdata.append("productDiscount", Discount);
+  //   // formdata.append("productQuantity", Volume);
+  //   formdata.append("productDescription", Description);
+  //   formdata.append("productRange", minValue && minValue);
+
+  //   try {
+  //     const config = {
+  //       url: "/product/addproduct",
+  //       method: "post",
+  //       baseURL: "https://api.infinitimart.in/api",
+  //       data: formdata,
+  //     };
+  //     await axios(config).then(function (res) {
+  //       if (res.status === 200) {
+  //         console.log("success");
+  //         alert("Product Added");
+  //         window.location.reload();
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert("Unable to complete the request");
+  //   }
+  // };
+
+  const addproduct = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      const formdata = new FormData();
+      formdata.append("userId", user._id);
+      formdata.append("catagoryName", category);
+      formdata.append("SubcatagoryName", subcatagory);
+      formdata.append("productName", ProductName);
+      formdata.append("productPrice", ProductPrice);
+      formdata.append("productBrand", Brand);
+      formdata.append("productImage", Image);
+      formdata.append("productStatus", "");
+      formdata.append("productMaximumRange", maxValue);
+      formdata.append("productMinimumRange", minValue);
+      formdata.append("productRange", minValue && minValue);
+      formdata.append("productDescription", Description);
+
+      try {
+        const config = {
+          url: "/product/addproduct",
+          method: "post",
+          baseURL: "https://api.infinitimart.in/api",
+          data: formdata,
+        };
+
+        await axios(config).then(function (res) {
+          if (res.status === 200) {
+            console.log("success");
+            // alert("Product Added");
+            // window.location.reload();
+            getProductsByUserId();
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        alert("Unable to complete the request");
+      }
     }
   };
 
@@ -268,8 +375,9 @@ function Products() {
         .then(function (res) {
           if (res.status === 200) {
             console.log(res.data);
-            alert(res.data.Success);
-            window.location.reload();
+            // alert(res.data.Success);
+            // window.location.reload();
+            getProductsByUserId();
           }
         });
     } catch (error) {
@@ -280,8 +388,16 @@ function Products() {
 
   return (
     <div className="row">
-      <h1 className="mt-3 mb-3">PRODUCTS</h1>
-      <div className="d-flex float-end mt-3 mb-3">
+      <h1
+        className=""
+        style={{ marginTop: "75px", fontSize: "23px", marginLeft: "30px" }}
+      >
+        PRODUCTS
+      </h1>
+      <div
+        className="d-flex float-end mt-3 mb-2"
+        style={{ marginLeft: "24px" }}
+      >
         <button
           className="btn-primary-button mx-2 addProduct"
           style={selected == 1 ? active : inactive}
@@ -300,7 +416,7 @@ function Products() {
       </div>
 
       <div>
-        <div>
+        <div style={{ marginLeft: "30px", marginTop: "20px" }}>
           {selected == 0 && !showEdit ? (
             <>
               <DataTable
@@ -316,7 +432,7 @@ function Products() {
           ) : (
             <>
               {selected === 1 && !showEdit ? (
-                <div className="card mt-4">
+                <div className="card mt-4" style={{ marginLeft: "30px" }}>
                   <div className="card-body p-3">
                     {/* <div className="vhs-sub-heading pb-2">Add New Record</div> */}
 
@@ -328,13 +444,19 @@ function Products() {
                           <Form.Label>Select Catagory</Form.Label>
                           <Form.Select
                             defaultValue="Choose..."
-                            onChange={(e) => setCategory(e.target.value)}
+                            onChange={(e) => {
+                              setCategory(e.target.value);
+                              setCategoryError("");
+                            }}
                           >
                             <option value="">Select</option>
                             <option key={user.id} value={user?.category}>
                               {user?.category}{" "}
                             </option>
                           </Form.Select>
+                          {categoryError && (
+                            <p className="error-message">{categoryError}</p>
+                          )}
                         </Form.Group>
 
                         <Form.Group className="product-grid">
@@ -342,20 +464,32 @@ function Products() {
                           <Form.Control
                             name="Productname"
                             // value={data.ProductName}
-                            onChange={(e) => setProductName(e.target.value)}
+                            onChange={(e) => {
+                              setProductName(e.target.value);
+                              setProductNameError("");
+                            }}
                             type="text"
                             placeholder="Enter Product"
                           />
+                          {ProductNameError && (
+                            <p className="error-message">{ProductNameError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group className="product-grid">
                           <Form.Label>Product Price</Form.Label>
                           <Form.Control
                             name="productPrice"
                             // value={data.ProductPrice}
-                            onChange={(e) => setProductPrice(e.target.value)}
+                            onChange={(e) => {
+                              setProductPrice(e.target.value);
+                              setProductPriceError("");
+                            }}
                             type="number"
                             placeholder="Enter Price"
                           />
+                          {ProductPriceError && (
+                            <p className="error-message">{ProductPriceError}</p>
+                          )}
                         </Form.Group>
 
                         <Form.Group className="product-grid">
@@ -365,8 +499,14 @@ function Products() {
                             type="file"
                             // multiple
                             // value={data.image}
-                            onChange={(e) => setImage(e.target.files[0])}
+                            onChange={(e) => {
+                              setImage(e.target.files[0]);
+                              setImageError("");
+                            }}
                           />
+                          {ImageError && (
+                            <p className="error-message">{ImageError}</p>
+                          )}
                         </Form.Group>
                         <br />
                         <Button
@@ -383,7 +523,10 @@ function Products() {
                           <Form.Label>Select Subcatagory</Form.Label>
                           <Form.Select
                             defaultValue="Choose..."
-                            onChange={(e) => setSubcatagory(e.target.value)}
+                            onChange={(e) => {
+                              setSubcatagory(e.target.value);
+                              setSubcatagoryError("");
+                            }}
                           >
                             <option>Choose...</option>
                             {subcatagorydata?.map((e) => (
@@ -392,6 +535,9 @@ function Products() {
                               </option>
                             ))}
                           </Form.Select>
+                          {subcatagoryError && (
+                            <p className="error-message">{subcatagoryError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group className="product-grid">
                           <Form.Label>Product Brand</Form.Label>
@@ -399,8 +545,14 @@ function Products() {
                             name="brand"
                             placeholder="Product Brand"
                             // value={data.brand}
-                            onChange={(e) => setBrand(e.target.value)}
+                            onChange={(e) => {
+                              setBrand(e.target.value);
+                              setProductbrandError("");
+                            }}
                           />
+                          {ProductbrandError && (
+                            <p className="error-message">{ProductbrandError}</p>
+                          )}
                         </Form.Group>
                         <Form.Group
                           controlId="formGridZip"
@@ -465,8 +617,14 @@ function Products() {
                             as="textarea"
                             rows={3}
                             // value={data.discription}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                              setDescriptionError("");
+                            }}
                           />
+                          {DescriptionError && (
+                            <p className="error-message">{DescriptionError}</p>
+                          )}
                         </Form.Group>
                       </Col>
                       <Col md={1}></Col>

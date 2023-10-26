@@ -1,9 +1,38 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function Settings() {
   const user = JSON.parse(sessionStorage.getItem("vendor"));
+
+  const signout = () => {
+    try {
+      axios
+        .get(`https://api.infinitimart.in/api/vendor/signout/` + user._id)
+        .then(function (res) {
+          if (res.status === 200) {
+            toast.success("Logout Done", {
+              position: toast.POSITION.TOP_RIGHT,
+              autoClose: 6000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              draggable: true,
+              theme: "colored",
+            });
+            sessionStorage.removeItem("vendor");
+            window.location.assign("/");
+            return;
+          } else {
+            alert("Signout Unsuccessfully");
+            return;
+          }
+        });
+    } catch (error) {
+      console.warn(error);
+      alert("Signout Unsuccessfully");
+    }
+  };
   const [catagory, setCatagory] = useState([]);
   const formdata = new FormData();
   const [firstName, setFirstName] = useState("");
@@ -85,12 +114,28 @@ function Settings() {
 
   return (
     <div className="row">
-      <div style={{ paddingTop: "35px" }}>
-        <h2>
+      <div style={{}}>
+        <h2 style={{ marginTop: "73px", marginLeft: "30px", fontSize: "20px" }}>
           {" "}
-          <i class="fa-solid fa-gear" style={{ fontSize: "25px" }}></i> Settings
+          <i
+            class="fa-solid fa-gear"
+            style={{ fontSize: "20px", marginLeft: "10px" }}
+          ></i>{" "}
+          Settings
         </h2>
-        <div className="shadow-lg bg-white rounded p-3 m-auto mt-3">
+        <div>
+          {" "}
+          <i
+            class="fa-solid fa-arrow-right-to-bracket logout-icon"
+            title="Signout"
+            style={{ cursor: "pointer" }}
+            onClick={signout}
+          ></i>
+        </div>
+        <div
+          className="shadow-lg bg-white rounded p-3 mb-3 mt-3"
+          style={{ marginLeft: "30px" }}
+        >
           {/* <h5 className="ps-4">My Profile</h5> */}
 
           <div className="row mt-4">
@@ -120,7 +165,15 @@ function Settings() {
                   }}
                 /> */}
                 <div style={{ marginLeft: "1rem" }}>
-                  <h3 style={{ fontWeight: "500" }}>{user?.firstname} </h3>
+                  <h3
+                    style={{
+                      fontWeight: "500",
+                      fontSize: "19px",
+                      color: "#FF4131",
+                    }}
+                  >
+                    {user?.firstname}{" "}
+                  </h3>
                   {/* <div style={{ color: "#6f8d93", fontWeight: "400" }}>
                       <i>{user?.customNumber}</i>
                     </div> */}
@@ -150,7 +203,7 @@ function Settings() {
             </div> */}
 
           <br />
-          <Card className=" m-auto mt-3" style={{ width: "95%" }}>
+          <Card className=" m-auto " style={{ width: "95%" }}>
             <div className="card-body p-4">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div className="settings-sub-heading">Personal Information</div>

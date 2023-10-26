@@ -338,7 +338,11 @@ function Settings() {
           <>
             <h2
               className="ps-3 pe-5"
-              style={{ display: "flex", justifyContent: "space-between" }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "35px",
+              }}
             >
               <div>
                 <i class="fa-solid fa-gear" style={{ fontSize: "25px" }}></i>{" "}
@@ -354,7 +358,7 @@ function Settings() {
                 ></i>
               </div>
             </h2>
-            <div className="shadow-lg bg-white rounded p-3 m-auto mt-3">
+            <div className="shadow-lg bg-white rounded p-3 st">
               <h5 className="ps-4">
                 {!showChangePassword ? "My Profile" : "Change Password"}{" "}
               </h5>

@@ -1,11 +1,14 @@
-import { Menu, MenuItem } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Container, Navbar } from "react-bootstrap";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+// import { CreateToggle } from "../TogglerProvider";
+import { Menu, MenuItem } from "@material-ui/core";
+
 function Header() {
   const user = JSON.parse(sessionStorage.getItem("vendor"));
+  // const { light, darkhandler, lighthandler } = useContext(CreateToggle);
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,12 +37,37 @@ function Header() {
       alert("Signout Unsuccessfully");
     }
   };
+
   return (
     <div>
-      <Navbar style={{ backgroundColor: "blue" }}>
-        <Container style={{ justifyContent: "flex-end" }}>
+      <div
+        className="row"
+        style={{
+          backgroundColor: "#e4e4e4",
+          height: "auto",
+          position: "fixed",
+          width: "-webkit-fill-available",
+          zIndex: 8,
+        }}
+      >
+        <div className="col-md-10">
+          <Link to="/home">
+            <img
+              src="./images/newlogo.png"
+              style={{ width: "100px", height: "60px" }}
+              alt=""
+            />
+          </Link>
+        </div>
+        <div className="col-md-2 d-flex header-profile-logo">
           <Link to="/settings" style={{ textDecoration: "none" }}>
-            <div style={{ display: "flex", justifyContent: "end" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "end",
+                marginTop: "18px",
+              }}
+            >
               <i
                 class="fa-solid fa-user h-icon"
                 style={{
@@ -48,28 +76,14 @@ function Header() {
                   marginTop: "3px",
                 }}
               ></i>
-              <p style={{ color: "white", fontWeight: "bold" }}>
+              <p style={{ color: "black", fontWeight: "bold" }}>
                 {" "}
                 Hi, {user?.firstname}
               </p>
             </div>
           </Link>
-
-          {/* <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={signout}>Logout</MenuItem>
-          </Menu> */}
-          {/* </> */}
-          {/* ) : ( */}
-          {/* ""
-          )} */}
-        </Container>
-      </Navbar>
+        </div>
+      </div>
     </div>
   );
 }

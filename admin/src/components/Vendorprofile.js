@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 function Vendorprofile() {
   const [limitProducts, setLimitProducts] = useState("");
   const [showTransactions, setShowTransactions] = useState(false);
+  const [message, setMessage] = useState("");
 
   const location = useLocation();
   const { item } = location.state || {};
@@ -89,8 +90,37 @@ function Vendorprofile() {
     }
   };
 
+  // const productLimits = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const config = {
+  //       url: `/productslimits/${item._id}`,
+  //       method: "put",
+  //       baseURL: "https://api.infinitimart.in/api/vendor",
+  //       headers: { "content-type": "application/json" },
+  //       data: {
+  //         ProductLimits: limitProducts,
+  //       },
+  //     };
+  //     await axios(config).then(function (response) {
+  //       if (response.status === 200) {
+  //         alert(response.data.Success);
+  //         window.location.reload("");
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const productLimits = async (e) => {
     e.preventDefault();
+
+    if (!limitProducts) {
+      setMessage("Please enter product limit");
+      return; // Exit the function early if the field is empty
+    }
+
     try {
       const config = {
         url: `/productslimits/${item._id}`,
@@ -101,12 +131,22 @@ function Vendorprofile() {
           ProductLimits: limitProducts,
         },
       };
-      await axios(config).then(function (response) {
-        if (response.status === 200) {
-          alert(response.data.Success);
-          window.location.reload("");
-        }
-      });
+
+      await axios(config)
+        .then(function (response) {
+          if (response.status === 200) {
+            setMessage(response.data.Success); // Set the success message
+            window.location.reload("");
+          }
+        })
+        .catch(function (error) {
+          if (error.response && error.response.status === 400) {
+            setMessage("Please enter product limit"); // Set the error message
+          } else {
+            setMessage(error.response.data.error); // Set other error messages
+          }
+          console.error(error);
+        });
     } catch (error) {
       console.error(error);
     }
@@ -196,6 +236,9 @@ function Vendorprofile() {
                 >
                   Add
                 </button>
+                <div>
+                  {message && <p style={{ color: "red" }}>{message}</p>}
+                </div>
               </span>
             </div>
           </div>

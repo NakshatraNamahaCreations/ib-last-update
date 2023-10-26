@@ -99,9 +99,8 @@ export function Login() {
         sessionStorage.setItem("adminData", JSON.stringify(data.user));
         window.location.assign("/home");
       } else if (data.error) {
-        setError(data.error); // Set the general error message
+        setError(data.error);
       } else if (data.field) {
-        // Set error messages for specific fields
         if (data.field === "email") {
           setEmailError(data.message);
         } else if (data.field === "password") {
@@ -112,6 +111,7 @@ export function Login() {
       console.error("Error logging in:", error);
     }
   };
+
   return (
     <div style={{ height: "100vh" }}>
       <div

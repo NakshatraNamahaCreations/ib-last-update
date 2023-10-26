@@ -24,6 +24,7 @@ function Buyer() {
   const [selected, setSelected] = useState(false);
   const [name, setName] = useState("");
   const [filterdata, setfilterdata] = useState([]);
+  const [filterOption, setFilterOption] = useState("all");
   const handleactive1 = () => {
     setSelected(true);
   };
@@ -44,7 +45,23 @@ function Buyer() {
     setToggel(false);
   };
 
-  const getAllBuyres = async () => {
+  // const getAllBuyres = async () => {
+  //   try {
+  //     let res = await axios.get(
+  //       "https://api.infinitimart.in/api/buyer/getalluser"
+  //     );
+  //     if (res.status === 200) {
+  //       const buyerDetails = res.data?.buyerProfile;
+  //       setBuyerData(buyerDetails);
+  //       setfilterdata(buyerDetails);
+  //       console.log("vendorPaymentsData", buyerDetails);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const getAllBuyers = async () => {
     try {
       let res = await axios.get(
         "https://api.infinitimart.in/api/buyer/getalluser"
@@ -52,8 +69,27 @@ function Buyer() {
       if (res.status === 200) {
         const buyerDetails = res.data?.buyerProfile;
         setBuyerData(buyerDetails);
-        setfilterdata(buyerDetails);
-        console.log("vendorPaymentsData", buyerDetails);
+        if (filterOption === "old") {
+          // Filter data for the last one week (adjust the date comparison logic as needed)
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          const filteredData = buyerDetails.filter(
+            (item) => new Date(item.date) < oneWeekAgo
+          );
+          setfilterdata(filteredData);
+        } else if (filterOption === "new") {
+          // Filter data for this week (adjust the date comparison logic as needed)
+          const today = new Date();
+          const startOfWeek = new Date(today);
+          startOfWeek.setDate(today.getDate() - today.getDay()); // Assuming Sunday is the start of the week
+          const filteredData = buyerDetails.filter(
+            (item) => new Date(item.date) >= startOfWeek
+          );
+          setfilterdata(filteredData);
+        } else {
+          // Default case, show all data
+          setfilterdata(buyerDetails);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -61,8 +97,8 @@ function Buyer() {
   };
 
   useEffect(() => {
-    getAllBuyres();
-  }, []);
+    getAllBuyers();
+  }, [filterOption]);
 
   const columns = [
     {
@@ -107,7 +143,7 @@ function Buyer() {
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
               }}
             >
               <div>
@@ -123,6 +159,19 @@ function Buyer() {
                   className="fa-solid fa-magnifying-glass"
                   style={{ position: "relative", left: "90%", bottom: "45%" }}
                 ></i> */}
+              </div>
+
+              <div style={{ marginLeft: "20px" }}>
+                <Form.Select
+                  onChange={(e) => setFilterOption(e.target.value)}
+                  value={filterOption}
+                  className="buyer-search-input"
+                >
+                  <option value="all">All</option>
+
+                  <option value="new">New</option>
+                  <option value="old">Old</option>
+                </Form.Select>
               </div>
             </div>
 
