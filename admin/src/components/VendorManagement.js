@@ -6,7 +6,6 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import { Form } from "react-bootstrap";
-import { Navigate } from "react-big-calendar";
 
 function VendorManagement() {
   const [search, setSearch] = useState("");
@@ -98,16 +97,16 @@ function VendorManagement() {
       selector: (row) => row.customNumber,
     },
 
-    {
-      name: "Action",
-      cell: (row) => (
-        <>
-          <Link to="/Vendorprofile" state={{ item: row }}>
-            <b className="vendor-mng-view tab-text-a"> View </b>
-          </Link>
-        </>
-      ),
-    },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <>
+    //       <Link to="/Vendorprofile" state={{ item: row }}>
+    //         <b className="vendor-mng-view tab-text-a"> View </b>
+    //       </Link>
+    //     </>
+    //   ),
+    // },
   ];
 
   const edit = (data) => {
@@ -159,9 +158,10 @@ function VendorManagement() {
     setFilterOption(selectedOption);
   };
 
-  // const handleRowClick = (row) => {
-  //   navigate(`/Vendorprofile/${row._id}`);
-  // };
+  const handleRowClick = (row) => {
+    navigate(`/Vendorprofile/${row?._id}`);
+    console.log("first", row._id);
+  };
 
   return (
     <div className="row me-0">
@@ -205,7 +205,7 @@ function VendorManagement() {
             selectableRowsHighlight
             subHeaderAlign="left"
             highlightOnHover
-            // onRowClicked={handleRowClick}
+            onRowClicked={handleRowClick}
           />
         </div>
       </div>

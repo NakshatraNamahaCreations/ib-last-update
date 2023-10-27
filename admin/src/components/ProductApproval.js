@@ -233,6 +233,7 @@ function ProductApproval() {
   const [unifiedSearchTerm, setUnifiedSearchTerm] = useState("");
   const navigate = useNavigate();
   const [commonUserIds, setCommonUserIds] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const getAllProducts = async () => {
     let res = await axios.get(
@@ -305,6 +306,7 @@ function ProductApproval() {
     const commonItem = productData.find((item) => item.userId?._id === userId);
     return commonItem;
   });
+
   const columns = [
     {
       name: "SL.NO",
@@ -433,23 +435,24 @@ function ProductApproval() {
   // }, [unifiedSearchTerm, productData]);
 
   useEffect(() => {
-    const filteredData = productData.filter((item) => {
-      const searchString = unifiedSearchTerm.toLowerCase();
+    const searchString = unifiedSearchTerm.toLowerCase();
+
+    const filteredData = commonUserData1.filter((item) => {
       const vendorNameMatch = item.userId?.firstname
         ?.toLowerCase()
         .includes(searchString);
       const productNameMatch = item.productName
-        ?.toLowerCase()
+        .toLowerCase()
         .includes(searchString);
       const vendorIdMatch = item.userId?.customNumber
-        ?.toLowerCase()
+        .toLowerCase()
         .includes(searchString);
 
       return vendorNameMatch || productNameMatch || vendorIdMatch;
     });
 
-    setFilteredProduct(filteredData);
-  }, [unifiedSearchTerm, productData]);
+    setFilteredData(filteredData);
+  }, [unifiedSearchTerm, commonUserData1]);
 
   const handleRowClick = (row) => {
     navigate(`/papprovaldetails/${row.userId._id}`);
@@ -472,7 +475,7 @@ function ProductApproval() {
         <div>
           <DataTable
             columns={columns}
-            data={commonUserData1}
+            data={unifiedSearchTerm ? filteredData : commonUserData1}
             pagination
             fixedHeader
             selectableRowsHighlight

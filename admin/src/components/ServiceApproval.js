@@ -9,6 +9,9 @@ function ServiceApproval() {
   const [filteredService, setFilteredService] = useState();
   const [unifiedSearchTerm, setUnifiedSearchTerm] = useState("");
   const navigate = useNavigate();
+  const [commonUserIds, setCommonUserIds] = useState([]);
+  const [commonUserData, setCommonUserData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const getAllservices = async () => {
     let res = await axios.get(
@@ -173,62 +176,6 @@ function ServiceApproval() {
     },
   ];
 
-  //search
-  useEffect(() => {
-    const filteredData = serviceData.filter((item) => {
-      const searchString = unifiedSearchTerm.toLowerCase();
-      const vendorNameMatch = item.userId?.firstname
-        ?.toLowerCase()
-        .includes(searchString);
-      const serviceNameMatch = item.serviceProductName
-        ?.toLowerCase()
-        .includes(searchString);
-      const vendorIdMatch = item.userId?.customNumber
-        ?.toLowerCase()
-        .includes(searchString);
-      const serviceCatagoryNameMatch = item.serviceCatagoryName
-        ?.toLowerCase()
-        .includes(searchString);
-      const serviceSubCatagoryNameMatch = item.serviceSubcatagoryName
-        ?.toLowerCase()
-        .includes(searchString);
-
-      return (
-        vendorNameMatch ||
-        serviceNameMatch ||
-        vendorIdMatch ||
-        serviceCatagoryNameMatch ||
-        serviceSubCatagoryNameMatch
-      );
-    });
-
-    setFilteredService(filteredData);
-  }, [unifiedSearchTerm, serviceData]);
-
-  const handleRowClick = (row) => {
-    navigate(`/sapprovaldetails/${row.userId._id}`);
-  };
-
-  const [commonUserIds, setCommonUserIds] = useState([]);
-  const [commonUserData, setCommonUserData] = useState([]);
-
-  const columns1 = [
-    {
-      name: "User ID",
-      selector: "userId._id",
-      width: "100px",
-    },
-    {
-      name: "First Name",
-      selector: "userId.firstname",
-      width: "100px",
-    },
-  ];
-  const commonUserData1 = commonUserIds.map((userId) => {
-    const commonItem = serviceData.find((item) => item.userId?._id === userId);
-    return commonItem;
-  });
-
   useEffect(() => {
     const userIdCount = new Map();
     const commonIds = [];
@@ -255,6 +202,80 @@ function ServiceApproval() {
     setCommonUserData(commonData);
   }, [serviceData]);
 
+  const commonUserData1 = commonUserIds.map((userId) => {
+    const commonItem = serviceData.find((item) => item.userId?._id === userId);
+    return commonItem;
+  });
+
+  //search
+  // useEffect(() => {
+  //   const filteredData = serviceData.filter((item) => {
+  //     const searchString = unifiedSearchTerm.toLowerCase();
+  //     const vendorNameMatch = item.userId?.firstname
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const serviceNameMatch = item.serviceProductName
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const vendorIdMatch = item.userId?.customNumber
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const serviceCatagoryNameMatch = item.serviceCatagoryName
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+  //     const serviceSubCatagoryNameMatch = item.serviceSubcatagoryName
+  //       ?.toLowerCase()
+  //       .includes(searchString);
+
+  //     return (
+  //       vendorNameMatch ||
+  //       serviceNameMatch ||
+  //       vendorIdMatch ||
+  //       serviceCatagoryNameMatch ||
+  //       serviceSubCatagoryNameMatch
+  //     );
+  //   });
+
+  //   setFilteredService(filteredData);
+  // }, [unifiedSearchTerm, serviceData]);
+
+  useEffect(() => {
+    const searchString = unifiedSearchTerm.toLowerCase();
+
+    const filteredData = commonUserData1.filter((item) => {
+      const vendorNameMatch = item.userId?.firstname
+        ?.toLowerCase()
+        .includes(searchString);
+      const serviceNameMatch = item.serviceProductName
+        .toLowerCase()
+        .includes(searchString);
+      const vendorIdMatch = item.userId?.customNumber
+        .toLowerCase()
+        .includes(searchString);
+
+      return vendorNameMatch || serviceNameMatch || vendorIdMatch;
+    });
+
+    setFilteredData(filteredData);
+  }, [unifiedSearchTerm, commonUserData1]);
+
+  const handleRowClick = (row) => {
+    navigate(`/sapprovaldetails/${row.userId._id}`);
+  };
+
+  const columns1 = [
+    {
+      name: "User ID",
+      selector: "userId._id",
+      width: "100px",
+    },
+    {
+      name: "First Name",
+      selector: "userId.firstname",
+      width: "100px",
+    },
+  ];
+
   return (
     <div>
       <div>
@@ -273,7 +294,7 @@ function ServiceApproval() {
           {" "}
           <DataTable
             columns={columns}
-            data={commonUserData1}
+            data={unifiedSearchTerm ? filteredData : commonUserData1}
             pagination
             fixedHeader
             selectableRowsHighlight

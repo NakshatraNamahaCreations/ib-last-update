@@ -1,26 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../components/layout/Sidebar";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import moment from "moment/moment";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function Vendorprofile() {
+  const { id } = useParams();
+
   const [limitProducts, setLimitProducts] = useState("");
   const [showTransactions, setShowTransactions] = useState(false);
   const [message, setMessage] = useState("");
+  const [vendorPaymentsData, setVendorPaymentsData] = useState([]);
 
-  const location = useLocation();
-  const { item } = location.state || {};
+  // const location = useLocation();
 
-  console.log("Vendor Data:", item);
+  useEffect(() => {
+    getvendorWithPayments();
+  }, []);
+
+  const getvendorWithPayments = async () => {
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/vendor/getuserswithpaymentsdata"
+      );
+      if (res.status === 200) {
+        const vendorsPayments = res.data?.vendorsPayments;
+        setVendorPaymentsData(
+          vendorsPayments.filter((data) => data?._id === id)
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log("========", vendorPaymentsData);
 
   const deleteUserAccount = async () => {
     try {
       const response = await axios.post(
-        `https://api.infinitimart.in/api/vendor/delete/${item._id}`
+        `https://api.infinitimart.in/api/vendor/delete/${id}`
       );
       if (response.status === 200) {
         console.log("delete successfully");
@@ -42,13 +64,13 @@ function Vendorprofile() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  console.log("yeyeyey", item._id);
+  console.log("yeyeyey", id);
 
   const Approve = async (e) => {
     e.preventDefault();
     try {
       const config = {
-        url: `/approvevendor/${item._id}`,
+        url: `/approvevendor/${id}`,
         method: "post",
         baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
@@ -58,7 +80,7 @@ function Vendorprofile() {
       };
       await axios(config).then(function (response) {
         if (response.status === 200) {
-          window.location.reload("");
+          // window.location.reload("");
         }
       });
     } catch (error) {
@@ -71,7 +93,7 @@ function Vendorprofile() {
     e.preventDefault();
     try {
       const config = {
-        url: `/disapprovevendor/${item._id}`,
+        url: `/disapprovevendor/${id}`,
         method: "post",
         baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
@@ -118,12 +140,12 @@ function Vendorprofile() {
 
     if (!limitProducts) {
       setMessage("Please enter product limit");
-      return; // Exit the function early if the field is empty
+      return;
     }
 
     try {
       const config = {
-        url: `/productslimits/${item._id}`,
+        url: `/productslimits/${id}`,
         method: "put",
         baseURL: "https://api.infinitimart.in/api/vendor",
         headers: { "content-type": "application/json" },
@@ -137,6 +159,7 @@ function Vendorprofile() {
           if (response.status === 200) {
             setMessage(response.data.Success); // Set the success message
             window.location.reload("");
+            getvendorWithPayments();
           }
         })
         .catch(function (error) {
@@ -152,15 +175,21 @@ function Vendorprofile() {
     }
   };
 
-  console.log(item.PaymentDetails);
+  // console.log(item.PaymentDetails);
 
   const checkPaymentsLength = () => {
-    if (!item || !item.PaymentDetails || item.PaymentDetails.length === 0) {
+    if (
+      !vendorPaymentsData[0] ||
+      !vendorPaymentsData[0].PaymentDetails ||
+      vendorPaymentsData[0].PaymentDetails.length === 0
+    ) {
       return 0;
     } else {
-      const sortedPayments = item.PaymentDetails.sort((a, b) => {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
+      const sortedPayments = vendorPaymentsData[0].PaymentDetails.sort(
+        (a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+      );
 
       const mostRecentSuccessPayment = sortedPayments.filter(
         (payment) => payment.code === "PAYMENT_SUCCESS"
@@ -169,7 +198,6 @@ function Vendorprofile() {
         console.log("mostRecentSuccessPayment", mostRecentSuccessPayment);
         return mostRecentSuccessPayment[0].data.amount;
       } else {
-        console.log("item", item);
         return 0;
       }
     }
@@ -281,7 +309,7 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ color: "#009834" }}>
-                      <b>{item?.customNumber}</b>
+                      <b>{vendorPaymentsData[0]?.customNumber}</b>
                     </span>
                   </div>
                 </div>
@@ -291,7 +319,9 @@ function Vendorprofile() {
                   </div>
                   <div className="col-1">:</div>
                   <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.firstname}</span>
+                    <span style={{ fontWeight: "600" }}>
+                      {vendorPaymentsData[0]?.firstname}
+                    </span>
                   </div>
                 </div>
 
@@ -302,7 +332,7 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>
-                      {item?.phoneNumber}
+                      {vendorPaymentsData[0]?.phoneNumber}
                     </span>
                   </div>
                 </div>
@@ -313,7 +343,9 @@ function Vendorprofile() {
                   </div>
                   <div className="col-1">:</div>
                   <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.email}</span>
+                    <span style={{ fontWeight: "600" }}>
+                      {vendorPaymentsData[0]?.email}
+                    </span>
                   </div>
                 </div>
                 <div className="row p-2">
@@ -322,7 +354,9 @@ function Vendorprofile() {
                   </div>
                   <div className="col-1">:</div>
                   <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.address}</span>
+                    <span style={{ fontWeight: "600" }}>
+                      {vendorPaymentsData[0]?.address}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -334,7 +368,7 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>
-                      {item?.businessName}
+                      {vendorPaymentsData[0]?.businessName}
                     </span>
                   </div>
                 </div>
@@ -346,7 +380,7 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>
-                      {item?.businesstype}
+                      {vendorPaymentsData[0]?.businesstype}
                     </span>
                   </div>
                 </div>
@@ -357,7 +391,9 @@ function Vendorprofile() {
                   </div>
                   <div className="col-1">:</div>
                   <div className="col-5">
-                    <span style={{ fontWeight: "600" }}>{item?.category}</span>
+                    <span style={{ fontWeight: "600" }}>
+                      {vendorPaymentsData[0]?.category}
+                    </span>
                   </div>
                 </div>
 
@@ -368,7 +404,7 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>
-                      {item?.websiteaddress}
+                      {vendorPaymentsData[0]?.websiteaddress}
                     </span>
                   </div>
                 </div>
@@ -379,7 +415,9 @@ function Vendorprofile() {
                   <div className="col-1">:</div>
                   <div className="col-5">
                     <span style={{ fontWeight: "600" }}>
-                      {item?.ProductLimits ? item?.ProductLimits : "0"}
+                      {vendorPaymentsData[0]?.ProductLimits
+                        ? vendorPaymentsData[0]?.ProductLimits
+                        : "0"}
                     </span>
                   </div>
                 </div>
@@ -390,13 +428,18 @@ function Vendorprofile() {
             className="d-flex p-5"
             style={{ justifyContent: "space-evenly" }}
           >
-            {item.PaymentDetails.length === 0 ? (
+            {vendorPaymentsData[0]?.PaymentDetails.length === 0 ? (
               ""
             ) : (
               <div>
-                <Link to="/invoice" state={{ invoiceData: item }}>
+                <Link
+                  to="/invoice"
+                  state={{ invoiceData: vendorPaymentsData[0] }}
+                >
                   <button
-                    disabled={item.PaymentDetails.length === 0}
+                    disabled={
+                      vendorPaymentsData[0]?.PaymentDetails.length === 0
+                    }
                     style={{
                       backgroundColor: "rgb(112 112 112)",
                       border: 0,
@@ -434,7 +477,8 @@ function Vendorprofile() {
               <Modal.Title>Transaction Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {showTransactions && item.PaymentDetails.length !== 0 ? (
+              {showTransactions &&
+              vendorPaymentsData[0]?.PaymentDetails.length !== 0 ? (
                 <div className="pb-5">
                   <div className="">
                     <div className="svg-container">
@@ -450,7 +494,10 @@ function Vendorprofile() {
                         }}
                       >
                         Transaction ID:{" "}
-                        {item.PaymentDetails[0]?.data?.transactionId}
+                        {
+                          vendorPaymentsData[0]?.PaymentDetails[0]?.data
+                            ?.transactionId
+                        }
                       </p>
                       <p className="total-paid" style={{ color: "#9da1ac" }}>
                         <b>TOTAL PAID</b>
@@ -467,16 +514,17 @@ function Vendorprofile() {
                       </h4>
 
                       <div className="created-at">
-                        {moment(item.PaymentDetails[0]?.createdAt).format(
-                          "dddd, MMMM Do YYYY"
-                        )}
+                        {moment(
+                          vendorPaymentsData[0]?.PaymentDetails[0]?.createdAt
+                        ).format("dddd, MMMM Do YYYY")}
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
                 <>
-                  {showTransactions && item.PaymentDetails.length === 0 ? (
+                  {showTransactions &&
+                  vendorPaymentsData[0]?.PaymentDetails.length === 0 ? (
                     <div className="pb-5">No Payment History</div>
                   ) : (
                     ""

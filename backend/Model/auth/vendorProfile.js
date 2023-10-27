@@ -96,6 +96,9 @@ const Vendor = new Schema({
   vendorId: {
     type: String,
   },
+  ProductLimits: {
+    type: Number,
+  },
   accountnumber: {
     type: String,
   },

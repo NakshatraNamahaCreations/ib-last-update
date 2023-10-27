@@ -863,7 +863,7 @@ function App() {
         />
 
         <Route
-          path="/Vendorprofile"
+          path="/Vendorprofile/:id"
           element={
             <>
               <Header />
