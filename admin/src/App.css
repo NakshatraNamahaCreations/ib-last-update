@@ -800,3 +800,9 @@ a {
   margin-left: 20px !important;
   margin-top: 30px !important;
 }
+.error-message{
+  color: red;
+  text-align: center;
+  font-size:14px;
+  padding-top: 20px;
+}

@@ -7,6 +7,7 @@ import DataTable from "react-data-table-component";
 import ServiceBanner from "./ServiceBanner";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Pageloader from "../components/Pageloader";
 
 function ProductBanner() {
   const [productBannerTab, setProductBannerTab] = useState(true);
@@ -19,10 +20,23 @@ function ProductBanner() {
   const [bannerPlacementError, setBannerPlacementError] = useState("");
   const [imageError, setImageError] = useState("");
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
+
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClose = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -65,6 +79,11 @@ function ProductBanner() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
+
       await addbanner(e);
     }
   };
@@ -106,13 +125,33 @@ function ProductBanner() {
     getAllBanner();
   }, []);
 
+  // const getAllBanner = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/product/getproductbanner"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log(res);
+  //     setBanner(res.data?.success);
+  //   }
+  // };
+
   const getAllBanner = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/product/getproductbanner"
-    );
-    if (res.status === 200) {
-      console.log(res);
-      setBanner(res.data?.success);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/product/getproductbanner"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setBanner(res.data?.success);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
 
@@ -160,7 +199,7 @@ function ProductBanner() {
           <img
             src={`https://api.infinitimart.in/productBanner/${row.bannerImage}`}
             alt=""
-            width="50%"
+            style={{ width: "50px", height: "50px" }}
           />
         </>
       ),
@@ -396,10 +435,12 @@ function ProductBanner() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Close
+            {/* Close */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

@@ -11,6 +11,7 @@ import { WbIncandescentTwoTone } from "@mui/icons-material";
 import ServiceApproval from "./ServiceApproval";
 import { CSVLink } from "react-csv";
 import * as XLSX from "xlsx";
+import Pageloader from "../components/Pageloader";
 
 function Servicescategory() {
   const [categoryTab, setCategoryTab] = useState(true);
@@ -21,11 +22,23 @@ function Servicescategory() {
   const [image, setImage] = useState("");
   const [catagoryNameError, setCatagoryNameError] = useState("");
   const [imageError, setImageError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
 
   const [show, setShow] = useState(false);
 
-  const handleClosemodel = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClosemodel = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClosemodel = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -56,6 +69,10 @@ function Servicescategory() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
       await AddCatagory(e);
     }
   };
@@ -118,16 +135,38 @@ function Servicescategory() {
     }
   };
 
+  // const getAllCatagory = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log(res);
+  //     setCatagory(res.data?.categoryservices);
+  //     setfilterdata(res.data?.categoryservices);
+  //   }
+  // };
+
   const getAllCatagory = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
-    );
-    if (res.status === 200) {
-      console.log(res);
-      setCatagory(res.data?.categoryservices);
-      setfilterdata(res.data?.categoryservices);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/vendor/services/catagory/getservicecatagory"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setCatagory(res.data?.categoryservices);
+        setfilterdata(res.data?.categoryservices);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
+
   useEffect(() => {
     getAllCatagory();
   }, []);
@@ -189,7 +228,9 @@ function Servicescategory() {
       name: "Category",
       // selector: (row, index) => row.categoryname,
       selector: (row, index) =>
-        row.categoryname.charAt(0).toUpperCase() + row.categoryname.slice(1),
+        // row.categoryname.charAt(0).toUpperCase() + row.categoryname.slice(1),
+        row.categoryname?.charAt(0)?.toUpperCase() +
+        (row.categoryname ? row.categoryname.slice(1) : ""),
     },
 
     {
@@ -541,7 +582,8 @@ function Servicescategory() {
         </Modal.Body>
         <Modal.Footer>
           <button className="update-button" onClick={updateCategory}>
-            Update
+            {/* Update */}
+            {showButtonLoader ? "updated..." : "Update"}
           </button>
         </Modal.Footer>
       </Modal>
@@ -587,10 +629,12 @@ function Servicescategory() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Save
+            {/* Save */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

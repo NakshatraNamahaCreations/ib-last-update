@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
 import { Form } from "react-bootstrap";
+import Pageloader from "../components/Pageloader";
 
 function VendorManagement() {
   const [search, setSearch] = useState("");
@@ -17,6 +18,8 @@ function VendorManagement() {
   const handleClose = () => setSmShow(false);
   const handleShow = () => setSmShow(true);
   const [filterOption, setFilterOption] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   const getvendorWithPayments = async () => {
@@ -30,8 +33,10 @@ function VendorManagement() {
         console.log("vendorPaymentsData", vendorsPayments);
         setFilterdata(vendorsPayments);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -114,7 +119,10 @@ function VendorManagement() {
     handleShow(true);
   };
 
+  // last 7 days working
+
   useEffect(() => {
+    const currentDate = new Date();
     const filteredData = vendorPaymentsData.filter((item) => {
       const searchString = search.toLowerCase();
       const vendorNameMatch = item.firstname
@@ -127,24 +135,20 @@ function VendorManagement() {
         ?.toLowerCase()
         .includes(searchString);
 
-      // Filter by the selected filter option
-      const currentDate = new Date();
-      if (filterOption === "new") {
-        const createdAtDate = new Date(item.createAt);
-        const timeDiff = currentDate - createdAtDate;
-        // Filter by vendors created today
-        return (
-          (vendorNameMatch || businessNameMatch || vendorIdMatch) &&
-          timeDiff < 86400000 // Milliseconds in a day
-        );
-      } else if (filterOption === "old") {
-        const createdAtDate = new Date(item.createAt);
-        const timeDiff = currentDate - createdAtDate;
+      const createdAtDate = new Date(item.createAt);
+      const timeDiff = currentDate - createdAtDate;
 
+      if (filterOption === "last3days") {
         return (
           (vendorNameMatch || businessNameMatch || vendorIdMatch) &&
-          timeDiff >= 86400000 &&
-          timeDiff < 172800000
+          timeDiff >= 259200000 &&
+          timeDiff < 604800000
+        );
+      } else if (filterOption === "last7days") {
+        return (
+          (vendorNameMatch || businessNameMatch || vendorIdMatch) &&
+          timeDiff >= 604800000 &&
+          timeDiff < 1209600000
         );
       } else {
         return vendorNameMatch || businessNameMatch || vendorIdMatch;
@@ -181,7 +185,7 @@ function VendorManagement() {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <select
+          {/* <select
             className="form-select mx-3"
             style={{ width: "100px" }}
             aria-label="Default select example"
@@ -192,6 +196,18 @@ function VendorManagement() {
             </option>
             <option value="new">New</option>
             <option value="old">Old</option>
+          </select> */}
+
+          <select
+            className="form-select mx-3"
+            style={{ width: "150px" }}
+            aria-label="Default select example"
+            onChange={(e) => handleFilterChange(e.target.value)}
+            value={filterOption}
+          >
+            <option value="all">All</option>
+            {/* <option value="last3days">Last 3 days</option> */}
+            <option value="last7days">Last 7 days</option>
           </select>
         </div>
 
@@ -227,6 +243,7 @@ function VendorManagement() {
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

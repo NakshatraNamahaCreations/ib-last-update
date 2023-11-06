@@ -11,6 +11,7 @@ import ProductApproval from "./ProductApproval";
 import { CSVLink } from "react-csv";
 import { Button } from "react-bootstrap";
 import * as XLSX from "xlsx";
+import Pageloader from "../components/Pageloader";
 
 function Category() {
   const [categoryTab, setCategoryTab] = useState(true);
@@ -22,6 +23,8 @@ function Category() {
   const [catagoryNameError, setCatagoryNameError] = useState("");
   const [imageError, setImageError] = useState("");
   const [hideUploadButton, setHideUploadButton] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+  const [reload, setReload] = useState(false);
 
   //search
   const [searchCategory, setSearchCategory] = useState("");
@@ -32,11 +35,23 @@ function Category() {
   const [showEdit, setShowEdit] = useState(false);
   const [editCategory, setEditCategory] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
 
   const [show, setShow] = useState(false);
 
-  const handleClosemodel = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClosemodel = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClosemodel = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -67,7 +82,12 @@ function Category() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
       await AddCatagory(e);
+      // setRefresh(true);
     }
   };
 
@@ -79,6 +99,7 @@ function Category() {
   const handleShowPopUp = () => {
     setShowEdit(true);
   };
+
   const handleClose = () => {
     setShowEdit(false);
   };
@@ -109,6 +130,7 @@ function Category() {
           // window.location.reload();
           getAllCatagory();
           handleClosemodel();
+          setReload((prev) => !prev);
         }
       });
     } catch (error) {
@@ -117,14 +139,35 @@ function Category() {
     }
   };
 
+  // const getAllCatagory = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log(res);
+  //     setCatagory(res.data?.catagory);
+  //     setfilterdata(res.data?.catagory);
+  //   }
+  // };
+
   const getAllCatagory = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
-    );
-    if (res.status === 200) {
-      console.log(res);
-      setCatagory(res.data?.catagory);
-      setfilterdata(res.data?.catagory);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/vendor/product/catagory/getcatagory"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setCatagory(res.data?.catagory);
+        setfilterdata(res.data?.catagory);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
 
@@ -146,6 +189,7 @@ function Category() {
             getAllCatagory();
           }
         });
+      // setRefresh(true);
     } catch (error) {
       console.log(error);
       alert("cannot able to do");
@@ -174,6 +218,7 @@ function Category() {
         getAllCatagory();
         setShowEdit(false);
       }
+      // setRefresh(true);
     } catch (error) {
       console.log(error);
       alert("Unable to complete the request");
@@ -188,7 +233,9 @@ function Category() {
     {
       name: "Category",
       selector: (row, index) =>
-        row.catagoryName.charAt(0).toUpperCase() + row.catagoryName.slice(1),
+        // row.catagoryName.charAt(0).toUpperCase() + row.catagoryName.slice(1),
+        row.catagoryName?.charAt(0)?.toUpperCase() +
+        (row.catagoryName ? row.catagoryName.slice(1) : ""),
     },
     {
       name: "Image",
@@ -653,10 +700,12 @@ function Category() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Save
+            {/* Save */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

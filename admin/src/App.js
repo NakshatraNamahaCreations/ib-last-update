@@ -721,6 +721,7 @@ import Papprovaldetails from "./components/Papprovaldetails";
 import Sapprovaldetail from "./components/Sapprovaldetail";
 import "./App.css";
 import Sidebar from "./components/layout/Sidebar";
+import Pageloader from "./components/Pageloader";
 
 function App() {
   const admin = JSON.parse(sessionStorage.getItem("adminData"));
@@ -878,6 +879,16 @@ function App() {
             <>
               <Header />
               <ProductBanner />
+            </>
+          }
+        />
+
+        <Route
+          path="/pageloader"
+          element={
+            <>
+              {/* <Header /> */}
+              <Pageloader />
             </>
           }
         />

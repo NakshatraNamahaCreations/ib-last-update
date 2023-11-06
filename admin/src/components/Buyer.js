@@ -17,6 +17,7 @@ import {
 } from "mdb-react-ui-kit";
 import axios from "axios";
 import DataTable from "react-data-table-component";
+import Pageloader from "../components/Pageloader";
 
 function Buyer() {
   const [buyerData, setBuyerData] = useState([]);
@@ -25,6 +26,7 @@ function Buyer() {
   const [name, setName] = useState("");
   const [filterdata, setfilterdata] = useState([]);
   const [filterOption, setFilterOption] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
   const handleactive1 = () => {
     setSelected(true);
   };
@@ -45,23 +47,7 @@ function Buyer() {
     setToggel(false);
   };
 
-  // const getAllBuyres = async () => {
-  //   try {
-  //     let res = await axios.get(
-  //       "https://api.infinitimart.in/api/buyer/getalluser"
-  //     );
-  //     if (res.status === 200) {
-  //       const buyerDetails = res.data?.buyerProfile;
-  //       setBuyerData(buyerDetails);
-  //       setfilterdata(buyerDetails);
-  //       console.log("vendorPaymentsData", buyerDetails);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  const getAllBuyers = async () => {
+  const getAllBuyres = async () => {
     try {
       let res = await axios.get(
         "https://api.infinitimart.in/api/buyer/getalluser"
@@ -69,35 +55,52 @@ function Buyer() {
       if (res.status === 200) {
         const buyerDetails = res.data?.buyerProfile;
         setBuyerData(buyerDetails);
-        if (filterOption === "old") {
-          // Filter data for the last one week (adjust the date comparison logic as needed)
-          const oneWeekAgo = new Date();
-          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-          const filteredData = buyerDetails.filter(
-            (item) => new Date(item.date) < oneWeekAgo
-          );
-          setfilterdata(filteredData);
-        } else if (filterOption === "new") {
-          // Filter data for this week (adjust the date comparison logic as needed)
-          const today = new Date();
-          const startOfWeek = new Date(today);
-          startOfWeek.setDate(today.getDate() - today.getDay()); // Assuming Sunday is the start of the week
-          const filteredData = buyerDetails.filter(
-            (item) => new Date(item.date) >= startOfWeek
-          );
-          setfilterdata(filteredData);
-        } else {
-          // Default case, show all data
-          setfilterdata(buyerDetails);
-        }
+        setfilterdata(buyerDetails);
+        console.log("vendorPaymentsData", buyerDetails);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
+  // const getAllBuyers = async () => {
+  //   try {
+  //     let res = await axios.get(
+  //       "https://api.infinitimart.in/api/buyer/getalluser"
+  //     );
+  //     if (res.status === 200) {
+  //       const buyerDetails = res.data?.buyerProfile;
+  //       setBuyerData(buyerDetails);
+  //       if (filterOption === "old") {
+  //         const oneWeekAgo = new Date();
+  //         oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  //         const filteredData = buyerDetails.filter(
+  //           (item) => new Date(item.date) < oneWeekAgo
+  //         );
+  //         setfilterdata(filteredData);
+  //       } else if (filterOption === "new") {
+  //         const today = new Date();
+  //         const startOfWeek = new Date(today);
+  //         startOfWeek.setDate(today.getDate() - today.getDay());
+  //         const filteredData = buyerDetails.filter(
+  //           (item) => new Date(item.date) >= startOfWeek
+  //         );
+  //         setfilterdata(filteredData);
+  //       }
+
+  //       else {
+  //         setfilterdata(buyerDetails);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
-    getAllBuyers();
+    getAllBuyres();
   }, [filterOption]);
 
   const columns = [
@@ -161,18 +164,17 @@ function Buyer() {
                 ></i> */}
               </div>
 
-              <div style={{ marginLeft: "20px" }}>
+              {/* <div style={{ marginLeft: "20px" }}>
                 <Form.Select
                   onChange={(e) => setFilterOption(e.target.value)}
                   value={filterOption}
                   className="buyer-search-input"
                 >
                   <option value="all">All</option>
-
                   <option value="new">New</option>
                   <option value="old">Old</option>
                 </Form.Select>
-              </div>
+              </div> */}
             </div>
 
             <div className="mt-3">
@@ -286,6 +288,7 @@ function Buyer() {
           </div>
         )}
       </div>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

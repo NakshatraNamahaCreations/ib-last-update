@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Pageloader from "../components/Pageloader";
 
 function ServiceBanner() {
   const [image, setImage] = useState();
@@ -15,11 +16,22 @@ function ServiceBanner() {
   const [contentError, setContentError] = useState("");
   const [bannerPlacementError, setBannerPlacementError] = useState("");
   const [imageError, setImageError] = useState("");
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClose = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -62,6 +74,10 @@ function ServiceBanner() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
       await addbanner(e);
     }
   };
@@ -98,13 +114,33 @@ function ServiceBanner() {
     getAllBanner();
   }, []);
 
+  // const getAllBanner = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/service/getservicebanner"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log(res);
+  //     setBanner(res.data?.success);
+  //   }
+  // };
+
   const getAllBanner = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/service/getservicebanner"
-    );
-    if (res.status === 200) {
-      console.log(res);
-      setBanner(res.data?.success);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/service/getservicebanner"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setBanner(res.data?.success);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
 
@@ -150,7 +186,7 @@ function ServiceBanner() {
           <img
             src={`https://api.infinitimart.in/serviceBanner/${row.bannerImage}`}
             alt=""
-            width="50%"
+            style={{ width: "50px", height: "50px" }}
           />
         </>
       ),
@@ -176,8 +212,8 @@ function ServiceBanner() {
     <div div className="  ">
       <div className="  pt-3">
         <div
-          className="d-flex pt-3 pb-3"
-          style={{ justifyContent: "space-between" }}
+          className="d-flex pt-3 pb-3 "
+          style={{ justifyContent: "end", marginBottom: 10, marginRight: 10 }}
         >
           <button
             type="button"
@@ -333,10 +369,12 @@ function ServiceBanner() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Close
+            {/* Close */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

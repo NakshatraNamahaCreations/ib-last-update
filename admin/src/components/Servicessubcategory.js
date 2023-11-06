@@ -11,6 +11,7 @@ import DataTable from "react-data-table-component";
 import { Button, Modal } from "react-bootstrap";
 import * as XLSX from "xlsx";
 import { CSVLink } from "react-csv";
+import Pageloader from "../components/Pageloader";
 
 function ServicessubCategory() {
   const [catagory, setCatagory] = useState([]);
@@ -35,11 +36,23 @@ function ServicessubCategory() {
   const [showEdit, setShowEdit] = useState(false);
   const [editSubcategory, setEditSubcategory] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
 
   const [show, setShow] = useState(false);
 
-  const handleClosemodel = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClosemodel = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClosemodel = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -77,6 +90,10 @@ function ServicessubCategory() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
       await AddSubCatagory(e);
     }
   };
@@ -143,14 +160,35 @@ function ServicessubCategory() {
     }
   };
 
+  // const getAllSubCatagory = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/vendor/services/subcatagory/getsubcatagoryservices"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log("subcatagory===", res);
+  //     setSubcatagory(res.data?.subcategory);
+  //     setfilterdata(res.data?.subcategory);
+  //   }
+  // };
+
   const getAllSubCatagory = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/services/subcatagory/getsubcatagoryservices"
-    );
-    if (res.status === 200) {
-      console.log("subcatagory===", res);
-      setSubcatagory(res.data?.subcategory);
-      setfilterdata(res.data?.subcategory);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/vendor/services/subcatagory/getsubcatagoryservices"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setSubcatagory(res.data?.subcategory);
+        setfilterdata(res.data?.subcategory);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
 
@@ -554,7 +592,8 @@ function ServicessubCategory() {
         </Modal.Body>
         <Modal.Footer>
           <button className="update-button" onClick={updateSubCategory}>
-            Update
+            {/* Update */}
+            {showButtonLoader ? "Updated..." : "Update"}
           </button>
         </Modal.Footer>
       </Modal>
@@ -619,10 +658,12 @@ function ServicessubCategory() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Save
+            {/* Save */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }

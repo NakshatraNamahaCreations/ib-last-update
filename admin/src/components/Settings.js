@@ -15,6 +15,7 @@ function Settings() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [showeditprofile, setShowEditProfile] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEditprofileClose = () => setShowEditProfile(false);
   const handleEditprofileShow = () => setShowEditProfile(true);
@@ -41,6 +42,38 @@ function Settings() {
   const [viewSubAdmin, setViewSubAdmin] = useState(false);
 
   // change password
+  // const handleChangePassword = async () => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://api.infinitimart.in/api/superadmin/superadminchangepassword/${adminData._id}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           oldPassword,
+  //           newPassword,
+  //           confirmPassword,
+  //         }),
+  //       }
+  //     );
+
+  //     const data = await response.json();
+  //     setMessage(data.success || data.error);
+  //     if (data.success) {
+  //       setTimeout(() => {
+  //         setMessage("");
+  //         setShowChangePassword(false);
+  //         window.location.reload();
+  //       }, 1000);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error changing password:", error);
+  //     setMessage("An error occurred. Please try again later.");
+  //   }
+  // };
+
   const handleChangePassword = async () => {
     try {
       const response = await fetch(
@@ -59,17 +92,25 @@ function Settings() {
       );
 
       const data = await response.json();
-      setMessage(data.success || data.error);
-      if (data.success) {
-        setTimeout(() => {
-          setMessage("");
-          setShowChangePassword(false);
-          window.location.reload();
-        }, 1000);
+
+      if (response.ok) {
+        // If the response is successful, reset the error message
+        setErrorMessage("");
+        setMessage(data.success);
+        if (data.success) {
+          setTimeout(() => {
+            setMessage("");
+            setShowChangePassword(false);
+            window.location.reload();
+          }, 1000);
+        }
+      } else {
+        // If the response is an error, set the error message
+        setErrorMessage(data.error);
       }
     } catch (error) {
       console.error("Error changing password:", error);
-      setMessage("An error occurred. Please try again later.");
+      setErrorMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -465,6 +506,9 @@ function Settings() {
                         />
                       </div>
                     </div>
+                    {errorMessage && (
+                      <div className="error-message">{errorMessage}</div>
+                    )}
                   </div>
                 )}
               </Card>

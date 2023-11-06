@@ -12,6 +12,7 @@ import { Modal } from "react-bootstrap";
 import { CSVLink, CSVDownload } from "react-csv";
 import { Button } from "react-bootstrap";
 import * as XLSX from "xlsx";
+import Pageloader from "../components/Pageloader";
 
 function SubCategory() {
   const [catagory, setCatagory] = useState([]);
@@ -36,6 +37,8 @@ function SubCategory() {
   const [showEdit, setShowEdit] = useState(false);
   const [editSubcategory, setEditSubcategory] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showButtonLoader, setShowButtonLoader] = useState(false);
 
   const handleEdit = (category) => {
     setEditSubcategory(category);
@@ -44,8 +47,18 @@ function SubCategory() {
 
   const [show, setShow] = useState(false);
 
-  const handleClosemodel = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleClosemodel = () => setShow(false);
+  // const handleShow = () => setShow(true);
+
+  const handleClosemodel = () => {
+    setShow(false);
+    setShowButtonLoader(false);
+  };
+
+  const handleShow = () => {
+    setShow(true);
+    setShowButtonLoader(false);
+  };
 
   const validateForm = () => {
     let hasErrors = false;
@@ -83,6 +96,10 @@ function SubCategory() {
     e.preventDefault();
 
     if (validateForm()) {
+      setShowButtonLoader(true);
+      setTimeout(() => {
+        setShowButtonLoader(false);
+      }, 2000);
       await AddSubCatagory(e);
     }
   };
@@ -143,14 +160,35 @@ function SubCategory() {
     }
   };
 
+  // const getAllSubCatagory = async () => {
+  //   let res = await axios.get(
+  //     "https://api.infinitimart.in/api/vendor/product/subcatagory/getsubcatagory"
+  //   );
+  //   if (res.status === 200) {
+  //     console.log("subcatagory===", res);
+  //     setSubCatagory(res.data?.subcategory);
+  //     setfilterdata(res.data?.subcategory);
+  //   }
+  // };
+
   const getAllSubCatagory = async () => {
-    let res = await axios.get(
-      "https://api.infinitimart.in/api/vendor/product/subcatagory/getsubcatagory"
-    );
-    if (res.status === 200) {
-      console.log("subcatagory===", res);
-      setSubCatagory(res.data?.subcategory);
-      setfilterdata(res.data?.subcategory);
+    setIsLoading(true);
+    try {
+      let res = await axios.get(
+        "https://api.infinitimart.in/api/vendor/product/subcatagory/getsubcatagory"
+      );
+      if (res.status === 200) {
+        console.log(res);
+        setSubCatagory(res.data?.subcategory);
+        setfilterdata(res.data?.subcategory);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000); // Show page loader for 2 seconds
     }
   };
 
@@ -193,7 +231,7 @@ function SubCategory() {
       const response = await axios(config);
       if (response.status === 200) {
         console.log("success");
-        alert(response.data.message);
+        // alert(response.data.message);
         getAllSubCatagory(); // Refresh the subcategory list
         setShowEdit(false); // Close the modal
       }
@@ -661,10 +699,12 @@ function SubCategory() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleFormSubmit}>
-            Save
+            {/* Save */}
+            {showButtonLoader ? "Adding..." : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>
+      {isLoading && <Pageloader />}
     </div>
   );
 }
