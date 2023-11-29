@@ -173,7 +173,7 @@ function Category() {
 
   useEffect(() => {
     getAllCatagory();
-  }, []);
+  }, [reload]);
 
   const deleteCatagory = async (data) => {
     try {
@@ -705,6 +705,7 @@ function Category() {
           </Button>
         </Modal.Footer>
       </Modal>
+
       {isLoading && <Pageloader />}
     </div>
   );

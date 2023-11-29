@@ -107,8 +107,9 @@ class Catagory {
       if (!findCategory) {
         return res.json({ error: "No such record found" });
       }
-      //
+
       findCategory.catagoryName = catagoryName || findCategory.catagoryName;
+
       if (file) {
         findCategory.catagoryImage = file;
       }

@@ -582,8 +582,7 @@ function Servicescategory() {
         </Modal.Body>
         <Modal.Footer>
           <button className="update-button" onClick={updateCategory}>
-            {/* Update */}
-            {showButtonLoader ? "updated..." : "Update"}
+            Update
           </button>
         </Modal.Footer>
       </Modal>
