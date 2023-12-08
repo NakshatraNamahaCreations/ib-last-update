@@ -15,7 +15,7 @@ class Paymentgetway {
           merchantId: "INFINITYBVONLINE",
           merchantTransactionId: transactionId,
           merchantUserId: "asfnjk212",
-          amount: 100,
+          amount: 235900,
           redirectUrl: "",
           redirectMode: "POST",
           callbackUrl: `http://192.168.1.67:8000/api/payment/status/INFINITYBVONLINE/${transactionId}`,
