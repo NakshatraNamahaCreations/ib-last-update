@@ -39,25 +39,6 @@ class banner {
       return res.json({ error: "not able to complete" });
     }
   }
-
-  // async editDetails(req, res) {
-  // 	const { id, content } = req.body;
-  // 	try {
-  // 		let oldData = await bannerModel.findOneAndUpdate(
-  // 			{ _id: id },
-  // 			{
-  // 				content: content,
-  // 			}
-  // 		);
-  // 		if (oldData) {
-  // 			return res.status(200).json({ data: "Content Updated" });
-  // 		} else {
-  // 			return res.status(500).json({ Error: "Something wrong" });
-  // 		}
-  // 	} catch (error) {
-  // 		console.log(error);
-  // 	}
-  // }
 }
 
 const adminbannerontroller = new banner();

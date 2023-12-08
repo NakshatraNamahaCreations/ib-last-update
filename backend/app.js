@@ -57,6 +57,7 @@ const AddPaymentGetWay = require("./Routes/Paymentgetway/Payment");
 const servicesProductroute = require("./Routes/Services/serviceProductList");
 const buyerauthroute = require("./Routes/auth/B2bprofile");
 const bannerroute = require("./Routes/admin/banner");
+const appbannerroute = require("./Routes/admin/Appbanner");
 const enquiryroute = require("./Routes/enquiry/Enquiry");
 const Serviceenquiryroute = require("./Routes/serviceEnquiry/Serviceenquiry");
 const addpackage = require("./Routes/Package/Package");
@@ -97,6 +98,7 @@ app.use("/api/postreq", postroute);
 app.use("/api/productpost", productpostroute);
 app.use("/api/buyer/enquiry", enquiryroute);
 app.use("/api/admin", bannerroute);
+app.use("/api/admin", appbannerroute);
 app.use("/api/admin", adminSequenceVendorCode);
 
 app.use(bodyParser.json());
